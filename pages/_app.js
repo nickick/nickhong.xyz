@@ -1,7 +1,13 @@
-import '../styles/globals.css'
+/* eslint-disable react/jsx-props-no-spreading */
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import { func, object } from 'prop-types';
+import '../styles/globals.css';
+
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />;
 }
 
-export default MyApp
+App.propTypes = {
+  Component: func.isRequired,
+  pageProps: object.isRequired,
+};
