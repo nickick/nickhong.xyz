@@ -1,20 +1,11 @@
-import {
-  Box, Button, Drawer, keyframes,
-} from '@mui/material';
-import { PropTypes } from 'prop-types';
-import Link from 'next/link';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import {
+  Box, Button, Drawer,
+} from '@mui/material';
 import { Spin as Hamburger } from 'hamburger-react';
-import { entranceAnimationDuration } from './utils/constants';
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
+import Link from 'next/link';
+import { PropTypes } from 'prop-types';
+import { entranceAnimationDuration, fadeIn } from './utils/animations';
 
 const navLinks = [
   {

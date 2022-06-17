@@ -1,17 +1,8 @@
-import { Box, keyframes } from '@mui/material';
+import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import * as THREE from 'three';
-import { entranceAnimationDelay, entranceAnimationDuration } from './utils/constants';
+import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
 // import * as dat from 'dat.gui'
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
 
 export default function Animation() {
   useEffect(() => {

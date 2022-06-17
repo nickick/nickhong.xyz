@@ -1,5 +1,5 @@
 import {
-  Box, Button, Container, keyframes, Typography,
+  Box, Button, Container, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -7,38 +7,9 @@ import Link from 'next/link';
 import { Spin as Hamburger } from 'hamburger-react';
 import { useCallback, useState } from 'react';
 import Drawer from './Drawer';
-import { entranceAnimationDelay, entranceAnimationDuration } from './utils/constants';
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const initialHeight = 35;
-
-const fadeInLogo = keyframes`
-  0% {
-    -webkit-transform: scale(1.2) translateY(${initialHeight}vh);;
-    transform: scale(1.2) translateY(${initialHeight}vh);
-    opacity: 0;
-  }
-
-  70% {
-    -webkit-transform: scale(1.2) translateY(${initialHeight}vh);
-    transform: scale(1.2) translateY(${initialHeight}vh);
-    opacity: 1;
-  }
-
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    opacity: 1;
-  }
-`;
+import {
+  entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeInLogo,
+} from './utils/animations';
 
 function NavButton({
   text, href, icon, index,
@@ -135,7 +106,7 @@ export default function Navbar() {
         background: 'linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%)',
         zIndex: {
           xs: 100,
-          md: 11,
+          md: 12,
         },
         position: {
           xs: 'sticky',

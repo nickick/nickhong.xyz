@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import {
   createContext, useEffect, useMemo, useState,
 } from 'react';
-import { entranceAnimationDelay } from './utils/constants';
+import { entranceAnimationDelay } from './utils/animations';
 
 export const LoadedContext = createContext();
 
