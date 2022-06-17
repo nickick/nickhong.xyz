@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {
-  createContext, useEffect, useMemo, useState
+  createContext, useEffect, useMemo, useState,
 } from 'react';
 import { entranceAnimationDelay } from './utils/constants';
 

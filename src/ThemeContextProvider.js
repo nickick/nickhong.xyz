@@ -72,6 +72,9 @@ const darkTheme = createTheme({
     background: {
       default: '#080808',
     },
+    text: {
+      primary: '#ffffff',
+    },
     mode: 'dark',
   },
   ...themeShared,

@@ -1,9 +1,7 @@
-import { Box } from '@mui/material';
+import Home from '../src/Home';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <Box>
-      Hello
-    </Box>
+    <Home />
   );
 }

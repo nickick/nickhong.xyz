@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import {
   useCallback, useEffect, useState,
 } from 'react';
+import Animation from './Animation';
 import Footer from './Footer';
 import Navbar from './Navbar';
 
 export default function Layout({ children }) {
   const [backgroundImage, setBackgroundImage] = useState('');
   const [backgroundOpacity, setBackgroundOpacity] = useState(0);
-  const [overlayOpacity, setOverlayOpacity] = useState(0);
   const router = useRouter();
 
   const pageLoadStartAnimation = useCallback((url) => {
@@ -22,7 +22,7 @@ export default function Layout({ children }) {
 
   const animationLength = 500; // ms
 
-  const pageLoadAnimationComplete = useCallback((url) => {
+  const pageLoadAnimationComplete = useCallback(() => {
     const bgImage = '';
     // if (url.includes('/gallery')) {
     //   bgImage = '/gallery-background.jpeg';
@@ -30,12 +30,6 @@ export default function Layout({ children }) {
     // if (url && url.includes('/publications')) {
     //   bgImage = '/publications-background.jpeg';
     // }
-
-    if (url && url.includes('/privacy-policy')) {
-      setOverlayOpacity(0);
-    } else {
-      setOverlayOpacity(1);
-    }
 
     setTimeout(() => {
       setBackgroundImage(bgImage);
@@ -75,9 +69,9 @@ export default function Layout({ children }) {
             xs: '90vh',
             md: '90vh',
           },
-          background: overlayOpacity === 1
-            ? 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 80%, #080808 100%)'
-            : 'none',
+          // background: overlayOpacity === 1
+          //   ? 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 80%, #080808 100%)'
+          //   : 'none',
           backgroundSize: 'cover',
           transition: `opacity ${animationLength}ms ease-out`,
           zIndex: 2,
@@ -115,6 +109,7 @@ export default function Layout({ children }) {
         <Navbar />
         {children}
         <Footer />
+        <Animation />
       </Box>
     </Box>
   );

@@ -122,6 +122,7 @@ export default function Footer() {
               sitemapLinks.map(({ text, link }) => (
                 <Typography
                   variant="body"
+                  key={text}
                   sx={{
                     m: 0.5,
                   }}

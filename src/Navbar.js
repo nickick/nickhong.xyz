@@ -135,7 +135,7 @@ export default function Navbar() {
         background: 'linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%)',
         zIndex: {
           xs: 100,
-          md: 2,
+          md: 11,
         },
         position: {
           xs: 'sticky',
