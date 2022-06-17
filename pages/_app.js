@@ -1,13 +1,31 @@
 /* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/forbid-prop-types */
 
-import { func, object } from 'prop-types';
+import { CssBaseline } from '@mui/material';
+import PropTypes from 'prop-types';
+import React from 'react';
+import LoadedContextProvider from '../src/LoadedContextProvider';
+import Layout from '../src/Layout';
+import ThemeContextProvider from '../src/ThemeContextProvider';
+
 import '../styles/globals.css';
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+function App({ Component, pageProps }) {
+  return (
+    <ThemeContextProvider>
+      <LoadedContextProvider>
+        <CssBaseline />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </LoadedContextProvider>
+    </ThemeContextProvider>
+  );
 }
 
 App.propTypes = {
-  Component: func.isRequired,
-  pageProps: object.isRequired,
+  Component: PropTypes.func.isRequired,
+  pageProps: PropTypes.object.isRequired,
 };
+
+export default App;
