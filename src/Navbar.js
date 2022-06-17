@@ -1,12 +1,12 @@
 import {
   Box, Button, Container, Typography,
 } from '@mui/material';
-import PropTypes from 'prop-types';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import Link from 'next/link';
 import { Spin as Hamburger } from 'hamburger-react';
+import Link from 'next/link';
+import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
 import Drawer from './Drawer';
+import { socialLinks } from './social-links';
 import {
   entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeInLogo,
 } from './utils/animations';
@@ -63,24 +63,6 @@ const leftNav = [
   {
     text: 'Publications',
     href: '/publications',
-    icon: '',
-  },
-];
-
-const rightNav = [
-  {
-    text: '',
-    href: 'https://twitter.com/pepperonick',
-    icon: <TwitterIcon sx={{ fontSize: 20 }} />,
-  },
-  {
-    text: 'Contact',
-    href: '/contact',
-    icon: '',
-  },
-  {
-    text: 'About',
-    href: '/about',
     icon: '',
   },
 ];
@@ -210,8 +192,8 @@ export default function Navbar() {
         >
           <NavButton
             key="twitter-mobile"
-            href={rightNav[1].href}
-            icon={rightNav[1].icon}
+            href={socialLinks[0].href}
+            icon={socialLinks[0].icon}
             index={0}
           />
         </Box>
@@ -228,7 +210,7 @@ export default function Navbar() {
           }}
         >
           {
-            rightNav.map(({ text, href, icon }, index) => (
+            socialLinks.map(({ text, href, icon }, index) => (
               <NavButton
                 key={text + href}
                 text={text}

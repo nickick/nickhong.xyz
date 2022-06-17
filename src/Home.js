@@ -1,7 +1,50 @@
+import { KeyboardArrowDown } from '@mui/icons-material';
 import {
-  Box, Container, Typography,
+  Box, Button, Container, Link, Typography,
 } from '@mui/material';
-import { entranceAnimationDelay, entranceAnimationDuration, fadeOut } from './utils/animations';
+import { node, number, string } from 'prop-types';
+import { socialLinks } from './social-links';
+import {
+  bounceUp, entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeOut,
+} from './utils/animations';
+
+function HomeIcon({
+  text, href, icon, index,
+}) {
+  return (
+    <Link href={href} key={text + href} target="_blank">
+      <Button
+        variant="text"
+        sx={{
+          color: 'text.primary',
+          minWidth: icon ? '1rem' : 'inherit',
+          mr: '1rem',
+          fontSize: '1.5rem',
+          lineHeight: '2rem',
+          letterSpacing: '0.1rem',
+          animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay + index * 0.2}s`,
+        }}
+        target="_blank"
+      >
+        {text}
+        {icon || ''}
+      </Button>
+    </Link>
+  );
+}
+
+HomeIcon.propTypes = {
+  text: string,
+  href: string,
+  icon: node,
+  index: number.isRequired,
+};
+
+HomeIcon.defaultProps = {
+  text: '',
+  href: '',
+  icon: null,
+};
 
 export default function Home() {
   return (
@@ -18,89 +61,157 @@ export default function Home() {
       <Box
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           width: '100%',
           height: '100%',
         }}
       >
-        {/* Left image */}
         <Box
           sx={{
-            height: '60vh',
-            position: 'relative',
-            flex: 5,
+            display: 'flex',
+            width: '100%',
+            height: '100%',
           }}
         >
+          {/* Left image */}
           <Box
             sx={{
               height: '60vh',
-              position: 'absolute',
-              top: 0,
-              left: 0,
+              position: 'relative',
+              flex: 5,
+              transform: 'translateX(20rem)',
             }}
           >
             <Box
               sx={{
-                mask: 'url(/cutout.png)',
-                maskSize: 'contain',
+                height: '60vh',
                 position: 'absolute',
-                height: '100%',
                 top: 0,
                 left: 0,
               }}
             >
-              <img
-                src="/profile-image.jpeg"
-                alt="Nick Hong staring off into the distance to the right"
-                style={{
+              <Box
+                sx={{
                   height: '100%',
+                  width: '100%',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  background: 'linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.0) 80%, #080808 100%)',
+                  zIndex: 12,
                 }}
               />
+              <Box
+                sx={{
+                  mask: 'url(/cutout.png)',
+                  maskSize: 'contain',
+                  position: 'absolute',
+                  height: '100%',
+                  top: 0,
+                  left: 0,
+                }}
+              >
+                <img
+                  src="/profile-image.jpeg"
+                  alt="Nick Hong staring off into the distance to the right"
+                  style={{
+                    height: '100%',
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  height: '60vh',
+                  animation: `${fadeOut} ${entranceAnimationDuration}s both ${entranceAnimationDelay}`,
+                }}
+              >
+                <img
+                  src="/profile-image.jpeg"
+                  alt="Nick Hong staring off into the distance to the right"
+                  style={{
+                    height: '100%',
+                    opacity: 0.5,
+                  }}
+                />
+              </Box>
             </Box>
-            <Box
+          </Box>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flex: 5,
+            }}
+          >
+            <Typography
+              variant="h1"
               sx={{
-                height: '60vh',
-                animation: `${fadeOut} ${entranceAnimationDuration}s both ${entranceAnimationDelay}`,
+                mb: 1,
               }}
             >
-              <img
-                src="/profile-image.jpeg"
-                alt="Nick Hong staring off into the distance to the right"
-                style={{
-                  height: '100%',
-                  opacity: 0.5,
-                }}
-              />
+              Hey, I&apos;m Nick 👋
+            </Typography>
+            <Typography
+              variant="h3"
+              sx={{
+                mb: 3,
+              }}
+            >
+              I&apos;m a Web3 engineer open to new work.
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {socialLinks.map(({ text, href, icon }, index) => (
+                <HomeIcon
+                  text={text}
+                  href={href}
+                  icon={icon}
+                  index={index}
+                  key={href}
+                />
+              ))}
             </Box>
+          </Box>
+          <Box
+            sx={{
+              flex: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              animationName: `${bounceUp}`,
+              animationIterationCount: 'infinite',
+              animationDuration: '2s',
+              animationDirection: 'both',
+
+            }}
+          >
+            <KeyboardArrowDown
+              sx={{
+                fontSize: 100,
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                document.getElementById('hosted-by').scrollIntoView({ behavior: 'smooth' });
+              }}
+            />
           </Box>
         </Box>
         <Box
           sx={{
-            width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
-            flex: 7,
+            position: 'absolute',
+            right: '10%',
+            bottom: 0,
+
           }}
-        >
-          <Typography
-            variant="h1"
-            sx={{
-              mb: 1,
-            }}
-          >
-            Hey, I&apos;m Nick 👋
-          </Typography>
-          <Typography
-            variant="h3"
-          >
-            I&apos;m a Web3 software engineer currently looking for work.
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-          />
-        </Box>
+        />
       </Box>
     </Container>
   );

@@ -101,7 +101,7 @@ export default function Animation() {
 
       // Update objects
       // sphere.rotation.y = .5 * elapsedTime
-      particlesMesh.rotation.y = -0.1 * elapsedTime;
+      particlesMesh.rotation.y = -0.01 * elapsedTime;
 
       if (mouseX > 0) {
         particlesMesh.rotation.x = mouseY * ((elapsedTime % 1000000000) * 0.000008);

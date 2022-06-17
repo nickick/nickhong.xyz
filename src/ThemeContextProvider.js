@@ -20,6 +20,7 @@ const themeShared = {
       fontFamily: serifFonts,
     },
     overline: {
+      fontFamily: serifFonts,
       fontSize: '2rem',
     },
   },
