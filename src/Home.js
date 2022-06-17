@@ -1,4 +1,16 @@
-import { Box, Container, Typography } from '@mui/material';
+import {
+  Box, Container, Typography, keyframes,
+} from '@mui/material';
+import { entranceAnimationDelay, entranceAnimationDuration } from './utils/constants';
+
+const fadeOut = keyframes`
+  100% {
+    opacity: 0;
+  }
+  0% {
+    opacity: 1;
+  }
+`;
 
 export default function Home() {
   return (
@@ -8,7 +20,6 @@ export default function Home() {
         zIndex: 11,
       }}
     >
-
       <Box
         sx={{
         }}
@@ -21,7 +32,7 @@ export default function Home() {
         <Box
           sx={{
             height: '60vh',
-            transform: 'translate(-30rem, 0)',
+            transform: 'translate(0rem, 0)',
             positoin: 'relative',
           }}
         >
@@ -43,13 +54,21 @@ export default function Home() {
               }}
             />
           </Box>
-          <img
-            src="/profile-image.jpeg"
-            alt="Nick Hong staring off into the distance to the right"
-            style={{
-              height: '100%',
+          <Box
+            sx={{
+              height: '60vh',
+              animation: `${fadeOut} ${entranceAnimationDuration}s both ${entranceAnimationDelay}`,
             }}
-          />
+          >
+            <img
+              src="/profile-image.jpeg"
+              alt="Nick Hong staring off into the distance to the right"
+              style={{
+                height: '100%',
+                opacity: 0.5,
+              }}
+            />
+          </Box>
         </Box>
       </Box>
     </Container>

@@ -1,5 +1,5 @@
 import {
-  Box, Button, Container, keyframes,
+  Box, Button, Container, keyframes, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -99,7 +99,7 @@ const leftNav = [
 const rightNav = [
   {
     text: '',
-    href: 'https://twitter.com/driftershoots',
+    href: 'https://twitter.com/pepperonick',
     icon: <TwitterIcon sx={{ fontSize: 20 }} />,
   },
   {
@@ -197,15 +197,32 @@ export default function Navbar() {
           }}
         >
           <Link href="/">
-            <img
-              src="/icons/drift-logo.svg"
-              style={{
-                height: '24px',
-                aspectRatio: '116 / 38',
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
                 cursor: 'pointer',
               }}
-              alt="Drifter Shoots logo"
-            />
+            >
+              <Typography
+                variant="h2"
+              >
+                nickhong
+              </Typography>
+              {
+                ['.', 'x', 'y', 'z'].map((letter, index) => (
+                  <Typography
+                    variant="h3"
+                    key={letter}
+                    sx={{
+                      animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay + index * 0.2}s`,
+                    }}
+                  >
+                    {letter}
+                  </Typography>
+                ))
+              }
+            </Box>
           </Link>
         </Box>
         <Box

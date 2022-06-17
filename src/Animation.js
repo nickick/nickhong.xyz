@@ -113,8 +113,8 @@ export default function Animation() {
       particlesMesh.rotation.y = -0.1 * elapsedTime;
 
       if (mouseX > 0) {
-        particlesMesh.rotation.x = mouseY * (elapsedTime * 0.00008);
-        particlesMesh.rotation.y = -mouseX * (elapsedTime * 0.00008);
+        particlesMesh.rotation.x = mouseY * ((elapsedTime % 1000000000) * 0.000008);
+        particlesMesh.rotation.y = -mouseX * ((elapsedTime % 1000000000) * 0.000008);
       }
 
       // Update Orbital Controls
@@ -171,6 +171,7 @@ export default function Animation() {
           top: 0,
           left: 0,
           outline: 'none',
+          opacity: 0.3,
         }}
       />
     </Box>

@@ -6,11 +6,18 @@ import { childrenProps } from './utils/propTypes';
 
 export const ThemeContext = createContext();
 
+const serifFonts = ['Cormorant Garamond', 'serif'].join(',');
+const sansSerifFonts = ['Red Hat Display', 'serif'].join(',');
+
 const themeShared = {
   typography: {
-    fontFamily: ['Karla', 'sans-serif'].join(','),
+    fontFamily: sansSerifFonts,
     h1: {
-      fontFamily: ['Rawgly', 'serif'].join(','),
+      fontFamily: serifFonts,
+      fontSize: '8rem',
+    },
+    h2: {
+      fontFamily: serifFonts,
     },
     overline: {
       fontSize: '2rem',

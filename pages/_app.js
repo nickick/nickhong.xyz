@@ -3,11 +3,10 @@
 
 import { CssBaseline } from '@mui/material';
 import PropTypes from 'prop-types';
-import React from 'react';
-import LoadedContextProvider from '../src/LoadedContextProvider';
-import Layout from '../src/Layout';
-import ThemeContextProvider from '../src/ThemeContextProvider';
 
+import Layout from '../src/Layout';
+import LoadedContextProvider from '../src/LoadedContextProvider';
+import ThemeContextProvider from '../src/ThemeContextProvider';
 import '../styles/globals.css';
 
 function App({ Component, pageProps }) {
