@@ -24,7 +24,7 @@ export default function Project({
             textDecoration: 'none',
             display: 'flex',
             flexDirection: 'column',
-            width: '20vw',
+            width: '33%',
             border: '1px solid rgba(255,255,255,0.3)',
             my: 3,
           },
