@@ -19,6 +19,7 @@ const projects = [
 
 export default function Projects() {
   const [focusedProject, setFocusedProject] = useState(null);
+  const selectedProject = projects.find((project) => project.name === focusedProject);
 
   const handleClose = useCallback(() => {
     setFocusedProject(null);
@@ -37,6 +38,7 @@ export default function Projects() {
         open={!!focusedProject}
         handleClose={handleClose}
         layoutId={focusedProject}
+        project={selectedProject}
       />
       <Box sx={{ flex: 2 }} />
       <Box sx={{ flex: 8 }}>

@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { array, func, string } from 'prop-types';
+import { func, string } from 'prop-types';
 import { useCallback } from 'react';
 
 export default function Project({
-  name, href, description, image, setFocusedProject,
+  name, href, image, setFocusedProject,
 }) {
   const onClick = useCallback(() => {
     setFocusedProject(name);
@@ -23,7 +23,8 @@ export default function Project({
           {
             textDecoration: 'none',
             display: 'flex',
-            width: '100%',
+            flexDirection: 'column',
+            width: '20vw',
             border: '1px solid rgba(255,255,255,0.3)',
             my: 3,
           },
@@ -51,17 +52,6 @@ export default function Project({
           >
             {name}
           </Typography>
-          {description.map((desc) => (
-            <Typography
-              dangerouslySetInnerHTML={{ __html: desc }}
-              key={desc}
-              variant="body"
-              sx={{
-                display: 'block',
-                mb: 2,
-              }}
-            />
-          ))}
         </Box>
         <Box
           sx={{
@@ -78,7 +68,6 @@ export default function Project({
 Project.propTypes = {
   name: string.isRequired,
   href: string.isRequired,
-  description: array.isRequired,
   image: string.isRequired,
   setFocusedProject: func.isRequired,
 };

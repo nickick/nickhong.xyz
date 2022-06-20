@@ -13,7 +13,7 @@ export default function Backdrop({ children, onClick }) {
         left: 0,
         height: '100%',
         width: '100%',
-        background: '#000000c1',
+        background: '#000000d7',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
