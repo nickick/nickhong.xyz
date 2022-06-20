@@ -6,7 +6,7 @@ import { node, number, string } from 'prop-types';
 import Projects from '../Projects';
 import { socialLinks } from '../social-links';
 import {
-  bounceUp, entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeOut, slideFromLeft,
+  bounceUp, entranceAnimationDelay, entranceAnimationDuration, fadeIn, slideFromLeft,
 } from '../utils/animations';
 
 function HomeIcon({
@@ -91,6 +91,7 @@ export default function Home() {
               sx={{
                 height: '60vh',
                 position: 'absolute',
+                width: '100%',
                 top: 0,
                 left: 0,
               }}
@@ -114,6 +115,7 @@ export default function Home() {
                   height: '100%',
                   top: 0,
                   left: 0,
+                  zIndex: 11,
                 }}
               >
                 <img
@@ -121,21 +123,6 @@ export default function Home() {
                   alt="Nick Hong staring off into the distance to the right"
                   style={{
                     height: '100%',
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  height: '60vh',
-                  animation: `${fadeOut} ${entranceAnimationDuration}s both ${entranceAnimationDelay + 1}`,
-                }}
-              >
-                <img
-                  src="/profile-image.jpeg"
-                  alt="Nick Hong staring off into the distance to the right"
-                  style={{
-                    height: '100%',
-                    opacity: 0.5,
                   }}
                 />
               </Box>
@@ -165,7 +152,7 @@ export default function Home() {
                 mb: 3,
               }}
             >
-              I&apos;m a Web3 engineer open to new work.
+              I&apos;m a Web3 engineer based in NYC.
             </Typography>
             <Box
               sx={{
