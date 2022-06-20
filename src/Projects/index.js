@@ -1,5 +1,7 @@
 import { Box, Typography } from '@mui/material';
-import { array, string } from 'prop-types';
+import { useCallback, useState } from 'react';
+import Project from './Project';
+import ProjectModal from './ProjectModal';
 
 const projects = [
   {
@@ -15,76 +17,13 @@ const projects = [
   },
 ];
 
-function Project({
-  name, href, description, image,
-}) {
-  return (
-    <Box
-      href={href}
-      key={href}
-      target="_blank"
-      color="#fff"
-      sx={[
-        {
-          textDecoration: 'none',
-          display: 'flex',
-          width: '100%',
-          border: '1px solid rgba(255,255,255,0.3)',
-          my: 3,
-        },
-        {
-          '&:hover': {
-            boxShadow: 'inset 0 0 10px 0 rgba(255,255,255,0.3)',
-          },
-        },
-      ]}
-    >
-      <Box
-        sx={[
-          {
-            p: 3,
-            flex: 4,
-          },
-        ]}
-      >
-        <Typography
-          variant="h3"
-          sx={{
-            mb: 1,
-          }}
-        >
-          {name}
-        </Typography>
-        {description.map((desc) => (
-          <Typography
-            dangerouslySetInnerHTML={{ __html: desc }}
-            variant="body"
-            sx={{
-              display: 'block',
-              mb: 2,
-            }}
-          />
-        ))}
-      </Box>
-      <Box
-        sx={{
-          flex: 2,
-        }}
-      >
-        <img src={image} alt={name} style={{ width: '100%' }} />
-      </Box>
-    </Box>
-  );
-}
-
-Project.propTypes = {
-  name: string.isRequired,
-  href: string.isRequired,
-  description: array.isRequired,
-  image: string.isRequired,
-};
-
 export default function Projects() {
+  const [focusedProject, setFocusedProject] = useState(null);
+
+  const handleClose = useCallback(() => {
+    setFocusedProject(null);
+  }, []);
+
   return (
     <Box
       id="projects"
@@ -94,6 +33,11 @@ export default function Projects() {
         display: 'flex',
       }}
     >
+      <ProjectModal
+        open={!!focusedProject}
+        handleClose={handleClose}
+        layoutId={focusedProject}
+      />
       <Box sx={{ flex: 2 }} />
       <Box sx={{ flex: 8 }}>
         <Typography
@@ -119,6 +63,7 @@ export default function Projects() {
             href={href}
             description={description}
             image={image}
+            setFocusedProject={setFocusedProject}
             key={href}
           />
         ))}
