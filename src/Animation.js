@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import * as THREE from 'three';
@@ -118,7 +120,7 @@ export default function Animation() {
       window.requestAnimationFrame(tick);
     };
 
-    tick();
+    // tick();
 
     function animateParticles(event) {
       mouseY = event.clientY;

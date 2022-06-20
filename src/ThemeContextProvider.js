@@ -17,10 +17,14 @@ const themeShared = {
       fontSize: '8rem',
     },
     h2: {
+      fontSize: '4rem',
       fontFamily: serifFonts,
     },
     overline: {
       fontFamily: serifFonts,
+      fontSize: '2rem',
+    },
+    body: {
       fontSize: '2rem',
     },
   },

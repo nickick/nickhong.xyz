@@ -3,10 +3,11 @@ import {
   Box, Button, Container, Link, Typography,
 } from '@mui/material';
 import { node, number, string } from 'prop-types';
-import { socialLinks } from './social-links';
+import Projects from '../Projects';
+import { socialLinks } from '../social-links';
 import {
-  bounceUp, entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeOut,
-} from './utils/animations';
+  bounceUp, entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeOut, slideFromLeft,
+} from '../utils/animations';
 
 function HomeIcon({
   text, href, icon, index,
@@ -22,7 +23,7 @@ function HomeIcon({
           fontSize: '1.5rem',
           lineHeight: '2rem',
           letterSpacing: '0.1rem',
-          animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay + index * 0.2}s`,
+          animation: `${fadeIn} ${entranceAnimationDuration}s both ${(entranceAnimationDelay + 0.5) + index * 0.2}s`,
         }}
         target="_blank"
       >
@@ -52,8 +53,8 @@ export default function Home() {
       sx={{
         position: 'relative',
         zIndex: 11,
-        minHeight: '70vh',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         width: '100%',
       }}
@@ -62,6 +63,9 @@ export default function Home() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          justifyContent: 'center',
+          minHeight: '70vh',
+          mb: 10,
           width: '100%',
           height: '100%',
         }}
@@ -80,6 +84,7 @@ export default function Home() {
               position: 'relative',
               flex: 5,
               transform: 'translateX(20rem)',
+              animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
             }}
           >
             <Box
@@ -122,7 +127,7 @@ export default function Home() {
               <Box
                 sx={{
                   height: '60vh',
-                  animation: `${fadeOut} ${entranceAnimationDuration}s both ${entranceAnimationDelay}`,
+                  animation: `${fadeOut} ${entranceAnimationDuration}s both ${entranceAnimationDelay + 1}`,
                 }}
               >
                 <img
@@ -142,6 +147,7 @@ export default function Home() {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
+              animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
               flex: 5,
             }}
           >
@@ -151,7 +157,7 @@ export default function Home() {
                 mb: 1,
               }}
             >
-              Hey, I&apos;m Nick 👋
+              Hi, I&apos;m Nick 👋
             </Typography>
             <Typography
               variant="h3"
@@ -188,31 +194,24 @@ export default function Home() {
               animationIterationCount: 'infinite',
               animationDuration: '2s',
               animationDirection: 'both',
-
+              animationDelay: '3s',
             }}
           >
             <KeyboardArrowDown
               sx={{
                 fontSize: 100,
                 cursor: 'pointer',
+                opacity: 0,
+                animation: `${slideFromLeft} ${entranceAnimationDuration}s both ${entranceAnimationDelay + 1}s`,
               }}
               onClick={() => {
-                document.getElementById('hosted-by').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
               }}
             />
           </Box>
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'absolute',
-            right: '10%',
-            bottom: 0,
-
-          }}
-        />
       </Box>
+      <Projects />
     </Container>
   );
 }

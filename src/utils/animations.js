@@ -71,3 +71,16 @@ export const fadeFromBelow = keyframes`
             opacity: 1;
   }
 `;
+
+export const slideFromLeft = keyframes`
+  0% {
+    -webkit-transform: translateX(100px);
+            transform: translateX(100px);
+            opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+            opacity: 1;
+  }
+`;
