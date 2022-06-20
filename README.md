@@ -13,6 +13,7 @@ This is a static portfolio site for [@pepperonick](https://twitter.com/pepperoni
 * Contact section
 * Additional project cards
 * Active sections for navigation
+* Add responsive mobile styling
 
 ## To run:
 ```
