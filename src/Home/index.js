@@ -64,7 +64,7 @@ export default function Home() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          minHeight: '80vh',
+          minHeight: '90vh',
           mb: 10,
           width: '100%',
           height: '100%',
