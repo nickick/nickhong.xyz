@@ -102,10 +102,11 @@ export default function ProjectModal({
 ProjectModal.propTypes = {
   handleClose: func.isRequired,
   open: bool.isRequired,
-  layoutId: string.isRequired,
+  layoutId: string,
   project: object,
 };
 
 ProjectModal.defaultProps = {
   project: {},
+  layoutId: null,
 };
