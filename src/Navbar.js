@@ -51,18 +51,18 @@ NavButton.defaultProps = {
 
 const leftNav = [
   {
-    text: 'Prints',
-    href: 'https://www.millergallery.com/featured-artists#/isaac-wright',
+    text: 'Home',
+    href: '/',
     icon: '',
   },
   {
-    text: 'Gallery',
-    href: '/gallery',
+    text: 'Projects',
+    href: '/#projects',
     icon: '',
   },
   {
-    text: 'Publications',
-    href: '/publications',
+    text: 'Contact',
+    href: '/#contact',
     icon: '',
   },
 ];
@@ -90,10 +90,7 @@ export default function Navbar() {
           xs: 100,
           md: 12,
         },
-        position: {
-          xs: 'sticky',
-          md: 'relative',
-        },
+        position: 'sticky',
         top: '0px',
       }}
     >
@@ -101,7 +98,7 @@ export default function Navbar() {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          maxWidth: '1440px',
+          maxWidth: '1400px',
         }}
       >
         <Box
