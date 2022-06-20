@@ -103,5 +103,9 @@ ProjectModal.propTypes = {
   handleClose: func.isRequired,
   open: bool.isRequired,
   layoutId: string.isRequired,
-  project: object.isRequired,
+  project: object,
+};
+
+ProjectModal.defaultProps = {
+  project: {},
 };
