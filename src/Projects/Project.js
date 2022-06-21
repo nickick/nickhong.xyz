@@ -1,67 +1,70 @@
 import { Box, Typography } from '@mui/material';
-import { motion } from 'framer-motion';
-import { func, string } from 'prop-types';
+import {
+  motion,
+} from 'framer-motion';
+import { func, number, string } from 'prop-types';
 import { useCallback } from 'react';
 
 export default function Project({
-  name, href, image, setFocusedProject,
+  name, href, image, setFocusedProject, index,
 }) {
   const onClick = useCallback(() => {
     setFocusedProject(name);
   }, [name, setFocusedProject]);
 
   return (
-    <motion.div
-      layoutId={name}
+    <Box
+      href={href}
+      key={href + index}
+      target="_blank"
+      color="#fff"
+      sx={[
+        {
+          textDecoration: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          border: '1px solid rgba(255,255,255,0.3)',
+          my: 3,
+        },
+        {
+          '&:hover': {
+            boxShadow: 'inset 0 0 10px 0 rgba(255,255,255,0.3)',
+          },
+        },
+      ]}
+      onClick={onClick}
     >
       <Box
-        href={href}
-        key={href}
-        target="_blank"
-        color="#fff"
         sx={[
           {
-            textDecoration: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            width: '33%',
-            border: '1px solid rgba(255,255,255,0.3)',
-            my: 3,
-          },
-          {
-            '&:hover': {
-              boxShadow: 'inset 0 0 10px 0 rgba(255,255,255,0.3)',
-            },
+            p: 3,
+            flex: 4,
           },
         ]}
-        onClick={onClick}
       >
-        <Box
-          sx={[
-            {
-              p: 3,
-              flex: 4,
-            },
-          ]}
-        >
-          <Typography
-            variant="h3"
-            sx={{
-              mb: 1,
-            }}
-          >
-            {name}
-          </Typography>
-        </Box>
-        <Box
+        <Typography
+          variant="h4"
           sx={{
-            flex: 2,
+            mb: 1,
           }}
         >
-          <img src={image} alt={name} style={{ width: '100%' }} />
-        </Box>
+          {name}
+        </Typography>
       </Box>
-    </motion.div>
+      <Box
+        sx={{
+          flex: 2,
+        }}
+      >
+        <motion.img
+          src={image}
+          alt={name}
+          style={{ width: '100%' }}
+          layoutId={image}
+        />
+      </Box>
+    </Box>
   );
 }
 
@@ -70,4 +73,5 @@ Project.propTypes = {
   href: string.isRequired,
   image: string.isRequired,
   setFocusedProject: func.isRequired,
+  index: number.isRequired,
 };

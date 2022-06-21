@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import { Box, Typography } from '@mui/material';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   array, bool, func, object, string,
 } from 'prop-types';
@@ -52,10 +52,17 @@ function ProjectModalContents({
             dangerouslySetInnerHTML={{ __html: desc }}
             key={desc}
             variant="body"
-            sx={{
-              display: 'block',
-              mb: 2,
-            }}
+            sx={[
+              {
+                display: 'block',
+                mb: 2,
+              },
+              {
+                '& > a': {
+                  textDecoration: 'underline',
+                },
+              },
+            ]}
           />
         ))}
       </Box>
@@ -64,7 +71,12 @@ function ProjectModalContents({
           flex: 2,
         }}
       >
-        <img src={image} alt={name} style={{ width: '100%' }} />
+        <motion.img
+          src={image}
+          alt={name}
+          style={{ width: '100%' }}
+          layoutId={image}
+        />
       </Box>
     </Box>
   );
