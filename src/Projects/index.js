@@ -80,7 +80,7 @@ export default function Projects() {
   const selectedProject = projects.find((project) => project.name === focusedProject);
 
   const rotationInitial = -5;
-  const slideInitial = -10;
+  const slideInitial = -16;
 
   const rotations = projects.map(() => useSpring(rotationInitial));
   const slides = projects.map((_, i) => useSpring(slideInitial * i));
@@ -157,6 +157,7 @@ export default function Projects() {
           sx={{
             display: 'flex',
             width: '100%',
+            mt: 6,
           }}
         >
           {projects.map(({
