@@ -5,11 +5,9 @@ import Backdrop from './Backdrop';
 
 const dropIn = {
   hidden: {
-    y: '-100vh',
     opacity: 0,
   },
   visible: {
-    y: 0,
     opacity: 1,
     transition: {
       duration: 0.1,
@@ -19,7 +17,6 @@ const dropIn = {
     },
   },
   exit: {
-    y: '100vh',
     opacity: 0,
   },
 };
