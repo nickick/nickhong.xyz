@@ -1,6 +1,24 @@
 import { Inbox, LinkedIn, Twitter } from '@mui/icons-material';
-import DiscordIcon from './DiscordIcon';
-import TelegramIcon from './TelegramIcon';
+import DiscordIcon from '../DiscordIcon';
+import TelegramIcon from '../TelegramIcon';
+
+export const leftNav = [
+  {
+    text: 'Home',
+    href: '/',
+    icon: '',
+  },
+  {
+    text: 'Projects',
+    href: '/#projects',
+    icon: '',
+  },
+  {
+    text: 'Contact',
+    href: '/#contact',
+    icon: '',
+  },
+];
 
 export const socialLinks = [
   {

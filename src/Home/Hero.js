@@ -1,50 +1,12 @@
 import { KeyboardArrowDown } from '@mui/icons-material';
 import {
-  Box, Button, Link, Typography,
+  Box, Typography,
 } from '@mui/material';
-import { node, number, string } from 'prop-types';
-import { socialLinks } from '../social-links';
+import NavButton from '../NavButton';
+import { socialLinks } from '../NavButton/social-links';
 import {
   bounceUp, entranceAnimationDelay, entranceAnimationDuration, fadeIn, slideFromLeft,
 } from '../utils/animations';
-
-function HomeIcon({
-  text, href, icon, index,
-}) {
-  return (
-    <Link href={href} key={text + href} target="_blank">
-      <Button
-        variant="text"
-        sx={{
-          color: 'text.primary',
-          minWidth: icon ? '1rem' : 'inherit',
-          mr: '1rem',
-          fontSize: '1.5rem',
-          lineHeight: '2rem',
-          letterSpacing: '0.1rem',
-          animation: `${fadeIn} ${entranceAnimationDuration}s both ${(entranceAnimationDelay + 0.5) + index * 0.2}s`,
-        }}
-        target="_blank"
-      >
-        {text}
-        {icon || ''}
-      </Button>
-    </Link>
-  );
-}
-
-HomeIcon.propTypes = {
-  text: string,
-  href: string,
-  icon: node,
-  index: number.isRequired,
-};
-
-HomeIcon.defaultProps = {
-  text: '',
-  href: '',
-  icon: null,
-};
 
 export default function Hero() {
   return (
@@ -150,7 +112,7 @@ export default function Hero() {
             }}
           >
             {socialLinks.map(({ text, href, icon }, index) => (
-              <HomeIcon
+              <NavButton
                 text={text}
                 href={href}
                 icon={icon}
