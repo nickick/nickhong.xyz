@@ -15,6 +15,7 @@ const projects = [
         icon: '',
       },
     ],
+    imageOnLeft: false,
   },
   {
     name: 'WMVG Migrator',
@@ -30,6 +31,7 @@ const projects = [
         icon: '',
       },
     ],
+    imageOnLeft: false,
   },
   {
     name: 'NYC365',
@@ -45,6 +47,7 @@ const projects = [
         icon: '',
       },
     ],
+    imageOnLeft: false,
   },
   {
     name: 'Digital Diaspora',
@@ -61,6 +64,7 @@ const projects = [
         icon: '',
       },
     ],
+    imageOnLeft: true,
   },
   {
     name: 'Chaos & Couture',
@@ -77,6 +81,7 @@ const projects = [
         icon: '',
       },
     ],
+    imageOnLeft: true,
   },
 ];
 

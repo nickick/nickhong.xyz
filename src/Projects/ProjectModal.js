@@ -8,7 +8,7 @@ import {
 import Modal from '../Modal';
 
 function ProjectModalContents({
-  name, href, description, image,
+  name, href, description, image, imageOnLeft,
 }) {
   return (
     <Box
@@ -20,6 +20,7 @@ function ProjectModalContents({
         {
           textDecoration: 'none',
           display: 'flex',
+          flexDirection: !imageOnLeft ? 'row' : 'row-reverse',
           width: '100%',
           border: '1px solid rgba(255,255,255,0.3)',
           my: 3,
@@ -87,6 +88,7 @@ ProjectModalContents.propTypes = {
   href: string.isRequired,
   description: array.isRequired,
   image: string.isRequired,
+  imageOnLeft: bool.isRequired,
 };
 
 export default function ProjectModal({
