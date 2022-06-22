@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { Box, Typography } from '@mui/material';
+import { ConnectedTv } from '@mui/icons-material';
+import { Box, Link, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   array, bool, func, object, string,
@@ -9,7 +10,7 @@ import { useEffect } from 'react';
 import Modal from '../Modal';
 
 function ProjectModalContents({
-  name, href, description, image, imageOnLeft,
+  name, href, description, image, imageOnLeft, contributors,
 }) {
   return (
     <Box
@@ -57,13 +58,48 @@ function ProjectModalContents({
         ]}
       >
         <Typography
-          variant="h3"
+          variant="h2"
           sx={{
             mb: 1,
           }}
         >
           {name}
         </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            my: 2,
+          }}
+        >
+          <Link
+            href={href}
+            target="_blank"
+          >
+            <ConnectedTv
+              sx={{
+                fontSize: '5rem',
+                mr: 2,
+              }}
+            />
+          </Link>
+          {contributors.map(({ link, icon }) => (
+            <Link
+              href={link}
+              target="_blank"
+            >
+              <img
+                src={icon}
+                alt="Twitter icon of a contributor"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  marginRight: '2rem',
+                  borderRadius: '50%',
+                }}
+              />
+            </Link>
+          ))}
+        </Box>
         {description.map((desc) => (
           <Typography
             dangerouslySetInnerHTML={{ __html: desc }}
@@ -105,6 +141,7 @@ ProjectModalContents.propTypes = {
   description: array.isRequired,
   image: string.isRequired,
   imageOnLeft: bool.isRequired,
+  contributors: array.isRequired,
 };
 
 export default function ProjectModal({

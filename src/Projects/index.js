@@ -186,7 +186,7 @@ export default function Projects() {
               }}
             >
               {projects.map(({
-                name, href, description, image,
+                name, href, description, image, contributors,
               }, index) => (
                 <motion.div
                   layoutId={name}
@@ -219,6 +219,7 @@ export default function Projects() {
                       image={image}
                       setFocusedProject={setFocusedProject}
                       hoverchange={hoverchange}
+                      contributors={contributors}
                       index={index}
                     />
                   </motion.div>
