@@ -12,16 +12,20 @@ export default function Footer() {
   return (
     <Box
       sx={{
-        pt: {
+        mt: {
           xs: '14rem',
           md: '16.5rem',
+        },
+        pt: {
+          xs: 2,
         },
         pb: {
           xs: 2,
         },
-        px: '4rem',
+        px: 4,
         zIndex: 11,
         position: 'relative',
+        borderTop: '1px solid #333',
       }}
     >
       <Container

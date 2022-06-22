@@ -16,10 +16,15 @@ export default function Hero() {
         flexDirection: 'column',
         justifyContent: 'center',
         minHeight: {
-          xs: '90vh',
+          xs: '40vh',
+          md: '90vh',
         },
         width: '100%',
         height: '100%',
+        transform: {
+          xs: 'translateY(20rem)',
+          md: 'none',
+        },
       }}
     >
       <Box
@@ -56,7 +61,7 @@ export default function Hero() {
                 md: 0,
               },
               transform: {
-                xs: 'translate(-50%,-50%)',
+                xs: 'translate(-50%,-40%)',
                 md: 'translate(0rem, -10rem)',
                 lg: 'translate(20rem, -2rem)',
                 xl: 'translate(0rem, -20rem)',
