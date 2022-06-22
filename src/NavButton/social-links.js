@@ -47,3 +47,21 @@ export const socialLinks = [
     icon: <Inbox sx={{ fontSize: 20 }} />,
   },
 ];
+
+export const shortSocialLinks = [
+  {
+    text: '',
+    href: 'https://twitter.com/pepperonick',
+    icon: <Twitter sx={{ fontSize: 20 }} />,
+  },
+  {
+    text: '',
+    href: 'https://discord.com/users/326217372438495232',
+    icon: <DiscordIcon sx={{ fontSize: 20 }} />,
+  },
+  {
+    text: '',
+    href: 'https://t.me/pepperonick',
+    icon: <TelegramIcon sx={{ fontSize: 20 }} />,
+  },
+];

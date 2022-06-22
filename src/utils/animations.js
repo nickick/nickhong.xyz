@@ -41,14 +41,14 @@ const initialHeight = 35;
 
 export const fadeInLogo = keyframes`
   0% {
-    -webkit-transform: scale(1.2) translateY(${initialHeight}vh);;
-    transform: scale(1.2) translateY(${initialHeight}vh);
+    -webkit-transform: scale(1.2) translateY(${initialHeight}vh) translateX(3rem);
+    transform: scale(1.2) translateY(${initialHeight}vh) translateX(3rem);
     opacity: 0;
   }
 
   70% {
-    -webkit-transform: scale(1.2) translateY(${initialHeight}vh);
-    transform: scale(1.2) translateY(${initialHeight}vh);
+    -webkit-transform: scale(1.2) translateY(${initialHeight}vh) translateX(0rem);
+    transform: scale(1.2) translateY(${initialHeight}vh) translateX(0rem);
     opacity: 1;
   }
 

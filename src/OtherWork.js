@@ -7,9 +7,16 @@ export default function OtherWork() {
     <Container
       sx={{
         width: '100%',
-        px: 10,
-        mb: 10,
+        px: {
+          xs: 4,
+          md: 10,
+        },
         display: 'flex',
+        flexDirection: {
+          xs: 'column',
+          md: 'row',
+        },
+        mt: 5,
       }}
     >
       <Box
@@ -21,6 +28,10 @@ export default function OtherWork() {
         sx={{
           flex: 8,
           display: 'flex',
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
         }}
       >
         <Box
@@ -28,6 +39,12 @@ export default function OtherWork() {
         >
           <Typography
             variant="h2"
+            sx={{
+              pb: {
+                xs: 5,
+                md: 0,
+              },
+            }}
           >
             Other Work
           </Typography>

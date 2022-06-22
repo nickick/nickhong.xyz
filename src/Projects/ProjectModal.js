@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import { Box, Typography } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   array, bool, func, object, string,
 } from 'prop-types';
+import { useEffect } from 'react';
 import Modal from '../Modal';
 
 function ProjectModalContents({
@@ -20,10 +21,25 @@ function ProjectModalContents({
         {
           textDecoration: 'none',
           display: 'flex',
-          flexDirection: !imageOnLeft ? 'row' : 'row-reverse',
+          flexDirection: {
+            xs: 'column',
+            md: !imageOnLeft ? 'row' : 'row-reverse',
+          },
           width: '100%',
           border: '1px solid rgba(255,255,255,0.3)',
           my: 3,
+          maxHeight: {
+            xs: '80vh',
+            md: '100vh',
+          },
+          overflow: {
+            xs: 'scroll',
+            md: 'unset',
+          },
+          mt: {
+            xs: 10,
+            md: 3,
+          },
         },
         {
           '&:hover': {
@@ -94,6 +110,12 @@ ProjectModalContents.propTypes = {
 export default function ProjectModal({
   open, handleClose, layoutId, project,
 }) {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    }
+  }, [open]);
+
   return (
     <div>
       <AnimatePresence

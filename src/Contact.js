@@ -9,22 +9,39 @@ export default function Contact() {
     <Container
       sx={{
         width: '100%',
-        px: 10,
+        px: {
+          xs: 4,
+          md: 10,
+        },
+        pt: {
+          xs: 10,
+          md: 10,
+        },
         display: 'flex',
       }}
       id="contact"
     >
-      <Box
-        sx={{
-          flex: 2,
-        }}
+      <Box sx={{
+        display: {
+          xs: 'none',
+          md: 'block',
+        },
+        flex: 2,
+      }}
       />
       <Box
         sx={{
           flex: 8,
           borderTop: '1px solid #333',
-          pt: 10,
+          pt: {
+            xs: 10,
+            md: 10,
+          },
           display: 'flex',
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
         }}
       >
         <Box
@@ -32,6 +49,12 @@ export default function Contact() {
         >
           <Typography
             variant="h2"
+            sx={{
+              pb: {
+                xs: 5,
+                md: 0,
+              },
+            }}
           >
             Contact
           </Typography>
@@ -63,10 +86,13 @@ export default function Contact() {
           }
         </Box>
       </Box>
-      <Box
-        sx={{
-          flex: 2,
-        }}
+      <Box sx={{
+        display: {
+          xs: 'none',
+          md: 'block',
+        },
+        flex: 2,
+      }}
       />
     </Container>
   );
