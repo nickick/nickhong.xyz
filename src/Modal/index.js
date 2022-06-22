@@ -61,6 +61,7 @@ export default function Modal({ children, layoutId, handleClose }) {
             right: '5rem',
             fontSize: '30px',
             background: '#00000066',
+            cursor: 'pointer',
           }}
           onClick={closeFn}
         />
