@@ -6,6 +6,7 @@ import {
   motion, useSpring,
 } from 'framer-motion';
 import { useCallback, useState } from 'react';
+import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from '../utils/animations';
 import Project from './Project';
 import projects from './project-data';
 import ProjectModal from './ProjectModal';
@@ -61,6 +62,7 @@ export default function Projects() {
       sx={{
         width: '100%',
         mb: 6,
+        animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
       }}
     >
       <Box

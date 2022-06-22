@@ -1,6 +1,7 @@
 import {
   Box, Container, Link as MuiLink, Typography,
 } from '@mui/material';
+import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
 
 export default function OtherWork() {
   return (
@@ -17,6 +18,7 @@ export default function OtherWork() {
           md: 'row',
         },
         mt: 5,
+        animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
       }}
     >
       <Box

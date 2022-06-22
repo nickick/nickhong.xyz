@@ -3,6 +3,7 @@ import {
 } from '@mui/material';
 import NavButton from './NavButton';
 import { socialLinks } from './NavButton/social-links';
+import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
 
 export default function Contact() {
   return (
@@ -18,6 +19,7 @@ export default function Contact() {
           md: 10,
         },
         display: 'flex',
+        animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
       }}
       id="contact"
     >

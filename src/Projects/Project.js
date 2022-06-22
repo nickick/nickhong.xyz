@@ -4,6 +4,7 @@ import {
 } from 'framer-motion';
 import { func, number, string } from 'prop-types';
 import { useCallback } from 'react';
+import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from '../utils/animations';
 
 export default function Project({
   name, href, image, setFocusedProject, index,
@@ -26,6 +27,7 @@ export default function Project({
           width: '100%',
           border: '1px solid rgba(255,255,255,0.3)',
           my: 3,
+          animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay + 0.2 * index}s`,
         },
         {
           '&:hover': {
