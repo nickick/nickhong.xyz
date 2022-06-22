@@ -66,6 +66,19 @@ const themeShared = {
         variant: 'standard',
       },
     },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+          textDecoration: 'underline',
+          transition: 'color 0.2s ease-out',
+          cursor: 'pointer',
+          '&:hover': {
+            color: '#efacbd',
+          },
+        },
+      },
+    },
   },
 };
 
