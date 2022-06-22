@@ -27,7 +27,7 @@ export default function Hero() {
           display: 'flex',
           flexDirection: {
             xs: 'column',
-            md: 'row'
+            md: 'row',
           },
           width: '100%',
           height: '100%',
@@ -143,7 +143,7 @@ export default function Hero() {
               fontSize: {
                 xs: '5rem',
                 md: '8rem',
-              }
+              },
             }}
           >
             Hi, I&apos;m Nick 👋
@@ -155,7 +155,7 @@ export default function Hero() {
               fontSize: {
                 xs: '2rem',
                 md: '3rem',
-              }
+              },
             }}
           >
             I&apos;m a Web3 engineer based in NYC.

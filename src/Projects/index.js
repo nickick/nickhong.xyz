@@ -7,8 +7,8 @@ import {
 } from 'framer-motion';
 import { useCallback, useState } from 'react';
 import Project from './Project';
-import ProjectModal from './ProjectModal';
 import projects from './project-data';
+import ProjectModal from './ProjectModal';
 
 export default function Projects() {
   const [focusedProject, setFocusedProject] = useState(null);
@@ -58,127 +58,178 @@ export default function Projects() {
 
   return (
     <Box
-      id="projects"
       sx={{
         width: '100%',
-        px: {
-          xs: 4,
-          md: 10,
-        },
-        pt: {
-          xs: 20,
-          md: 10,
-        },
         mb: 6,
-        display: 'flex',
       }}
     >
-      <ProjectModal
-        open={!!focusedProject}
-        handleClose={handleClose}
-        layoutId={focusedProject}
-        project={selectedProject}
-      />
-      <Box sx={{
-        display: {
-          xs: 'none',
-          md: 'block',
-        },
-        flex: 2 
-      }} />
       <Box
+        id="projects"
         sx={{
-          flex: 8,
+          width: '100%',
+          px: {
+            xs: 4,
+            md: 10,
+          },
+          pt: {
+            xs: 20,
+            md: 10,
+          },
+          display: 'flex',
         }}
       >
+        <ProjectModal
+          open={!!focusedProject}
+          handleClose={handleClose}
+          layoutId={focusedProject}
+          project={selectedProject}
+        />
+        <Box sx={{
+          display: {
+            xs: 'none',
+            md: 'block',
+          },
+          flex: 2,
+        }}
+        />
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: {
-              xs: 'column',
-              md: 'row',
-            },
+            flex: 8,
           }}
         >
           <Box
-            flex={2}
+            sx={{
+              display: 'flex',
+              flexDirection: {
+                xs: 'column',
+                md: 'row',
+              },
+            }}
           >
-            <Typography
-              variant="h2"
+            <Box
+              flex={2}
             >
-              Web3 Projects
-            </Typography>
-          </Box>
-          <Box
-            flex={6}
-          >
-            <Typography
-              variant="body"
-            >
-              I&apos;ve worked as a Dapp/React/Solidity engineer on
-              several projects in the 1/1 NFT photography space.
-            </Typography>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: {
-              xs: 'column',
-              md: 'row',
-            },
-            width: '100%',
-            mt: 6,
-          }}
-        >
-          {projects.map(({
-            name, href, description, image,
-          }, index) => (
-            <motion.div
-              layoutId={name}
-              style={{
-                width: '100%',
-                cursor: 'pointer',
-                x: slides[index],
-                perspective: 200,
-                position: 'relative',
-                zIndex: 15 - index,
-              }}
-              onHoverStart={() => {
-                hoverchange({ hover: true, index });
-              }}
-              onHoverEnd={() => {
-                hoverchange({ hover: false, index });
-              }}
-              key={name}
-            >
-              <motion.div
-                style={{
-                  width: '100%',
-                  rotateY: rotations[index],
-                }}
+              <Typography
+                variant="h2"
               >
-                <Project
-                  name={name}
-                  href={href}
-                  description={description}
-                  image={image}
-                  setFocusedProject={setFocusedProject}
-                  hoverchange={hoverchange}
-                  index={index}
-                />
-              </motion.div>
-            </motion.div>
-          ))}
+                Web3 Projects
+              </Typography>
+            </Box>
+            <Box
+              flex={6}
+            >
+              <Typography
+                variant="body"
+              >
+                I&apos;ve worked as a Dapp/React/Solidity engineer on
+                several projects in the 1/1 NFT photography space.
+              </Typography>
+            </Box>
+          </Box>
         </Box>
+        <Box sx={{
+          display: {
+            xs: 'none',
+            md: 'block',
+          },
+          flex: 2,
+        }}
+        />
       </Box>
-      <Box sx={{
-        display: {
-          xs: 'none',
-          md: 'block',
-        },
-        flex: 2 
-      }} />
+      <Box
+        sx={{
+          px: {
+            md: 10,
+          },
+          display: 'flex',
+        }}
+      >
+        <Box sx={{
+          display: {
+            xs: 'none',
+            md: 'block',
+          },
+          flex: 2,
+        }}
+        />
+        <Box
+          sx={{
+            flex: 8,
+          }}
+        >
+          <Box
+            sx={{
+              maxWidth: '100vw',
+              overflow: {
+                xs: 'scroll',
+                md: 'unset',
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: {
+                  md: 'row',
+                },
+                width: {
+                  xs: '400%',
+                  md: '100%',
+                },
+                mt: 6,
+              }}
+            >
+              {projects.map(({
+                name, href, description, image,
+              }, index) => (
+                <motion.div
+                  layoutId={name}
+                  style={{
+                    width: '100%',
+                    cursor: 'pointer',
+                    x: slides[index],
+                    perspective: 200,
+                    position: 'relative',
+                    zIndex: 15 - index,
+                  }}
+                  onHoverStart={() => {
+                    hoverchange({ hover: true, index });
+                  }}
+                  onHoverEnd={() => {
+                    hoverchange({ hover: false, index });
+                  }}
+                  key={name}
+                >
+                  <motion.div
+                    style={{
+                      width: '100%',
+                      rotateY: rotations[index],
+                    }}
+                  >
+                    <Project
+                      name={name}
+                      href={href}
+                      description={description}
+                      image={image}
+                      setFocusedProject={setFocusedProject}
+                      hoverchange={hoverchange}
+                      index={index}
+                    />
+                  </motion.div>
+                </motion.div>
+              ))}
+            </Box>
+          </Box>
+        </Box>
+        <Box sx={{
+          display: {
+            xs: 'none',
+            md: 'block',
+          },
+          flex: 2,
+        }}
+        />
+      </Box>
     </Box>
   );
 }
