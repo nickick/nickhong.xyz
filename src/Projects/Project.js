@@ -57,10 +57,14 @@ export default function Project({
           flex: 2,
         }}
       >
-        <motion.img
-          src={image}
-          alt={name}
-          style={{ width: '100%' }}
+        <motion.div
+          style={{
+            width: '100%',
+            minHeight: '40rem',
+            backgroundImage: `url(${image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
           layoutId={image}
         />
       </Box>
