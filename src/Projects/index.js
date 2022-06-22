@@ -73,22 +73,34 @@ export default function Projects() {
         project={selectedProject}
       />
       <Box sx={{ flex: 2 }} />
-      <Box sx={{ flex: 8 }}>
-        <Typography
-          variant="h2"
-          sx={{
-            textAlign: 'left',
-            width: '100%',
-          }}
+      <Box
+        sx={{
+          flex: 8,
+        }}
+      >
+        <Box
+          display="flex"
         >
-          Projects
-        </Typography>
-        <Typography
-          variant="body"
-        >
-          I&apos;ve worked as a Dapp/React/Solidity engineer on
-          several projects in the 1/1 NFT photography space.
-        </Typography>
+          <Box
+            flex={2}
+          >
+            <Typography
+              variant="h2"
+            >
+              Web3 Projects
+            </Typography>
+          </Box>
+          <Box
+            flex={6}
+          >
+            <Typography
+              variant="body"
+            >
+              I&apos;ve worked as a Dapp/React/Solidity engineer on
+              several projects in the 1/1 NFT photography space.
+            </Typography>
+          </Box>
+        </Box>
         <Box
           sx={{
             display: 'flex',
