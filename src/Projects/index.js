@@ -61,7 +61,14 @@ export default function Projects() {
       id="projects"
       sx={{
         width: '100%',
-        px: 10,
+        px: {
+          xs: 4,
+          md: 10,
+        },
+        pt: {
+          xs: 20,
+          md: 10,
+        },
         mb: 6,
         display: 'flex',
       }}
@@ -72,14 +79,26 @@ export default function Projects() {
         layoutId={focusedProject}
         project={selectedProject}
       />
-      <Box sx={{ flex: 2 }} />
+      <Box sx={{
+        display: {
+          xs: 'none',
+          md: 'block',
+        },
+        flex: 2 
+      }} />
       <Box
         sx={{
           flex: 8,
         }}
       >
         <Box
-          display="flex"
+          sx={{
+            display: 'flex',
+            flexDirection: {
+              xs: 'column',
+              md: 'row',
+            },
+          }}
         >
           <Box
             flex={2}
@@ -104,6 +123,10 @@ export default function Projects() {
         <Box
           sx={{
             display: 'flex',
+            flexDirection: {
+              xs: 'column',
+              md: 'row',
+            },
             width: '100%',
             mt: 6,
           }}
@@ -149,7 +172,13 @@ export default function Projects() {
           ))}
         </Box>
       </Box>
-      <Box sx={{ flex: 2 }} />
+      <Box sx={{
+        display: {
+          xs: 'none',
+          md: 'block',
+        },
+        flex: 2 
+      }} />
     </Box>
   );
 }

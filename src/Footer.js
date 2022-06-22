@@ -72,7 +72,10 @@ export default function Footer() {
         <Box
           sx={{
             flex: 1,
-            display: 'flex',
+            display: {
+              xs: 'none',
+              md: 'flex',
+            },
             justifyContent: 'center',
           }}
         >
@@ -87,6 +90,25 @@ export default function Footer() {
               />
             ))
           }
+        </Box>
+        <Box
+          sx={{
+            display: {
+              xs: 'flex',
+              md: 'none',
+            },
+            flexDirection: 'row-reverse',
+            flex: 1,
+            flexWrap: 'nowrap',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <NavButton
+            key="twitter-mobile"
+            href={socialLinks[0].href}
+            icon={socialLinks[0].icon}
+            index={0}
+          />
         </Box>
         <Box
           sx={{
