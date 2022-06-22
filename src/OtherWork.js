@@ -1,7 +1,6 @@
 import {
   Box, Container, Link as MuiLink, Typography,
 } from '@mui/material';
-import Link from 'next/link';
 
 export default function OtherWork() {
   return (
@@ -68,9 +67,14 @@ export default function OtherWork() {
           >
             <br />
             <br />
-            For more details, take a look at
+            For more details, take a look at my
             {' '}
-            <Link href="/resume"><MuiLink>my resume.</MuiLink></Link>
+            <MuiLink
+              href="https://www.linkedin.com/in/nickhong/"
+              target="_blank"
+            >
+              Linkedin.
+            </MuiLink>
           </Typography>
         </Box>
       </Box>
