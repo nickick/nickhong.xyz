@@ -39,7 +39,7 @@ export default function Modal({ children, layoutId, handleClose }) {
         onClick={(e) => e.stopPropagation()}
         style={{
           width: 'clamp(400px, 1000px, 1200px)',
-          maxHeight: '80vh',
+          maxHeight: '90vh',
           margin: 'auto',
           padding: '0 2rem',
           borderRadius: '1.5rem',
@@ -57,7 +57,10 @@ export default function Modal({ children, layoutId, handleClose }) {
         <Close
           sx={{
             position: 'absolute',
-            top: '5rem',
+            top: {
+              xs: '10rem',
+              md: '5rem',
+            },
             right: '5rem',
             fontSize: '30px',
             background: '#00000066',
