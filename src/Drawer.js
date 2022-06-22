@@ -1,44 +1,13 @@
-import TwitterIcon from '@mui/icons-material/Twitter';
 import {
   Box, Button, Drawer,
 } from '@mui/material';
 import { Spin as Hamburger } from 'hamburger-react';
 import Link from 'next/link';
 import { PropTypes } from 'prop-types';
+import { leftNav, shortSocialLinks } from './NavButton/social-links';
 import { entranceAnimationDuration, fadeIn } from './utils/animations';
 
-const navLinks = [
-  {
-    text: 'Prints',
-    href: 'https://www.millergallery.com/featured-artists#/isaac-wright',
-    icon: '',
-  },
-  {
-    text: 'Gallery',
-    href: '/gallery',
-    icon: '',
-  },
-  {
-    text: 'Publications',
-    href: '/publications',
-    icon: '',
-  },
-  {
-    text: 'Contact',
-    href: '/contact',
-    icon: '',
-  },
-  {
-    text: 'About',
-    href: '/about',
-    icon: '',
-  },
-  {
-    text: '',
-    href: 'https://twitter.com/driftershoots',
-    icon: <TwitterIcon sx={{ fontSize: 20 }} />,
-  },
-];
+const navLinks = leftNav.concat(shortSocialLinks);
 
 function NavButton({
   text, href, icon, index, onClose,
