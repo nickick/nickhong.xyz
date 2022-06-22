@@ -1,4 +1,5 @@
 import { Container } from '@mui/material';
+import OtherWork from '../OtherWork';
 import Projects from '../Projects';
 import Hero from './Hero';
 
@@ -16,6 +17,7 @@ export default function Home() {
     >
       <Hero />
       <Projects />
+      <OtherWork />
     </Container>
   );
 }

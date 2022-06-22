@@ -62,6 +62,7 @@ export default function Projects() {
       sx={{
         width: '100%',
         px: 10,
+        mb: 6,
         display: 'flex',
       }}
     >
