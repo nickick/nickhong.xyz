@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
-import { func, number } from 'prop-types';
+import {
+  func, number, oneOfType, string,
+} from 'prop-types';
 import { childrenProps } from '../utils/propTypes';
 import Backdrop from './Backdrop';
 
@@ -51,7 +53,7 @@ export default function Modal({ children, layoutId, handleClose }) {
 }
 
 Modal.propTypes = {
-  layoutId: number.isRequired,
+  layoutId: oneOfType([number, string]).isRequired,
   children: childrenProps.isRequired,
   handleClose: func.isRequired,
 };
