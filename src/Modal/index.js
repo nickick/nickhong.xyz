@@ -31,7 +31,7 @@ export default function Modal({ children, layoutId, handleClose }) {
       <motion.div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: 'clamp(70%, 700px, 900px)',
+          width: 'clamp(400px, 1000px, 1200px)',
           height: 'min(50%, 300px)',
           margin: 'auto',
           padding: '0 2rem',
