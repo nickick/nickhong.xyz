@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   array, bool, func, object, string,
 } from 'prop-types';
+import { useEffect } from 'react';
 import Modal from '../Modal';
 
 function ProjectModalContents({
@@ -94,6 +95,12 @@ ProjectModalContents.propTypes = {
 export default function ProjectModal({
   open, handleClose, layoutId, project,
 }) {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    }
+  }, [open]);
+
   return (
     <div>
       <AnimatePresence

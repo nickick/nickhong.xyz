@@ -1,7 +1,9 @@
+import { Close } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import {
   func, number, oneOfType, string,
 } from 'prop-types';
+import { useCallback } from 'react';
 import { childrenProps } from '../utils/propTypes';
 import Backdrop from './Backdrop';
 
@@ -24,21 +26,27 @@ const dropIn = {
 };
 
 export default function Modal({ children, layoutId, handleClose }) {
+  const closeFn = useCallback(() => {
+    document.body.style.overflow = 'unset';
+    handleClose();
+  }, [handleClose]);
+
   return (
     <Backdrop
-      onClick={handleClose}
+      onClick={closeFn}
     >
       <motion.div
         onClick={(e) => e.stopPropagation()}
         style={{
           width: 'clamp(400px, 1000px, 1200px)',
-          height: 'min(50%, 300px)',
+          maxHeight: '80vh',
           margin: 'auto',
           padding: '0 2rem',
           borderRadius: '1.5rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          position: 'relative',
         }}
         variants={dropIn}
         initial="hiddden"
@@ -46,6 +54,16 @@ export default function Modal({ children, layoutId, handleClose }) {
         exit="exit"
         layoutId={layoutId}
       >
+        <Close
+          sx={{
+            position: 'absolute',
+            top: '5rem',
+            right: '5rem',
+            fontSize: '30px',
+            background: '#00000066',
+          }}
+          onClick={closeFn}
+        />
         {children}
       </motion.div>
     </Backdrop>
