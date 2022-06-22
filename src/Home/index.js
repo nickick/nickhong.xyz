@@ -19,6 +19,7 @@ export default function Home() {
       <Hero />
       <Projects />
       <OtherWork />
+      <Contact />
     </Container>
   );
 }

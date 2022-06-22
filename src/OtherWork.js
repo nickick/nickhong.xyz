@@ -9,6 +9,7 @@ export default function OtherWork() {
       sx={{
         width: '100%',
         px: 10,
+        mb: 10,
         display: 'flex',
       }}
     >
