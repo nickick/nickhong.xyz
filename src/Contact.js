@@ -12,6 +12,7 @@ export default function Contact() {
         px: 10,
         display: 'flex',
       }}
+      id="contact"
     >
       <Box
         sx={{
