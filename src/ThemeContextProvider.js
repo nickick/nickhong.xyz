@@ -28,7 +28,7 @@ const themeShared = {
       fontSize: '2rem',
     },
     body: {
-      fontSize: '2rem',
+      fontSize: '2.5rem',
     },
   },
   components: {
