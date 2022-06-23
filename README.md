@@ -9,11 +9,11 @@ This is a static portfolio site for [@pepperonick](https://twitter.com/pepperoni
 * Vercel.js for deployments
 
 ## Features remaining:
-* Footer section
-* Contact section
-* Additional project cards
+* ~~Footer section~~
+* ~~Contact section~~
+* ~~Additional project cards~~
+* ~~Add responsive mobile styling~~
 * Active sections for navigation
-* Add responsive mobile styling
 
 ## To run:
 ```
