@@ -34,7 +34,7 @@ const projects = [
     href: 'https://wheremyvansgo.com',
     description: [
       "WMVG is <a href='https://twitter.com/driftershoots' target='_blank'>@driftershoots&apos;s</a> best known <a href='https://opensea.io/collection/where-my-vans-go' target='_blank'>NFT collection.</a> Drift started the collection in OpenSea&apos;s generic ERC-1155 Storefront contract, which has millions of NFTs from other artists.",
-      "I worked with <a href='https://twitter.com/andrewjiang' target='_blank'>@andrewjiang</a> and <a href='https://twitter.com/0x5e5e' target='_blank'>@0x5e5e</a> to create an migrator Dapp to for @driftershoots. The dapp connects with your wallet, checks for existing WMVG in OpenSea&apos;s contract, and allows you to send that NFT to a burn address and have a new NFT minted for you on @driftershoot&apos;s own custom ERC-721 Creator Core contract.",
+      "I worked with <a href='https://twitter.com/andrewjiang' target='_blank'>@andrewjiang</a> and <a href='https://twitter.com/0x5e5e' target='_blank'>@0x5e5e</a> to create an migrator Dapp for Drift. The dapp connects with your wallet, checks for existing WMVG in OpenSea&apos;s contract, and allows you to send that NFT to a burn address and have a new NFT minted for you on Drift&apos;s own custom ERC-721 Creator Core contract.",
     ],
     image: '/portfolio/wmvg-migrator.jpeg',
     contributors: [
