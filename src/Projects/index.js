@@ -63,6 +63,8 @@ export default function Projects() {
         width: '100%',
         mb: 6,
         animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
+        position: 'relative',
+        zIndex: 10,
       }}
     >
       <Box
@@ -117,7 +119,7 @@ export default function Projects() {
                   mb: {
                     xs: 2,
                     md: 0,
-                  }
+                  },
                 }}
               >
                 Web3 Projects
