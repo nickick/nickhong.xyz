@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { ConnectedTv } from '@mui/icons-material';
+import { Link as LinkIcon } from '@mui/icons-material';
 import { Box, Link, Typography } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -8,6 +8,7 @@ import {
 } from 'prop-types';
 import { useEffect } from 'react';
 import Modal from '../Modal';
+import { entranceAnimationDuration, fadeIn } from '../utils/animations';
 
 function ProjectModalContents({
   name, href, description, image, imageOnLeft, contributors,
@@ -75,17 +76,21 @@ function ProjectModalContents({
             href={href}
             target="_blank"
           >
-            <ConnectedTv
+            <LinkIcon
               sx={{
                 fontSize: '5rem',
                 mr: 2,
               }}
             />
           </Link>
-          {contributors.map(({ link, icon }) => (
+          {contributors.map(({ link, icon }, index) => (
             <Link
               href={link}
               target="_blank"
+              key={link}
+              sx={{
+                animation: `${fadeIn} ${entranceAnimationDuration}s both ${0.5 + 0.2 * index}s`,
+              }}
             >
               <img
                 src={icon}
