@@ -138,7 +138,7 @@ function ProjectModalContents({
         }}
       >
         <Box
-          sx={{ 
+          sx={{
             display: 'flex',
             width: '100%',
             height: {

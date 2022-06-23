@@ -46,30 +46,27 @@ export default function Project({
         ]}
       >
         <Typography
-          variant="h4"
+          variant="h2"
           sx={{
             mb: 1,
+            fontSize: '3rem',
           }}
         >
           {name}
         </Typography>
       </Box>
       <Box
+        component={motion.div}
         sx={{
           flex: 2,
+          width: '100%',
+          minHeight: '40rem',
+          backgroundImage: `url(${image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
-      >
-        <motion.div
-          style={{
-            width: '100%',
-            minHeight: '40rem',
-            backgroundImage: `url(${image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          layoutId={image}
-        />
-      </Box>
+        layoutId={image}
+      />
     </Box>
   );
 }
