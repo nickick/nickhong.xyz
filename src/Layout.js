@@ -65,10 +65,7 @@ export default function Layout({ children }) {
           top: 0,
           left: 0,
           width: '100%',
-          height: {
-            xs: '90vh',
-            md: '90vh',
-          },
+          height: '90vh',
           backgroundSize: 'cover',
           transition: `opacity ${animationLength}ms ease-out`,
           zIndex: 2,
