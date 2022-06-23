@@ -16,13 +16,12 @@ export default function Hero() {
         flexDirection: 'column',
         justifyContent: 'center',
         minHeight: {
-          xs: '40vh',
+          xs: '90vh',
           md: '90vh',
         },
         width: '100%',
         height: '100%',
         transform: {
-          xs: 'translateY(20rem)',
           md: 'none',
         },
       }}
@@ -86,8 +85,8 @@ export default function Hero() {
                   md: 'none',
                 },
                 background: {
-                  xs: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) 80%, #080808 100%)',
-                  md: 'linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.0) 80%, #080808 100%)',
+                  xs: 'linear-gradient(180deg, #08080888 0%, #08080888 50%, #080808ff 100%)',
+                  md: 'linear-gradient(180deg, #08080800 0%, #08080800 70%, #080808ff 100%)',
                 },
                 zIndex: 12,
               }}

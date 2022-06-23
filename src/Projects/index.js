@@ -73,10 +73,6 @@ export default function Projects() {
             xs: 4,
             md: 10,
           },
-          mt: {
-            xs: 20,
-            md: 0,
-          },
           pt: {
             xs: 20,
             md: 30,

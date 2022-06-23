@@ -29,7 +29,7 @@ export default function Navbar() {
           xs: 2,
         },
         px: '4rem',
-        background: 'linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%)',
+        background: 'linear-gradient(180deg, #080808ff 0%, #080808ab 50%, #08080800 100%)',
         zIndex: {
           xs: 100,
           md: 12,
