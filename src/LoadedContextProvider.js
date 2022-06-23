@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import {
   createContext, useEffect, useMemo, useState,
 } from 'react';
 import { entranceAnimationDelay } from './utils/animations';
+import { childrenProps } from './utils/propTypes';
 
 export const LoadedContext = createContext();
 
@@ -33,8 +33,5 @@ export default function LoadedProvider({ children }) {
 }
 
 LoadedProvider.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
+  children: childrenProps.isRequired,
 };

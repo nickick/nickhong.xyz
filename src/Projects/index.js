@@ -5,7 +5,9 @@ import { Box, Typography } from '@mui/material';
 import {
   motion, useSpring,
 } from 'framer-motion';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import useActiveSection from '../hooks/useActiveSection';
 import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from '../utils/animations';
 import Project from './Project';
 import projects from './project-data';
@@ -57,6 +59,20 @@ export default function Projects() {
     }
   }, [focusCard, resetCard, slideProjectCard]);
 
+  const { ref, inView } = useInView({
+    threshold: 0.3,
+  });
+
+  const { setSectionInView } = useActiveSection();
+
+  useEffect(() => {
+    if (inView) {
+      setSectionInView('Projects', 'add');
+    } else {
+      setSectionInView('Projects', 'delete');
+    }
+  }, [inView, setSectionInView]);
+
   return (
     <Box
       sx={{
@@ -66,6 +82,7 @@ export default function Projects() {
         position: 'relative',
         zIndex: 10,
       }}
+      ref={ref}
     >
       <Box
         id="projects"

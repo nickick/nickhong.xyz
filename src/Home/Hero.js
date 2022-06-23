@@ -2,6 +2,9 @@ import { KeyboardArrowDown } from '@mui/icons-material';
 import {
   Box, Typography,
 } from '@mui/material';
+import { useCallback, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import useActiveSection from '../hooks/useActiveSection';
 import NavButton from '../NavButton';
 import { socialLinks } from '../NavButton/social-links';
 import {
@@ -9,6 +12,22 @@ import {
 } from '../utils/animations';
 
 export default function Hero() {
+  const { ref, inView } = useInView({
+    threshold: 0.3,
+  });
+
+  const { setSectionInView } = useActiveSection();
+
+  const onDownClick = useCallback(() => {
+    document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    if (inView) {
+      setSectionInView('Home', 'add');
+    }
+  }, [inView, setSectionInView]);
+
   return (
     <Box
       sx={{
@@ -25,6 +44,8 @@ export default function Hero() {
           md: 'none',
         },
       }}
+      ref={ref}
+      id="home"
     >
       <Box
         sx={{
@@ -205,9 +226,7 @@ export default function Hero() {
               opacity: 0,
               animation: `${slideFromLeft} ${entranceAnimationDuration}s both ${entranceAnimationDelay + 1}s`,
             }}
-            onClick={() => {
-              document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
-            }}
+            onClick={onDownClick}
           />
         </Box>
       </Box>

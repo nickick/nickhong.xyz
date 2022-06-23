@@ -1,11 +1,28 @@
 import {
   Box, Container, Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import useActiveSection from './hooks/useActiveSection';
 import NavButton from './NavButton';
 import { socialLinks } from './NavButton/social-links';
 import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
 
 export default function Contact() {
+  const { ref, inView } = useInView({
+    threshold: 0.7,
+  });
+
+  const { setSectionInView } = useActiveSection();
+
+  useEffect(() => {
+    if (inView) {
+      setSectionInView('Contact', 'add');
+    } else {
+      setSectionInView('Contact', 'delete');
+    }
+  }, [inView, setSectionInView]);
+
   return (
     <Container
       sx={{
@@ -22,6 +39,7 @@ export default function Contact() {
         animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
       }}
       id="contact"
+      ref={ref}
     >
       <Box sx={{
         display: {

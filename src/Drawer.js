@@ -4,14 +4,25 @@ import {
 import { Spin as Hamburger } from 'hamburger-react';
 import Link from 'next/link';
 import { PropTypes } from 'prop-types';
+import { useCallback } from 'react';
 import { leftNav, shortSocialLinks } from './NavButton/social-links';
 import { entranceAnimationDuration, fadeIn } from './utils/animations';
 
 const navLinks = leftNav.concat(shortSocialLinks);
 
 function NavButton({
-  text, href, icon, index, onClose,
+  text, href, icon, index, onClose, anchor,
 }) {
+  const scrollTo = useCallback(() => {
+    if (anchor) {
+      document.getElementById(anchor).scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+
+    onClose();
+  }, [anchor, onClose]);
+
   return (
     <Link href={href} passHref>
       <Button
@@ -25,7 +36,7 @@ function NavButton({
           letterSpacing: '0.1rem',
           animation: `${fadeIn} ${entranceAnimationDuration}s both ${index * 0.1}s`,
         }}
-        onClick={onClose}
+        onClick={scrollTo}
         target={(icon || href[0] !== '/') ? '_blank' : ''}
       >
         {text}
@@ -40,6 +51,7 @@ NavButton.propTypes = {
   href: PropTypes.string,
   icon: PropTypes.node,
   index: PropTypes.number.isRequired,
+  anchor: PropTypes.string,
   onClose: PropTypes.func.isRequired,
 };
 
@@ -47,6 +59,7 @@ NavButton.defaultProps = {
   text: '',
   href: '',
   icon: null,
+  anchor: '',
 };
 
 export default function MobileDrawer({ isOpen, setOpen, closeDrawer }) {
@@ -88,6 +101,7 @@ export default function MobileDrawer({ isOpen, setOpen, closeDrawer }) {
             href={href}
             icon={icon}
             index={index}
+            anchor={text.toLowerCase()}
             onClose={closeDrawer}
           />
         ))}

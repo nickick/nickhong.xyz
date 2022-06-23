@@ -5,7 +5,7 @@ import TelegramIcon from '../TelegramIcon';
 export const leftNav = [
   {
     text: 'Home',
-    href: '/',
+    href: '/#home',
     icon: '',
   },
   {

@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useCallback, useState } from 'react';
 import Drawer from './Drawer';
 import NavButton from './NavButton';
-import { socialLinks, leftNav } from './NavButton/social-links';
+import ActiveNav from './NavButton/ActiveNav';
+import { socialLinks } from './NavButton/social-links';
 import {
   entranceAnimationDelay, entranceAnimationDuration, fadeIn, fadeInLogo,
 } from './utils/animations';
@@ -68,17 +69,7 @@ export default function Navbar() {
             },
           }}
         >
-          {
-            leftNav.map(({ text, href, icon }, index) => (
-              <NavButton
-                key={text + href}
-                text={text}
-                href={href}
-                icon={icon}
-                index={index}
-              />
-            ))
-          }
+          <ActiveNav />
         </Box>
         <Box
           sx={{
