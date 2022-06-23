@@ -63,7 +63,7 @@ export default function Hero() {
                 xs: 'translate(-50%,-40%)',
                 md: 'translate(0rem, -10rem)',
                 lg: 'translate(20rem, -2rem)',
-                xl: 'translate(0rem, -20rem)',
+                xl: 'translate(20rem, -0rem)',
               },
             }}
           >
