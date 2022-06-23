@@ -69,9 +69,6 @@ export default function Layout({ children }) {
             xs: '90vh',
             md: '90vh',
           },
-          // background: overlayOpacity === 1
-          //   ? 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 80%, #080808 100%)'
-          //   : 'none',
           backgroundSize: 'cover',
           transition: `opacity ${animationLength}ms ease-out`,
           zIndex: 2,
