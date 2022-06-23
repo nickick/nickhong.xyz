@@ -43,7 +43,7 @@ export const socialLinks = [
   },
   {
     text: '',
-    href: 'mailto:hong.nick+xyz@gmail.com',
+    href: 'mailto:contact@nickhong.xyz',
     icon: <Inbox sx={{ fontSize: 20 }} />,
   },
 ];
