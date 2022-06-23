@@ -127,12 +127,29 @@ function ProjectModalContents({
       <Box
         sx={{
           flex: 2,
+          height: {
+            xs: '200px',
+            md: 'unset',
+          },
+          minHeight: {
+            xs: '200px',
+            md: 'unset',
+          },
         }}
       >
-        <motion.img
-          src={image}
-          alt={name}
-          style={{ width: '100%' }}
+        <Box
+          sx={{ 
+            display: 'flex',
+            width: '100%',
+            height: {
+              xs: '600px',
+              md: '100%',
+            },
+            backgroundImage: `url(${image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+          component={motion.div}
           layoutId={image}
         />
       </Box>
