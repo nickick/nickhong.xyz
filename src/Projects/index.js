@@ -113,6 +113,12 @@ export default function Projects() {
             >
               <Typography
                 variant="h2"
+                sx={{
+                  mb: {
+                    xs: 2,
+                    md: 0,
+                  }
+                }}
               >
                 Web3 Projects
               </Typography>

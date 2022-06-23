@@ -53,7 +53,7 @@ export default function Contact() {
             variant="h2"
             sx={{
               pb: {
-                xs: 5,
+                xs: 2,
                 md: 0,
               },
             }}
