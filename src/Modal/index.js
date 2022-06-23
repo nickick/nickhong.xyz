@@ -61,7 +61,7 @@ export default function Modal({ children, layoutId, handleClose }) {
               xs: '10rem',
               md: '5rem',
             },
-            right: '5rem',
+            right: '4rem',
             fontSize: '30px',
             background: '#00000066',
             cursor: 'pointer',
