@@ -82,7 +82,7 @@ const projects = [
     href: 'https://digitaldiaspora.xyz',
     description: [
       "Digital Diaspora is <a href='https://twitter.com/dianaesinclair' target='_blank'>@dianaesinclair&apos;s</a> and <a href='https://twitter.com/driftershoots' target='_blank'>@driftershoots&apos;s</a> Juneteenth event, the only Black-owned event for Juneteenth in the NYC.NFT calendar.",
-      "Prominent artists include <a href='https://twitter.com/Reuel_Williams' target='_blank'>@Reuel_Williams</a>, <a href='https://twitter.com/coryvanlew' target='_blank'>@coryvanlew</a>, <a href='https://twitter.com/Ed_Balloon' target='_blank'>@ed_balloon</a>, <a href='https://twitter.com/Swopes' target='_blank'>@swopes</a>, <a href='https://twitter.com/CallMeLatashaSwopes' target='_blank'>@callmelatasha</a>, <a href='https://twitter.com/misanharriman' target='_blank'>@misanharriman</a>, and <a href='https://twitter.com/ix_shells' target='_blank'>@ix_shells</a>.",
+      "Prominent artists include <a href='https://twitter.com/Reuel_Williams' target='_blank'>@Reuel_Williams</a>, <a href='https://twitter.com/coryvanlew' target='_blank'>@coryvanlew</a>, <a href='https://twitter.com/Ed_Balloon' target='_blank'>@ed_balloon</a>, <a href='https://twitter.com/Swopes' target='_blank'>@swopes</a>, <a href='https://twitter.com/CallMeLatasha' target='_blank'>@callmelatasha</a>, <a href='https://twitter.com/misanharriman' target='_blank'>@misanharriman</a>, and <a href='https://twitter.com/ix_shells' target='_blank'>@ix_shells</a>.",
       'I built a simple static React site and helped coordinate with artists to create Maniforld ERC-721 Creator Core contracts and auction sites for the event.',
     ],
     image: '/portfolio/digitaldiaspora.png',
