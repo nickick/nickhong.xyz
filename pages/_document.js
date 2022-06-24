@@ -7,15 +7,15 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta name="description" content="Personal site for Nick Hong, Web3 Dev" />
-          <meta property="og:title" content="nickhong.xyz" />
-          <meta property="og:description" content="Personal site for Nick Hong, Web3 Dev" />
-          <meta property="og:url" content="https://nickhong.xyz/" />
           <meta property="og:image" content="https://nickhong.xyz/og-image.jpeg" />
           <meta property="og:image:type" content="image/jpeg" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
           <meta property="og:image:alt" content="Nick Hong, Web3 Dev" />
+          <meta name="description" content="Home for Nick Hong, Web3 Dev" />
+          <meta property="og:title" content="nickhong.xyz" />
+          <meta property="og:description" content="Home for Nick Hong, Web3 Dev" />
+          <meta property="og:url" content="https://nickhong.xyz/" />
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:site" content="@pepperonick" />
           <meta name="twitter:creator" content="@pepperonick" />
