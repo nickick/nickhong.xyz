@@ -119,7 +119,7 @@ export default function Projects() {
           display: 'flex',
           animation: `${fadeIn} ${entranceAnimationDuration}s both ${animationDelay}s`,
           position: 'relative',
-          zIndex: 2
+          zIndex: 2,
         }}
       >
         <ProjectModal
