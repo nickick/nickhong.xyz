@@ -23,17 +23,25 @@ export default function NavButton({
     <Link href={href} passHref>
       <Button
         variant="text"
-        sx={{
-          color: active ? 'black' : 'text.primary',
-          background: active ? '#ccc' : '#080808',
-          minWidth: icon ? '1rem' : 'inherit',
-          mx: '0.5rem',
-          fontSize: '1.5rem',
-          height: '4rem',
-          lineHeight: '2rem',
-          letterSpacing: '0.1rem',
-          animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay + index * 0.2}s`,
-        }}
+        sx={[
+          {
+            color: active ? 'black' : 'text.primary',
+            background: active ? '#ccc' : '#080808',
+            minWidth: icon ? '1rem' : 'inherit',
+            mx: '0.5rem',
+            fontSize: '1.5rem',
+            height: '4rem',
+            lineHeight: '2rem',
+            letterSpacing: '0.1rem',
+            animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay + index * 0.2}s`,
+          },
+          {
+            '&:hover': {
+              background: '#ddd',
+              color: 'black',
+            },
+          },
+        ]}
         target={(icon || href[0] !== '/') ? '_blank' : ''}
         onClick={scrollTo}
       >
