@@ -1,9 +1,10 @@
 import {
   Box, Container, Typography,
 } from '@mui/material';
-import { useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useActiveSection from './hooks/useActiveSection';
+import { LoadedContext } from './LoadedContextProvider';
 import NavButton from './NavButton';
 import { socialLinks } from './NavButton/social-links';
 import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
@@ -12,6 +13,11 @@ export default function Contact() {
   const { ref, inView } = useInView({
     threshold: 0.7,
   });
+
+  const [ inViewRef, inAnimationView ] = useInView({
+    threshold: 0.7,
+    triggerOnce: true
+  })
 
   const { setSectionInView } = useActiveSection();
 
@@ -22,6 +28,17 @@ export default function Contact() {
       setSectionInView('Contact', 'delete');
     }
   }, [inView, setSectionInView]);
+
+  const setRefs = useCallback(
+    (node) => {
+      ref.current = node;
+      ref(node);
+      inViewRef(node)
+    },
+    [ref, inViewRef]
+  )
+
+  const { animationDelay } = useContext(LoadedContext);
 
   return (
     <Container
@@ -36,10 +53,11 @@ export default function Contact() {
           md: 10,
         },
         display: 'flex',
-        animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
+        animation: inAnimationView ? `${fadeIn} ${entranceAnimationDuration}s both ${animationDelay}s` : 'none',
+        opacity: 0,
       }}
       id="contact"
-      ref={ref}
+      ref={setRefs}
     >
       <Box sx={{
         display: {

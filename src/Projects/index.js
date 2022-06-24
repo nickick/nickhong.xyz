@@ -5,9 +5,10 @@ import { Box, Typography } from '@mui/material';
 import {
   motion, useSpring,
 } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useActiveSection from '../hooks/useActiveSection';
+import { LoadedContext } from '../LoadedContextProvider';
 import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from '../utils/animations';
 import Project from './Project';
 import projects from './project-data';
@@ -63,6 +64,11 @@ export default function Projects() {
     threshold: 0.3,
   });
 
+  const [ inViewRef, inAnimationView ] = useInView({
+    threshold: 0.3,
+    triggerOnce: true
+  })
+
   const { setSectionInView } = useActiveSection();
 
   useEffect(() => {
@@ -73,19 +79,31 @@ export default function Projects() {
     }
   }, [inView, setSectionInView]);
 
+  const setRefs = useCallback(
+    (node) => {
+      ref.current = node;
+      ref(node);
+      inViewRef(node)
+    },
+    [ref, inViewRef]
+  )
+
+  const { animationDelay } = useContext(LoadedContext);
+
   return (
     <Box
       sx={{
         width: '100%',
         mb: 6,
-        animation: `${fadeIn} ${entranceAnimationDuration}s both ${entranceAnimationDelay}s`,
+        animation: inAnimationView ? `${fadeIn} ${entranceAnimationDuration}s both ${animationDelay}s` : 'none',
+        opacity: 0,
         position: 'relative',
         zIndex: 10,
       }}
-      ref={ref}
+      ref={setRefs}
+      id="projects"
     >
       <Box
-        id="projects"
         sx={{
           width: '100%',
           px: {
@@ -97,6 +115,7 @@ export default function Projects() {
             md: 30,
           },
           display: 'flex',
+          animation: `${fadeIn} ${entranceAnimationDuration}s both ${animationDelay}s`,
         }}
       >
         <ProjectModal
@@ -169,6 +188,7 @@ export default function Projects() {
             md: 10,
           },
           display: 'flex',
+          animation: `${fadeIn} ${entranceAnimationDuration}s both 0s`,
         }}
       >
         <Box sx={{
