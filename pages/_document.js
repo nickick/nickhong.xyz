@@ -7,11 +7,12 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta property="og:image" content="https://nickhong.xyz/og-image.jpeg" />
+          <meta property="og:image" content="https://nickhong.xyz/og-image.jpg" />
           <meta property="og:image:type" content="image/jpeg" />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
           <meta property="og:image:alt" content="Nick Hong, Web3 Dev" />
+          <meta property="og:type" content="website" />
           <meta name="description" content="Home for Nick Hong, Web3 Dev" />
           <meta property="og:title" content="nickhong.xyz" />
           <meta property="og:description" content="Home for Nick Hong, Web3 Dev" />
