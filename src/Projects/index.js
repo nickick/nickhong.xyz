@@ -5,11 +5,13 @@ import { Box, Typography } from '@mui/material';
 import {
   motion, useSpring,
 } from 'framer-motion';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { useInView } from 'react-intersection-observer';
 import useActiveSection from '../hooks/useActiveSection';
 import { LoadedContext } from '../LoadedContextProvider';
-import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from '../utils/animations';
+import { entranceAnimationDuration, fadeIn } from '../utils/animations';
 import Project from './Project';
 import projects from './project-data';
 import ProjectModal from './ProjectModal';
@@ -64,10 +66,10 @@ export default function Projects() {
     threshold: 0.3,
   });
 
-  const [ inViewRef, inAnimationView ] = useInView({
+  const [inViewRef, inAnimationView] = useInView({
     threshold: 0.3,
-    triggerOnce: true
-  })
+    triggerOnce: true,
+  });
 
   const { setSectionInView } = useActiveSection();
 
@@ -83,10 +85,10 @@ export default function Projects() {
     (node) => {
       ref.current = node;
       ref(node);
-      inViewRef(node)
+      inViewRef(node);
     },
-    [ref, inViewRef]
-  )
+    [ref, inViewRef],
+  );
 
   const { animationDelay } = useContext(LoadedContext);
 

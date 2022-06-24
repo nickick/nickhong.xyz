@@ -4,12 +4,12 @@ import {
 import { useContext } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { LoadedContext } from './LoadedContextProvider';
-import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
+import { entranceAnimationDuration, fadeIn } from './utils/animations';
 
 export default function OtherWork() {
   const { ref, inView } = useInView({
     threshold: 0.1,
-    triggerOnce: true
+    triggerOnce: true,
   });
 
   const { animationDelay } = useContext(LoadedContext);
@@ -23,7 +23,7 @@ export default function OtherWork() {
           md: 10,
         },
         mt: 5,
-        
+
       }}
       ref={ref}
     >

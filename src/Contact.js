@@ -7,17 +7,17 @@ import useActiveSection from './hooks/useActiveSection';
 import { LoadedContext } from './LoadedContextProvider';
 import NavButton from './NavButton';
 import { socialLinks } from './NavButton/social-links';
-import { entranceAnimationDelay, entranceAnimationDuration, fadeIn } from './utils/animations';
+import { entranceAnimationDuration, fadeIn } from './utils/animations';
 
 export default function Contact() {
   const { ref, inView } = useInView({
     threshold: 0.7,
   });
 
-  const [ inViewRef, inAnimationView ] = useInView({
+  const [inViewRef, inAnimationView] = useInView({
     threshold: 0.7,
-    triggerOnce: true
-  })
+    triggerOnce: true,
+  });
 
   const { setSectionInView } = useActiveSection();
 
@@ -33,10 +33,10 @@ export default function Contact() {
     (node) => {
       ref.current = node;
       ref(node);
-      inViewRef(node)
+      inViewRef(node);
     },
-    [ref, inViewRef]
-  )
+    [ref, inViewRef],
+  );
 
   const { animationDelay } = useContext(LoadedContext);
 
