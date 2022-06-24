@@ -13,9 +13,9 @@ class MyDocument extends Document {
           <meta property="og:image:height" content="630" />
           <meta property="og:image:alt" content="Nick Hong, Web3 Dev" />
           <meta property="og:type" content="website" />
-          <meta name="description" content="Home for Nick Hong, Web3 Dev" />
+          <meta name="description" content="Nick Hong, Web3 Dev" />
           <meta property="og:title" content="nickhong.xyz" />
-          <meta property="og:description" content="Home for Nick Hong, Web3 Dev" />
+          <meta property="og:description" content="Nick Hong, Web3 Dev" />
           <meta property="og:url" content="https://nickhong.xyz/" />
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:site" content="@pepperonick" />
