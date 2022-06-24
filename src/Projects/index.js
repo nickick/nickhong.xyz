@@ -100,7 +100,7 @@ export default function Projects() {
         animation: inAnimationView ? `${fadeIn} ${entranceAnimationDuration}s both ${animationDelay}s` : 'none',
         opacity: 0,
         position: 'relative',
-        zIndex: 10,
+        zIndex: 1,
       }}
       ref={setRefs}
       id="projects"
@@ -118,6 +118,8 @@ export default function Projects() {
           },
           display: 'flex',
           animation: `${fadeIn} ${entranceAnimationDuration}s both ${animationDelay}s`,
+          position: 'relative',
+          zIndex: 2
         }}
       >
         <ProjectModal
