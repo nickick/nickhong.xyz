@@ -33,6 +33,7 @@ export default function Footer() {
         sx={{
           display: 'flex',
           flexDirection: 'row',
+          alignItems: 'center',
           maxWidth: '1400px',
         }}
       >
@@ -96,6 +97,7 @@ export default function Footer() {
             flex: 1,
             flexWrap: 'nowrap',
             justifyContent: 'flex-start',
+            alignItems: 'center',
           }}
         >
           <NavButton
