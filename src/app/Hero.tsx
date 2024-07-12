@@ -48,7 +48,7 @@ const Hero: FC<{}> = ({}) => {
             transform
             md:h-[60rem]
             translate-x-[-50%] translatey-y-[-40%]
-            md:translate-x-[20%] md:-translate-y-1/2 lg:translate-x-[10rem] xl:translate-x-[20rem]"
+            md:translate-x-[20%] md:-translate-y-1/2 lg:translate-x-[4rem] xl:translate-x-[14rem]"
           >
             {/* Mobile cutout gradient */}
             <div
@@ -136,7 +136,7 @@ const Hero: FC<{}> = ({}) => {
             })}
           </div>
         </div>
-        <div className="flex absolute right-1/2 md:right-[3rem] xl:right-[12.5%] top-3/4 md:top-1/2 -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
+        <div className="flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-3/4 md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
           <Image
             src="/icons/down-carets.svg"
             width={50}
