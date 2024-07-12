@@ -23,72 +23,82 @@ const config: Config = {
       colors: {
         backgroundBlack: "#080808",
       },
-    },
-    keyframes: {
-      fadeIn: {
-        "0%": {
-          opacity: "0",
+      keyframes: {
+        wave: {
+          "0%, 100%": {
+            transform: "rotate(0deg)",
+          },
+          "50%": {
+            transform: "rotate(15deg)",
+          },
         },
-        "100%": {
-          opacity: "1",
+        fadeIn: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+        fadeOut: {
+          "0%": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+          },
+        },
+        bounceUp: {
+          "0%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            transform: "translateY(0px)",
+          },
+        },
+        fadeInLogo: {
+          "0%": {
+            transform: "scale(1.2) translateY(35vh) translateX(-30%)",
+            opacity: "0",
+          },
+          "70%": {
+            transform: "scale(1.2) translateY(35vh) translateX(-50%)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(1) translateY(5px) translateX(-50%)",
+            opacity: "1",
+          },
+        },
+        fadeFromBelow: {
+          "0%": {
+            transform: "translateY(20px)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0)",
+            opacity: "1",
+          },
+        },
+        slideFromLeft: {
+          "0%": {
+            transform: "translateX(100px)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateX(0)",
+            opacity: "1",
+          },
         },
       },
-      fadeOut: {
-        "0%": {
-          opacity: "1",
-        },
-        "100%": {
-          opacity: "0",
-        },
+      animation: {
+        fadeInAfterDelay: "fadeIn 1s both 1s",
+        fadeInFromLeftAfterDelay: "slideFromLeft 1s both 1s",
+        wave: "wave 3s infinite",
       },
-      bounceUp: {
-        "0%": {
-          transform: "translateY(0px)",
-        },
-        "50%": {
-          transform: "translateY(20px)",
-        },
-        "100%": {
-          transform: "translateY(0px)",
-        },
-      },
-      fadeInLogo: {
-        "0%": {
-          transform: "scale(1.2) translateY(35vh) translateX(-30%)",
-          opacity: "0",
-        },
-        "70%": {
-          transform: "scale(1.2) translateY(35vh) translateX(-50%)",
-          opacity: "1",
-        },
-        "100%": {
-          transform: "scale(1) translateY(5px) translateX(-50%)",
-          opacity: "1",
-        },
-      },
-      fadeFromBelow: {
-        "0%": {
-          transform: "translateY(20px)",
-          opacity: "0",
-        },
-        "100%": {
-          transform: "translateY(0)",
-          opacity: "1",
-        },
-      },
-      slideFromLeft: {
-        "0%": {
-          transform: "translateX(100px)",
-          opacity: "0",
-        },
-        "100%": {
-          transform: "translateX(0)",
-          opacity: "1",
-        },
-      },
-    },
-    animation: {
-      fadeInAfterDelay: "fadeIn 1s both 1s",
     },
   },
   plugins: [],

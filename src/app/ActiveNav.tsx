@@ -32,7 +32,7 @@ export default function ActiveNav() {
           anchor={text.toLowerCase()}
           active={text === activeSection}
           index={index}
-          className="mx-2 uppercase text-xs py-2"
+          className="md:mx-0 lg:mx-2 uppercase text-xs py-2"
         />
       ))}
     </>

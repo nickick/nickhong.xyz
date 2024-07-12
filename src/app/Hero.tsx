@@ -109,24 +109,40 @@ const Hero: FC<HeroProps> = ({}) => {
           }}
         >
           <h1
-            className={`text-[3rem] md:text-[4rem] leading-none ${serif.className} mb-[-1rem]`}
+            className={`text-[3rem] md:text-[3.5rem] lg:text-[4rem] leading-none ${serif.className} mb-[-1rem] flex gap-2 items-center`}
           >
-            Hi, I&apos;m Nick 👋
+            Hi, I&apos;m Nick{" "}
+            <div className="animate-wave text-[2rem] md:text-[3rem] md:ml-3">
+              👋
+            </div>
           </h1>
           <div className="md:text-2xl">
             I&apos;m a Web3 engineer based in NYC.
           </div>
           <div className="flex text-white items-center">
-            {socialLinks.map(({ text, href, icon }, index) => (
-              <NavIcon
-                text={text}
-                href={href}
-                icon={icon}
-                index={index}
-                key={href}
-              />
-            ))}
+            {socialLinks.map(({ text, href, icon }, index) => {
+              return (
+                <NavIcon
+                  text={text}
+                  href={href}
+                  icon={icon}
+                  index={index}
+                  key={href}
+                  className={index === 0 ? "md:pl-0 md:ml-0" : ""}
+                />
+              );
+            })}
           </div>
+        </div>
+        <div className="hidden lg:flex absolute md:right-[3rem] xl:right-[12.5%] top-1/2 -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
+          <Image
+            src="/icons/down-carets.svg"
+            width={50}
+            height={50}
+            alt="Down"
+            className="cursor-pointer relative z-[50] animate-bounce"
+            onClick={onDownClick}
+          />
         </div>
       </div>
     </div>
