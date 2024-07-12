@@ -1,24 +1,7 @@
 import { useEffect, useState } from "react";
 import NavIcon from "@/app/NavIcon";
 import useActiveSection from "@/app/hooks/useActiveSection";
-
-export const leftNav = [
-  {
-    text: "Home",
-    href: "/#home",
-    icon: "",
-  },
-  {
-    text: "Projects",
-    href: "/#projects",
-    icon: "",
-  },
-  {
-    text: "Contact",
-    href: "/#contact",
-    icon: "",
-  },
-];
+import { leftNav } from "@/app/socialLinks";
 
 export default function ActiveNav() {
   const [activeSection, setActiveSection] = useState("home");

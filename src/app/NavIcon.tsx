@@ -10,6 +10,7 @@ type NavIconProps = {
   anchor?: string;
   active?: boolean;
   className?: string;
+  onClose?: () => void;
 };
 
 export default function NavIcon({
@@ -20,6 +21,7 @@ export default function NavIcon({
   anchor,
   active,
   className,
+  onClose,
 }: NavIconProps) {
   const scrollTo = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -29,9 +31,11 @@ export default function NavIcon({
         document.getElementById(anchor)?.scrollIntoView({
           behavior: "smooth",
         });
+
+        onClose?.();
       }
     },
-    [anchor]
+    [anchor, onClose]
   );
 
   return (

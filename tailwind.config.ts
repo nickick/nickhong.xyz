@@ -54,7 +54,7 @@ const config: Config = {
       },
       fadeInLogo: {
         "0%": {
-          transform: "scale(1.2) translateY(35vh) translateX(3rem)",
+          transform: "scale(1.2) translateY(35vh) translateX(-30%)",
           opacity: "0",
         },
         "70%": {
@@ -62,7 +62,7 @@ const config: Config = {
           opacity: "1",
         },
         "100%": {
-          transform: "scale(1) translateY(0) translateX(-50%)",
+          transform: "scale(1) translateY(5px) translateX(-50%)",
           opacity: "1",
         },
       },
