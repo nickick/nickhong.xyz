@@ -1,4 +1,7 @@
-import useActiveSection from "@/app/hooks/useActiveSection";
+import useActiveSection, {
+  AddOrDelete,
+  Section,
+} from "@/app/hooks/useActiveSection";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { serif } from "../fonts";
@@ -33,7 +36,6 @@ const Projects: FC = () => {
 
   const hoverchange = useCallback(
     ({ hover, index }: { hover: boolean; index: number }) => {
-      console.log(hover, index);
       let newProjectSlideStates: ProjectSlideState[] = [];
       if (hover) {
         newProjectSlideStates = projects.map((_, i) => {
@@ -68,9 +70,9 @@ const Projects: FC = () => {
 
   useEffect(() => {
     if (inView) {
-      setSectionInView("Projects", "add");
+      setSectionInView(Section.Projects, AddOrDelete.add);
     } else {
-      setSectionInView("Projects", "delete");
+      setSectionInView(Section.Projects, AddOrDelete.delete);
     }
   }, [inView, setSectionInView]);
 

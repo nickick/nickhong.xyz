@@ -1,5 +1,8 @@
 "use client";
-import useActiveSection from "@/app/hooks/useActiveSection";
+import useActiveSection, {
+  AddOrDelete,
+  Section,
+} from "@/app/hooks/useActiveSection";
 import Image from "next/image";
 import { FC, useCallback, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -24,7 +27,7 @@ const Hero: FC<{}> = ({}) => {
 
   useEffect(() => {
     if (inView) {
-      setSectionInView("Home", "add");
+      setSectionInView(Section.Home, AddOrDelete.add);
     }
   }, [inView, setSectionInView]);
 

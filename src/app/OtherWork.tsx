@@ -1,6 +1,10 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { serif } from "./fonts";
 import { useInView } from "react-intersection-observer";
+import useActiveSection, {
+  AddOrDelete,
+  Section,
+} from "./hooks/useActiveSection";
 
 const Link = ({
   href,
@@ -24,8 +28,18 @@ const Link = ({
 const OtherWork: FC = ({}) => {
   const { ref, inView } = useInView({
     threshold: 0.1,
-    triggerOnce: true,
+    triggerOnce: false,
   });
+
+  const { setSectionInView } = useActiveSection();
+
+  useEffect(() => {
+    if (inView) {
+      setSectionInView(Section.OtherProjects, AddOrDelete.add);
+    } else {
+      setSectionInView(Section.OtherProjects, AddOrDelete.delete);
+    }
+  }, [inView, setSectionInView]);
 
   return (
     <div

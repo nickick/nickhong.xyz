@@ -3,12 +3,15 @@ import { serif } from "./fonts";
 import { useInView } from "react-intersection-observer";
 import { socialLinks } from "./socialLinks";
 import NavIcon from "./NavIcon";
-import useActiveSection from "./hooks/useActiveSection";
+import useActiveSection, {
+  AddOrDelete,
+  Section,
+} from "./hooks/useActiveSection";
 
 const Contact: FC = ({}) => {
   const { ref, inView } = useInView({
     threshold: 0.1,
-    triggerOnce: true,
+    triggerOnce: false,
   });
 
   const [inViewRef, inAnimationView] = useInView({
@@ -20,9 +23,9 @@ const Contact: FC = ({}) => {
 
   useEffect(() => {
     if (inView) {
-      setSectionInView("Contact", "add");
+      setSectionInView(Section.Contact, AddOrDelete.add);
     } else {
-      setSectionInView("Contact", "delete");
+      setSectionInView(Section.Contact, AddOrDelete.delete);
     }
   }, [inView, setSectionInView]);
 
