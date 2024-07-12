@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sansSerif.className}`}
+        className={`${sansSerif.className} max-w-screen-2xl mx-auto`}
         style={{
           background: "#080808",
         }}

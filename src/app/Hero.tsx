@@ -9,9 +9,8 @@ import { socialLinks } from "./socialLinks";
 
 type HeroProps = {};
 
-const heightClamp = "clamp(20rem, 60rem, 80rem)";
 const mobileScreenPosition =
-  "absolute h-1/2 bottom-1/2 w-full left-1/2 z-20 transform translate-x-[-50%] translate-y-[-50%]";
+  "absolute h-full w-full left-1/2 z-20 transform translate-x-[-50%] translate-y-[-50%]";
 
 const Hero: FC<HeroProps> = ({}) => {
   const { ref, inView } = useInView({
@@ -39,17 +38,15 @@ const Hero: FC<HeroProps> = ({}) => {
         {/* Left image */}
         <div
           className="relative w-full animate-fadeInAfterDelay"
-          style={{ height: heightClamp, flex: 5 }}
+          style={{ flex: 5 }}
         >
           <div
-            className="absolute w-full top-1/2 md:top-0 left-1/2 md:left-0
+            className="absolute w-full top-1/2 md:top-1/2 left-1/2 md:left-0
             transform
             translate-x-[-50%] translatey-y-[-40%]
-            md:translate-x-0 md:translate-y-[10rem]
-            lg:translate-x-[10rem] lg:translate-y-[20%]
-            xl:translate-x-[20rem] xl:translate-y-[10rem]"
+            md:translate-x-[20%] md:-translate-y-1/2 lg:translate-x-[10rem] xl:translate-x-[20rem]"
             style={{
-              height: heightClamp,
+              height: "60rem",
             }}
           >
             {/* Mobile cutout gradient */}
@@ -71,10 +68,11 @@ const Hero: FC<HeroProps> = ({}) => {
             />
             {/* Desktop cutout gradient */}
             <div
-              className="absolute h-1/2 bottom-0 w-full top-0 left-0 z-20
+              className="absolute h-96 w-full top-0 md:top-1/2 left-0 z-20
               transform
               opacity-0 md:opacity-100
-              translate-x-[0%] translate-y-[0%]"
+              translate-x-[0%] translate-y-[0%]
+              md:-translate-y-1/2"
               style={{
                 background:
                   "linear-gradient(180deg, #08080800 0%, #08080800 70%, #080808ff 100%)",
@@ -82,22 +80,25 @@ const Hero: FC<HeroProps> = ({}) => {
             />
             {/* Cutout */}
             <div
-              className="absolute h-1/2 bottom-1/2 md:bottom-0 md:top-0 left-1/2 md:left-0 transform
-              translate-x-[-50%] translate-y-[-50%]
-              md:translate-x-[0%] md:translate-y-[0%]
-              bg-no-repeat"
+              className="absolute h-96 w-96 left-1/2 top-0 md:left-0 md:top-1/2 transform
+              -translate-x-1/2 -translate-y-[90%]
+              md:translate-x-[0%] md:-translate-y-1/2"
               style={{
                 mask: "url(/cutout.png)",
                 maskSize: "contain",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
               }}
             >
-              <Image
-                src="/profile-image.jpeg"
-                alt="Nick Hong staring off into the distance to the right"
-                className="w-96 h-auto"
-                width={1080}
-                height={1350}
-              />
+              <div className="relative w-96 h-96">
+                <Image
+                  src="/profile-image.jpeg"
+                  alt="Nick Hong staring off into the distance to the right"
+                  className="absolute left-0 top-0"
+                  fill
+                  objectFit="contain"
+                />
+              </div>
             </div>
           </div>
         </div>
