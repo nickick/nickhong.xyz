@@ -89,7 +89,8 @@ const config: Config = {
             opacity: "0",
           },
           "100%": {
-            transform: "translateX(0)",
+            // assumes positioned from right 50%
+            transform: "translateX(50%)",
             opacity: "1",
           },
         },

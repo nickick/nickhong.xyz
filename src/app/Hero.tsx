@@ -7,12 +7,12 @@ import { serif } from "./fonts";
 import { NavIcon } from "./NavIcon";
 import { socialLinks } from "./socialLinks";
 
-type HeroProps = {};
-
 const mobileScreenPosition =
-  "absolute h-full w-full left-1/2 z-20 transform translate-x-[-50%] translate-y-[-50%]";
+  "absolute h-96 w-96 top-1/4 left-1/2 z-20 transform translate-x-[-50%] translate-y-[-90%]";
 
-const Hero: FC<HeroProps> = ({}) => {
+const cutoutSize = "h-96 w-96 md:h-[30rem] md:w-[30rem]";
+
+const Hero: FC<{}> = ({}) => {
   const { ref, inView } = useInView({
     threshold: 0.3,
   });
@@ -30,7 +30,7 @@ const Hero: FC<HeroProps> = ({}) => {
 
   return (
     <div
-      className="flex flex-col justify-center min-h-[90hv] w-full h-[90vh]"
+      className="flex flex-col justify-center min-h-[90hv] w-full max-w-screen-2xl mx-auto h-[90vh]"
       ref={ref}
       id="home"
     >
@@ -43,11 +43,9 @@ const Hero: FC<HeroProps> = ({}) => {
           <div
             className="absolute w-full top-1/2 md:top-1/2 left-1/2 md:left-0
             transform
+            md:h-[60rem]
             translate-x-[-50%] translatey-y-[-40%]
             md:translate-x-[20%] md:-translate-y-1/2 lg:translate-x-[10rem] xl:translate-x-[20rem]"
-            style={{
-              height: "60rem",
-            }}
           >
             {/* Mobile cutout gradient */}
             <div
@@ -68,11 +66,11 @@ const Hero: FC<HeroProps> = ({}) => {
             />
             {/* Desktop cutout gradient */}
             <div
-              className="absolute h-96 w-full top-0 md:top-1/2 left-0 z-20
+              className={`absolute ${cutoutSize} top-0 md:top-1/2 left-0 z-20
               transform
               opacity-0 md:opacity-100
               translate-x-[0%] translate-y-[0%]
-              md:-translate-y-1/2"
+              md:-translate-y-1/2`}
               style={{
                 background:
                   "linear-gradient(180deg, #08080800 0%, #08080800 70%, #080808ff 100%)",
@@ -80,9 +78,9 @@ const Hero: FC<HeroProps> = ({}) => {
             />
             {/* Cutout */}
             <div
-              className="absolute h-96 w-96 left-1/2 top-0 md:left-0 md:top-1/2 transform
+              className={`absolute ${cutoutSize} left-1/2 top-0 md:left-0 md:top-1/2 transform
               -translate-x-1/2 -translate-y-[90%]
-              md:translate-x-[0%] md:-translate-y-1/2"
+              md:translate-x-[0%] md:-translate-y-1/2`}
               style={{
                 mask: "url(/cutout.png)",
                 maskSize: "contain",
@@ -90,7 +88,7 @@ const Hero: FC<HeroProps> = ({}) => {
                 maskPosition: "center",
               }}
             >
-              <div className="relative w-96 h-96">
+              <div className={`relative ${cutoutSize}`}>
                 <Image
                   src="/profile-image.jpeg"
                   alt="Nick Hong staring off into the distance to the right"
@@ -104,7 +102,7 @@ const Hero: FC<HeroProps> = ({}) => {
         </div>
         {/* Right text */}
         <div
-          className="absolute top-1/2 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
+          className="absolute top-1/4 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
           style={{
             flex: 5,
           }}
@@ -135,13 +133,13 @@ const Hero: FC<HeroProps> = ({}) => {
             })}
           </div>
         </div>
-        <div className="hidden lg:flex absolute md:right-[3rem] xl:right-[12.5%] top-1/2 -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
+        <div className="flex absolute right-1/2 md:right-[3rem] xl:right-[12.5%] top-[37%] md:top-[20%] -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
           <Image
             src="/icons/down-carets.svg"
             width={50}
             height={50}
             alt="Down"
-            className="cursor-pointer relative z-[50] animate-bounce"
+            className="cursor-pointer relative z-[50] animate-bounce w-8 md:w-18 h-auto"
             onClick={onDownClick}
           />
         </div>
