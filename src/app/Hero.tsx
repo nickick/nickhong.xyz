@@ -1,12 +1,11 @@
 "use client";
-import { FC } from "react";
-import { useCallback, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
 import useActiveSection from "@/app/hooks/useActiveSection";
 import Image from "next/image";
-import { cormorant } from "./fonts";
+import { FC, useCallback, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { serif } from "./fonts";
+import { NavIcon } from "./NavIcon";
 import { socialLinks } from "./socialLinks";
-import NavButton from "./NavIcon";
 
 type HeroProps = {};
 
@@ -39,7 +38,7 @@ const Hero: FC<HeroProps> = ({}) => {
       <div className="flex flex-col md:flex-row w-full h-full">
         {/* Left image */}
         <div
-          className="relative w-full"
+          className="relative w-full animate-fadeInAfterDelay"
           style={{ height: heightClamp, flex: 5 }}
         >
           <div
@@ -104,22 +103,22 @@ const Hero: FC<HeroProps> = ({}) => {
         </div>
         {/* Right text */}
         <div
-          className="absolute top-1/2 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20"
+          className="absolute top-1/2 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
           style={{
             flex: 5,
           }}
         >
           <h1
-            className={`text-[3rem] md:text-[4rem] leading-none ${cormorant.className} mb-[-1rem]`}
+            className={`text-[3rem] md:text-[4rem] leading-none ${serif.className} mb-[-1rem]`}
           >
             Hi, I&apos;m Nick 👋
           </h1>
           <div className="md:text-2xl">
             I&apos;m a Web3 engineer based in NYC.
           </div>
-          <div className="flex text-white gap-8 items-center">
+          <div className="flex text-white items-center">
             {socialLinks.map(({ text, href, icon }, index) => (
-              <NavButton
+              <NavIcon
                 text={text}
                 href={href}
                 icon={icon}

@@ -1,25 +1,26 @@
-import Link from "next/link";
-import PropTypes from "prop-types";
 import { useCallback } from "react";
 import { Button } from "./Button";
+import { twMerge } from "tailwind-merge";
 
-type NavButtonProps = {
+type NavIconProps = {
   text: string;
   href: string;
   icon: React.ReactNode;
   index: number;
-  anchor: string;
-  active: boolean;
+  anchor?: string;
+  active?: boolean;
+  className?: string;
 };
 
-export default function NavButton({
+export default function NavIcon({
   text,
   href,
   icon,
   index,
   anchor,
   active,
-}: NavButtonProps) {
+  className,
+}: NavIconProps) {
   const scrollTo = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (anchor) {
@@ -39,6 +40,14 @@ export default function NavButton({
       target={icon || href[0] !== "/" ? "_blank" : ""}
       href={href}
       onClick={scrollTo}
+      className={twMerge(
+        `animate-[fadeIn_1s_both_${1 + index * 0.2}s] ${
+          active ? "text-black" : "text-white"
+        } ${
+          active ? "bg-gray-300" : "bg-backgroundBlack"
+        } mx-2 tracking-widest rounded px-2 py-1`,
+        className
+      )}
     >
       {text}
       {icon || ""}
@@ -46,19 +55,4 @@ export default function NavButton({
   );
 }
 
-NavButton.propTypes = {
-  text: PropTypes.string,
-  href: PropTypes.string,
-  icon: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  anchor: PropTypes.string,
-  active: PropTypes.bool,
-};
-
-NavButton.defaultProps = {
-  text: "",
-  href: "",
-  icon: null,
-  anchor: "",
-  active: false,
-};
+export { NavIcon };

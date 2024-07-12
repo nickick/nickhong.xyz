@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { redHat } from "./fonts";
+import { sansSerif } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${redHat.className}`}
+        className={`${sansSerif.className}`}
         style={{
           background: "#080808",
         }}
