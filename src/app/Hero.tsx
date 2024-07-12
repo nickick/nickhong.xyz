@@ -30,7 +30,7 @@ const Hero: FC<{}> = ({}) => {
 
   return (
     <div
-      className="flex flex-col justify-center min-h-[90hv] w-full max-w-screen-2xl mx-auto h-[90vh]"
+      className="flex flex-col justify-center min-h-[90hv] w-full max-w-screen-2xl mx-auto h-[90vh] relative"
       ref={ref}
       id="home"
     >
@@ -102,7 +102,7 @@ const Hero: FC<{}> = ({}) => {
         </div>
         {/* Right text */}
         <div
-          className="absolute top-1/4 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
+          className="absolute top-1/2 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
           style={{
             flex: 5,
           }}
@@ -133,7 +133,7 @@ const Hero: FC<{}> = ({}) => {
             })}
           </div>
         </div>
-        <div className="flex absolute right-1/2 md:right-[3rem] xl:right-[12.5%] top-[37%] md:top-[20%] -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
+        <div className="flex absolute right-1/2 md:right-[3rem] xl:right-[12.5%] top-3/4 md:top-1/2 -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
           <Image
             src="/icons/down-carets.svg"
             width={50}

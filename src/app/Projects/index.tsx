@@ -1,11 +1,9 @@
-import { FC } from "react";
-import { motion, useSpring } from "framer-motion";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import { projects } from "./projectData";
 import useActiveSection from "@/app/hooks/useActiveSection";
-import { Slide } from "./Slide";
+import { FC, useCallback, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import { serif } from "../fonts";
+import { projects } from "./projectData";
+import { Slide } from "./Slide";
 
 export enum ProjectSlideState {
   LEFT,

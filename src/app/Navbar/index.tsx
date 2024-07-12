@@ -2,7 +2,6 @@
 import { Spin as Hamburger } from "hamburger-react";
 import { FC, useState } from "react";
 import ActiveNav from "../ActiveNav";
-import { sansSerif, serif } from "../fonts";
 import MobileDrawer from "../MobileDrawer";
 import NavIcon from "../NavIcon";
 import { socialLinks } from "../socialLinks";

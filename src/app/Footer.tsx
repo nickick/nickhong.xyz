@@ -1,9 +1,8 @@
 import { FC } from "react";
 import ActiveNav from "./ActiveNav";
-import { socialLinks } from "./socialLinks";
-import NavIcon from "./NavIcon";
-import { sansSerif, serif } from "./fonts";
 import { Logo } from "./Navbar/Logo";
+import NavIcon from "./NavIcon";
+import { socialLinks } from "./socialLinks";
 
 type FooterProps = {};
 
