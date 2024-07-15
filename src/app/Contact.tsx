@@ -24,7 +24,7 @@ const Contact: FC = ({}) => {
             especially from cool cats in the NFT space.
           </p>
           <p>If that&apos;s you, smash one of these buttons!</p>
-          <div className="flex text-white items-center">
+          <div className="flex text-white items-center justify-center">
             {socialLinks.map(({ text, href, icon }, index) => {
               return (
                 <NavIcon
