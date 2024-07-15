@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
 import { BodyLock } from "./BodyLock";
+import Image from "next/image";
 
 type ModalProps = {
   children: React.ReactNode;
   closeModal: () => void;
-  layoutId?: string;
 };
 
-const Modal: FC<ModalProps> = ({ children, closeModal, layoutId }) => {
+const Modal: FC<ModalProps> = ({ children, closeModal }) => {
   const [bodyLock, setBodyLock] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,20 +26,33 @@ const Modal: FC<ModalProps> = ({ children, closeModal, layoutId }) => {
         closeModal();
       }}
     >
-      <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[90vh] w-full z-[100] flex flex-col items-center justify-center">
+      <div className="sm:max-w-3xl sm:w-full m-3 sm:mx-auto h-[90vh] w-full z-[100] flex flex-col items-center justify-center">
         <div
-          className="flex flex-col bg-black bg-opacity-80 backdrop-blur-lg border border-gray-300 border-opacity-50 shadow-sm pointer-events-auto h-96 w-full overflow-hidden"
-          style={{ WebkitBackdropFilter: "blur(20px)" }}
+          className={`flex flex-col border-opacity-50 shadow-sm pointer-events-auto h-96 w-full overflow-hidden transition-all`}
+          style={{
+            WebkitBackdropFilter: `${!!children ? "blur(20px)" : "blur(0)"}`,
+          }}
         >
           <motion.div
-            className=""
-            initial="hiddden"
+            className="relative"
+            initial="hidden"
             animate="visible"
             exit="exit"
-            layoutId={layoutId}
           >
             {children}
             {bodyLock && <BodyLock />}
+            {!!children && (
+              <Image
+                src="/icons/close.svg"
+                alt="close"
+                height={20}
+                width={20}
+                className={`w-5 h-5 rounded-full absolute right-4 top-4 cursor-pointer bg-black bg-opacity-30 p-1 transition-opacity ${
+                  !!children ? "opacity-50 hover:opacity-100" : "opacity-0"
+                }`}
+                onClick={() => closeModal()}
+              />
+            )}
           </motion.div>
         </div>
       </div>

@@ -74,9 +74,6 @@ const Slide: FC<SlideProps> = ({
       layoutId={project.name.concat()}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      className={`opacity-100 ${
-        focusedProject ? `` : `animate-[fadeIn_1s_both_${0 + index * 0.2}s]`
-      }`}
     >
       <motion.div
         style={{

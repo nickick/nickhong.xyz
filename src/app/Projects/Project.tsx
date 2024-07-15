@@ -14,7 +14,6 @@ const Project: FC<ProjectProps> = ({ name, href, image, index }) => {
       className={`h-full border border-[rgba(255,255,255,0.3)] hover:shadow-inner transition-shadow animate-[fadeIn_1s_both_${
         1 + index * 0.2
       }s]`}
-      layoutId={name}
     >
       <div className="p-3">{name}</div>
       <motion.div
