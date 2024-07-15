@@ -8,16 +8,19 @@ const config: Config = {
   ],
   safelist: [
     "animate-[fadeIn_1s_both_0s]",
+    "animate-[fadeIn_1s_both_0.0s]",
     "animate-[fadeIn_1s_both_0.2s]",
     "animate-[fadeIn_1s_both_0.4s]",
     "animate-[fadeIn_1s_both_0.6s]",
     "animate-[fadeIn_1s_both_0.8s]",
     "animate-[fadeIn_1s_both_1s]",
+    "animate-[fadeIn_1s_both_1.0s]",
     "animate-[fadeIn_1s_both_1.2s]",
     "animate-[fadeIn_1s_both_1.4s]",
     "animate-[fadeIn_1s_both_1.6s]",
     "animate-[fadeIn_1s_both_1.8s]",
     "animate-[fadeIn_1s_both_2s]",
+    "animate-[fadeIn_1s_both_2.0s]",
   ],
   theme: {
     extend: {
