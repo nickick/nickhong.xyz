@@ -26,9 +26,9 @@ const Modal: FC<ModalProps> = ({ children, closeModal }) => {
         closeModal();
       }}
     >
-      <div className="sm:max-w-3xl sm:w-full m-3 sm:mx-auto h-[90vh] w-full z-[100] flex flex-col items-center justify-center">
+      <div className="w-[calc(100vw-2rem)] mx-auto md:max-w-3xl m-3 sm:mx-auto h-[90vh] md:h-[90vh] md:w-full z-[100] flex flex-col items-center justify-center">
         <div
-          className={`flex flex-col border-opacity-50 shadow-sm pointer-events-auto w-full overflow-hidden transition-all`}
+          className={`flex flex-col border-opacity-50 shadow-sm pointer-events-auto w-full overflow-hidden transition-all overflow-y-scroll md:overflow-y-hidden`}
           style={{
             WebkitBackdropFilter: `${!!children ? "blur(20px)" : "blur(0)"}`,
           }}
@@ -47,7 +47,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal }) => {
                 alt="close"
                 height={20}
                 width={20}
-                className={`w-5 h-5 rounded-full absolute right-4 top-4 cursor-pointer bg-black bg-opacity-30 p-1 transition-opacity ${
+                className={`w-12 h-12 md:w-5 md:h-5 rounded-full absolute right-4 top-4 cursor-pointer bg-black bg-opacity-30 p-1 transition-opacity ${
                   !!children ? "opacity-50 hover:opacity-100" : "opacity-0"
                 }`}
                 onClick={() => closeModal()}

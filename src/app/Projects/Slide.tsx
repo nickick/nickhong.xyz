@@ -64,13 +64,13 @@ const Slide: FC<SlideProps> = ({
   return (
     <motion.div
       style={{
-        width: "100%",
         cursor: "pointer",
         x: slide,
         perspective: 200,
         position: "relative",
         zIndex: 15 - index,
       }}
+      className="w-64 md:w-full"
       layoutId={project.name.concat()}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}

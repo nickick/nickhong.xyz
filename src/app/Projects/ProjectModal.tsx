@@ -29,7 +29,7 @@ const dropIn = {
 const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
   return (
     <motion.div
-      className={`flex flex-col shadow-inner ${
+      className={`flex shadow-inner flex-col-reverse ${
         selectedProject?.imageOnLeft ? "md:flex-row-reverse" : "md:flex-row"
       } ${
         !!selectedProject
@@ -46,7 +46,7 @@ const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
     >
       {selectedProject && (
         <motion.div
-          className={`h-[34rem] w-96 bg-cover bg-center`}
+          className={`h-[34rem] w-full md:w-96 bg-cover bg-center`}
           style={{
             backgroundImage: `url('${selectedProject.image}')`,
           }}
@@ -81,9 +81,10 @@ const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
                 href={link}
                 target="_blank"
                 rel="noreferrer"
-                className={`animate-[fadeIn_1s_both_${(index * 0.2).toFixed(
-                  1
-                )}s]`}
+                className={`opacity-0 animate-[fadeIn_1s_both_${(
+                  1 +
+                  index * 0.2
+                ).toFixed(1)}s]`}
               >
                 <Image
                   src={icon}
@@ -96,7 +97,7 @@ const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
             </div>
           ))}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4 md:gap-2 text-base md:text-base">
           {selectedProject.description.map((desc, index) => (
             <div dangerouslySetInnerHTML={{ __html: desc }} key={index} />
           ))}
