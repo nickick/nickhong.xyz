@@ -39,7 +39,6 @@ const Slide: FC<SlideProps> = ({
   );
 
   const focusCard = useCallback(() => {
-    console.log("here");
     slide.set(0);
     rotation.set(0);
   }, [slide, rotation]);
