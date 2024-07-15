@@ -1,10 +1,11 @@
 import { Section } from "@/app/hooks/useActiveSection";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { FadeInSection } from "../FadeInSection";
 import { serif } from "../fonts";
 import { projects } from "./projectData";
 import { ProjectModal } from "./ProjectModal";
 import { Slide } from "./Slide";
+import { ModalContext } from "../ModalContext";
 
 export enum ProjectSlideState {
   LEFT,
@@ -20,6 +21,31 @@ const Projects: FC = () => {
     (project) => project.name === focusedProject
   );
 
+  const setFocusState = useCallback(
+    ({ index }: { index: number }) => {
+      const newProjectSlideStates = projects.map((project, i) => {
+        if (i === index || project.name === focusedProject) {
+          return ProjectSlideState.FOCUS;
+        } else if (i < index) {
+          return ProjectSlideState.LEFT;
+        } else {
+          return ProjectSlideState.RIGHT;
+        }
+      });
+
+      setProjectSlideStates(newProjectSlideStates);
+    },
+    [focusedProject]
+  );
+
+  const resetFocusStates = useCallback(() => {
+    const newProjectSlideStates = projects.map(() => {
+      return ProjectSlideState.NONE;
+    });
+
+    setProjectSlideStates(newProjectSlideStates);
+  }, []);
+
   const handleClose = useCallback(() => {
     setFocusedProject(null);
   }, []);
@@ -34,26 +60,23 @@ const Projects: FC = () => {
 
   const hoverchange = useCallback(
     ({ hover, index }: { hover: boolean; index: number }) => {
-      let newProjectSlideStates: ProjectSlideState[] = [];
       if (hover) {
-        newProjectSlideStates = projects.map((_, i) => {
-          if (i < index) {
-            return ProjectSlideState.LEFT;
-          } else if (i === index) {
-            return ProjectSlideState.FOCUS;
-          } else {
-            return ProjectSlideState.RIGHT;
-          }
-        });
+        setFocusState({ index });
       } else {
-        projects.map((_, i) => {
-          newProjectSlideStates[i] = ProjectSlideState.NONE;
-        });
+        resetFocusStates();
       }
-      setProjectSlideStates(newProjectSlideStates);
     },
-    []
+    [resetFocusStates, setFocusState]
   );
+
+  const { setModalContents, setOnCloseFn } = useContext(ModalContext);
+
+  useEffect(() => {
+    if (selectedProject) {
+      setModalContents(<ProjectModal selectedProject={selectedProject} />);
+      setOnCloseFn(handleClose);
+    }
+  }, [handleClose, selectedProject, setModalContents, setOnCloseFn]);
 
   return (
     <FadeInSection
@@ -80,7 +103,10 @@ const Projects: FC = () => {
               key={`slide-${index}`}
               {...project}
               slideState={projectSlideStates[index]}
-              onClick={() => setFocusedProject(project.name)}
+              focusedProject={focusedProject}
+              onClick={() => {
+                setFocusedProject(project.name);
+              }}
               onHoverStart={() => {
                 hoverchange({ hover: true, index });
               }}
@@ -92,7 +118,6 @@ const Projects: FC = () => {
           ))}
         </div>
       </div>
-      <ProjectModal selectedProject={selectedProject} setClosed={handleClose} />
     </FadeInSection>
   );
 };

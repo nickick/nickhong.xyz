@@ -7,6 +7,11 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   safelist: [
+    "animate-[fadeIn_1s_both_0s]",
+    "animate-[fadeIn_1s_both_0.2s]",
+    "animate-[fadeIn_1s_both_0.4s]",
+    "animate-[fadeIn_1s_both_0.6s]",
+    "animate-[fadeIn_1s_both_0.8s]",
     "animate-[fadeIn_1s_both_1s]",
     "animate-[fadeIn_1s_both_1.2s]",
     "animate-[fadeIn_1s_both_1.4s]",

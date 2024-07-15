@@ -4,19 +4,21 @@ import { Project, ProjectProps } from "./Project";
 import { ProjectSlideState } from ".";
 
 type SlideProps = {
+  index: number;
+  focusedProject: string | null;
   onHoverStart: () => void;
   onHoverEnd: () => void;
-  index: number;
-  slideState: ProjectSlideState;
   onClick: () => void;
+  slideState: ProjectSlideState;
 };
 
 const Slide: FC<SlideProps> = ({
+  index,
+  focusedProject,
   onHoverStart,
   onHoverEnd,
-  index,
-  slideState,
   onClick,
+  slideState,
   ...projectProps
 }) => {
   const rotationInitial = -5;
@@ -69,8 +71,12 @@ const Slide: FC<SlideProps> = ({
         position: "relative",
         zIndex: 15 - index,
       }}
+      layoutId={project.name.concat()}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
+      className={`opacity-100 ${
+        focusedProject ? `` : `animate-[fadeIn_1s_both_${0 + index * 0.2}s]`
+      }`}
     >
       <motion.div
         style={{
@@ -79,7 +85,7 @@ const Slide: FC<SlideProps> = ({
         }}
         onClick={onClick}
       >
-        <Project {...project} />
+        <Project {...project} index={index} />
       </motion.div>
     </motion.div>
   );
