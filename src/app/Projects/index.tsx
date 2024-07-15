@@ -93,10 +93,12 @@ const Projects: FC = () => {
       id="projects"
     >
       <div className="flex flex-col md:flex-row gap-4 md:gap-0 flex-[4] items-start">
-        <h2 className={`flex-[1] ${serif.className} text-3xl`}>
+        <h2
+          className={`flex-[1] w-full ${serif.className} text-3xl text-center md:text-left`}
+        >
           Web3 Projects
         </h2>
-        <p className="flex-[3] text-xl gap-4 flex flex-col leading-relaxed">
+        <p className="flex-[3] w-full text-xl gap-4 flex flex-col leading-relaxed">
           I&apos;ve worked as a Solidity/React engineer on several projects in
           the NFT space for artists like DrifterShoots and Brendan North, as
           well as for celebrities like Patrick Mahomes and Dana Taylor.

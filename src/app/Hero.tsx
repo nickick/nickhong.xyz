@@ -136,7 +136,7 @@ const Hero: FC<{}> = ({}) => {
             })}
           </div>
         </div>
-        <div className="flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-3/4 md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[50] animate-fadeInFromLeftAfterDelay">
+        <div className="flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-3/4 md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[30] animate-fadeInFromLeftAfterDelay">
           <Image
             src="/icons/down-carets.svg"
             width={50}

@@ -46,7 +46,11 @@ const Contact: FC = ({}) => {
       id="contact"
     >
       <div className="flex flex-col md:flex-row gap-4 md:gap-0 flex-[4] items-start">
-        <h2 className={`flex-[1] ${serif.className} text-3xl`}>Contact</h2>
+        <h2
+          className={`flex-[1] w-full ${serif.className} text-3xl text-center md:text-left`}
+        >
+          Contact
+        </h2>
         <div className="flex-[3] text-xl gap-8 flex flex-col leading-relaxed">
           <p>
             I&apos;m currently open to new Web3 project work and employment,
