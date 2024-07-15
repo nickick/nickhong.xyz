@@ -97,7 +97,7 @@ const Projects: FC = () => {
         </p>
       </div>
       <div className="overflow-x-scroll overflow-y-visible md:overflow-x-visible md:overflow-y-visible w-full">
-        <div className="flex mt-12 w-[400%] md:w-full pb-20 md:pb-0">
+        <div className="flex md:justify-center items-center mt-12 w-[400%] md:w-full pb-20 md:pb-0 md:ml-16">
           {projects.map((project, index) => (
             <Slide
               key={`slide-${index}`}

@@ -50,6 +50,58 @@ export const projects: Project[] = [
     imageOnLeft: false,
   },
   {
+    name: "Museum of Mahomes",
+    href: "https://museumofmahomes.com",
+    description: [
+      "Museum of Mahomes is <a href='https://twitter.com/patrickmahomes' target='_blank' class='underline'>@patrickmahomes</a>&apos;s official NFT collection.",
+      "This project was an incredible challenge. It involved complex minting mechanics, fiat credit card processing, a burn-to-physical shipment component, and an incredibly tight deadline.",
+      "I was brought on to rescue the project and make the entire mint site to use <a href='https://x.com/0xfoobar' target='_blank' class='underline'>0xfoobar</a>'s smart contract work, in less than 3 weeks, with an unmoveable deadline enforced by NFL promotional bans.",
+      "In that time, I brought on another amazing contractor, <a href='https://x.com/tom_hirst' target='_blank' class='underline'>Tom Hirst</a>, and managed to deliver on a beautiful, fully functional mint <a href='https://museumofmahomes.com' target='_blank' class='underline'>site</a>.",
+      "A quote from the client, after Tom and I jumped in to save the project: 'Omg. I haven't been able to sleep for 3 days straight. I'm finally going to be able to get some tonight.'",
+    ],
+    image: "/portfolio/museumofmahomes.webp",
+    contributors: [
+      {
+        link: "https://twitter.com/patrickmahomes",
+        icon: "/portfolio/patrickmahomes.jpg",
+      },
+      {
+        link: "https://x.com/0xfoobar",
+        icon: "/portfolio/foobar.jpg",
+      },
+      {
+        link: "https://twitter.com/tom_hirst",
+        icon: "/portfolio/tomhirst.jpg",
+      },
+      {
+        link: "https://twitter.com/sneakerdad_",
+        icon: "/portfolio/sneakerdad.png",
+      },
+    ],
+    imageOnLeft: false,
+  },
+  {
+    name: "Signs of the Times",
+    href: "https://www.signs-of-the-times.xyz/",
+    description: [
+      "Signs of the Times is a NFT collection featuring work from <a href='https://x.com/imbrendannorth' target='_blank' class='underline'>@brendannorth</a>.",
+      "We created an NFT collection that had 2 different possible mints, representing a vote for the future of the NFT space.",
+      "I wrote the Solidity smart contract. I also got to bring to life <a href='https://x.com/imbrendannorth' target='_blank' class='underline'>Jeffrey Fan</a>'s incredible site design that displays the mint vote mechanic so well.",
+    ],
+    image: "/portfolio/the-beginning-is-near.jpg",
+    contributors: [
+      {
+        link: "https://twitter.com/imbrendannorth",
+        icon: "/portfolio/brendannorth.jpg",
+      },
+      {
+        link: "https://twitter.com/jeffreyraefan",
+        icon: "/portfolio/jeffreyraefan.jpeg",
+      },
+    ],
+    imageOnLeft: false,
+  },
+  {
     name: "WMVG Migrator",
     href: "https://wheremyvansgo.com",
     description: [
@@ -130,9 +182,8 @@ export const projects: Project[] = [
     name: "Chaos & Couture",
     href: "https://twitter.com/chaosxcouture",
     description: [
-      "Chaos & Couture is <a href='https://twitter.com/itsdanataylor' target='_blank' class='underline'>@itsdanataylor&apos;s</a> upcoming debut NFT drop, split into 2 individual drops that have a combination of 1/1 NFTs, edition color way NFTs, Dutch auction mechanics, and raffle mechanics.",
-      "I&apos;ll be building the dapp and smart contract for these drops.",
-      "More to come.",
+      "Chaos & Couture is <a href='https://twitter.com/itsdanataylor' target='_blank' class='underline'>@itsdanataylor&apos;s</a> debut NFT drop, split into 2 individual drops that have a combination of 1/1 NFTs, edition color way NFTs, Dutch auction mechanics, and raffle mechanics.",
+      "I built the dapp and smart contract for these drops. The drop had complex minting mechanisms that required a mix of NFT images organized by attributes. I also programmatically set up delayed reveals using Arweave.",
     ],
     image: "/portfolio/chaos-couture.jpeg",
     contributors: [

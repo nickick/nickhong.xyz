@@ -21,6 +21,7 @@ const config: Config = {
     "animate-[fadeIn_1s_both_1.8s]",
     "animate-[fadeIn_1s_both_2s]",
     "animate-[fadeIn_1s_both_2.0s]",
+    "animate-[fadeIn_1s_both_2.2s]",
   ],
   theme: {
     extend: {
