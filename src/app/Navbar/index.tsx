@@ -13,8 +13,9 @@ const Navbar: FC<NavbarProps> = ({}) => {
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <div className="sticky top-0 w-full px-4 md:px-12 pt-8 z-50 max-w-screen-2xl mx-auto">
-      <div className="w-full relative flex justify-between">
+    <div className="sticky top-0 w-full z-50 max-w-screen-2xl mx-auto">
+      <div className="w-full relative flex justify-between px-4 md:px-12 pt-8">
+        <div className="absolute inset-0 h-24 w-full bg-gradient-to-t from-[rgba(8,8,8,0)] via-[rgba(8,8,8,0.7)] to-[rgba(8,8,8,1)]" />
         <div className="md:hidden z-50 animate-fadeInAfterDelay">
           <Hamburger
             toggled={isOpen}
