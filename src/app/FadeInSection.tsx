@@ -23,12 +23,12 @@ const FadeInSection: FC<FadeInSectionProps> = ({
   section,
 }) => {
   const { ref, inView } = useInView({
-    threshold: 0.01,
+    threshold: 0.1,
     triggerOnce: false,
   });
 
   const [inViewRef, inAnimationView] = useInView({
-    threshold: 0.7,
+    threshold: 0.1,
     triggerOnce: true,
   });
 
