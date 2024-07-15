@@ -2,6 +2,8 @@ import { Spin as Hamburger } from "hamburger-react";
 import { leftNav, shortSocialLinks } from "@/app/socialLinks";
 import NavIcon from "./NavIcon";
 import { Drawer } from "./Drawer";
+import { useEffect, useState } from "react";
+import { BodyLock } from "./BodyLock";
 
 const navLinks = leftNav.concat(shortSocialLinks);
 
@@ -16,8 +18,14 @@ export default function MobileDrawer({
   setOpen,
   closeDrawer,
 }: MobileDrawerProps) {
+  const [bodyLock, setBodyLock] = useState<boolean>(false);
+
+  useEffect(() => {
+    setBodyLock(isOpen);
+  }, [isOpen]);
   return (
     <Drawer open={isOpen}>
+      {bodyLock && <BodyLock />}
       <div className="absolute top-8 left-8 z-[100]">
         <Hamburger
           toggled={isOpen}

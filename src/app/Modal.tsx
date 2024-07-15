@@ -1,17 +1,13 @@
 import { useLockBodyScroll } from "@uidotdev/usehooks";
 import { FC, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { BodyLock } from "./BodyLock";
 
 type ModalProps = {
   children: React.ReactNode;
   open: boolean;
   closeModal: () => void;
   layoutId?: string;
-};
-
-const BodyLock = () => {
-  useLockBodyScroll();
-  return <></>;
 };
 
 const Modal: FC<ModalProps> = ({ children, open, closeModal, layoutId }) => {
