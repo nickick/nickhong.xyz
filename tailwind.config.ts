@@ -15,6 +15,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        inner: "inset 0 0 10px 0 rgba(255,255,255,0.5)",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -96,6 +99,7 @@ const config: Config = {
         },
       },
       animation: {
+        fadeIn: "fadeIn 1s both",
         fadeInAfterDelay: "fadeIn 1s both 1s",
         fadeInFromLeftAfterDelay: "slideFromLeft 1s both 1s",
         wave: "wave 3s infinite",

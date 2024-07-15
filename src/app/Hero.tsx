@@ -1,11 +1,8 @@
 "use client";
-import useActiveSection, {
-  AddOrDelete,
-  Section,
-} from "@/app/hooks/useActiveSection";
+import { Section } from "@/app/hooks/useActiveSection";
 import Image from "next/image";
-import { FC, useCallback, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import { FC, useCallback } from "react";
+import { FadeInSection } from "./FadeInSection";
 import { serif } from "./fonts";
 import { NavIcon } from "./NavIcon";
 import { socialLinks } from "./socialLinks";
@@ -16,26 +13,15 @@ const mobileScreenPosition =
 const cutoutSize = "h-96 w-96 md:h-[30rem] md:w-[30rem]";
 
 const Hero: FC<{}> = ({}) => {
-  const { ref, inView } = useInView({
-    threshold: 0.3,
-  });
-  const { setSectionInView } = useActiveSection();
-
   const onDownClick = useCallback(() => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  useEffect(() => {
-    if (inView) {
-      setSectionInView(Section.Home, AddOrDelete.add);
-    }
-  }, [inView, setSectionInView]);
-
   return (
-    <div
+    <FadeInSection
       className="flex flex-col justify-center min-h-[90hv] w-full max-w-screen-2xl mx-auto h-[90vh] relative"
-      ref={ref}
       id="home"
+      section={Section.Home}
     >
       <div className="flex flex-col md:flex-row w-full h-full">
         {/* Left image */}
@@ -147,7 +133,7 @@ const Hero: FC<{}> = ({}) => {
           />
         </div>
       </div>
-    </div>
+    </FadeInSection>
   );
 };
 

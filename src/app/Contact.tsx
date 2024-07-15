@@ -1,48 +1,15 @@
-import { FC, useCallback, useEffect } from "react";
-import { serif } from "./fonts";
-import { useInView } from "react-intersection-observer";
-import { socialLinks } from "./socialLinks";
+import { FC } from "react";
+import { FadeInSection } from "./FadeInSection";
 import NavIcon from "./NavIcon";
-import useActiveSection, {
-  AddOrDelete,
-  Section,
-} from "./hooks/useActiveSection";
+import { serif } from "./fonts";
+import { Section } from "./hooks/useActiveSection";
+import { socialLinks } from "./socialLinks";
 
 const Contact: FC = ({}) => {
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: false,
-  });
-
-  const [inViewRef, inAnimationView] = useInView({
-    threshold: 0.7,
-    triggerOnce: true,
-  });
-
-  const { setSectionInView } = useActiveSection();
-
-  useEffect(() => {
-    if (inView) {
-      setSectionInView(Section.Contact, AddOrDelete.add);
-    } else {
-      setSectionInView(Section.Contact, AddOrDelete.delete);
-    }
-  }, [inView, setSectionInView]);
-
-  const setRefs = useCallback(
-    (node: Element | null) => {
-      ref(node);
-      inViewRef(node);
-    },
-    [ref, inViewRef]
-  );
-
   return (
-    <div
-      className={`flex flex-col w-full px-8 md:px-36 max-w-screen-xl mx-auto pt-24 opacity-0 ${
-        inAnimationView ? "animate-fadeInAfterDelay" : ""
-      }`}
-      ref={setRefs}
+    <FadeInSection
+      className={`flex flex-col w-full px-8 md:px-36 max-w-screen-xl mx-auto pt-24`}
+      section={Section.Contact}
       id="contact"
     >
       <div className="flex flex-col md:flex-row gap-4 md:gap-0 flex-[4] items-start">
@@ -74,7 +41,7 @@ const Contact: FC = ({}) => {
         </div>
       </div>
       <div className="pb-24" />
-    </div>
+    </FadeInSection>
   );
 };
 

@@ -5,6 +5,7 @@ import useActiveSection, {
   AddOrDelete,
   Section,
 } from "./hooks/useActiveSection";
+import { FadeInSection } from "./FadeInSection";
 
 const Link = ({
   href,
@@ -26,25 +27,11 @@ const Link = ({
 };
 
 const OtherWork: FC = ({}) => {
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: false,
-  });
-
-  const { setSectionInView } = useActiveSection();
-
-  useEffect(() => {
-    if (inView) {
-      setSectionInView(Section.OtherProjects, AddOrDelete.add);
-    } else {
-      setSectionInView(Section.OtherProjects, AddOrDelete.delete);
-    }
-  }, [inView, setSectionInView]);
-
   return (
-    <div
-      className="flex flex-col w-full px-8 md:px-36 max-w-screen-xl mx-auto pt-24 animate-fadeInAfterDelay"
-      ref={ref}
+    <FadeInSection
+      className="flex flex-col w-full px-8 md:px-36 max-w-screen-xl mx-auto pt-24"
+      id="other-work"
+      section={Section.OtherProjects}
     >
       <div className="flex flex-col md:flex-row gap-4 md:gap-0 flex-[4] items-start">
         <h2
@@ -76,7 +63,7 @@ const OtherWork: FC = ({}) => {
         </div>
       </div>
       <div className="border-b border-gray-700 pb-24" />
-    </div>
+    </FadeInSection>
   );
 };
 

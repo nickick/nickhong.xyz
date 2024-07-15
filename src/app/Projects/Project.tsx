@@ -20,13 +20,15 @@ const Project: FC<ProjectProps> = ({
     setFocusedProject(name);
   }, [name, setFocusedProject]);
   return (
-    <div>
+    <div className="h-full border border-[rgba(255,255,255,0.3)] hover:shadow-inner transition-shadow">
+      <div className="p-3">{name}</div>
       <motion.div
-        className="min-h-[40rem] w-full bg-cover bg-center"
+        className="min-h-[20rem] md:min-h-[30rem] w-full bg-cover bg-center"
         style={{
           backgroundImage: `url(${image})`,
         }}
-      ></motion.div>
+        layoutId={image}
+      />
     </div>
   );
 };

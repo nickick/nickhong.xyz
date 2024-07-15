@@ -1,9 +1,6 @@
-import useActiveSection, {
-  AddOrDelete,
-  Section,
-} from "@/app/hooks/useActiveSection";
-import { FC, useCallback, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import { Section } from "@/app/hooks/useActiveSection";
+import { FC, useCallback, useState } from "react";
+import { FadeInSection } from "../FadeInSection";
 import { serif } from "../fonts";
 import { projects } from "./projectData";
 import { Slide } from "./Slide";
@@ -57,42 +54,13 @@ const Projects: FC = () => {
     []
   );
 
-  const { ref, inView } = useInView({
-    threshold: 0.3,
-  });
-
-  const [inViewRef, inAnimationView] = useInView({
-    threshold: 0.3,
-    triggerOnce: true,
-  });
-
-  const { setSectionInView } = useActiveSection();
-
-  useEffect(() => {
-    if (inView) {
-      setSectionInView(Section.Projects, AddOrDelete.add);
-    } else {
-      setSectionInView(Section.Projects, AddOrDelete.delete);
-    }
-  }, [inView, setSectionInView]);
-
-  const setRefs = useCallback(
-    (node: Element | null) => {
-      ref(node);
-      inViewRef(node);
-    },
-    [ref, inViewRef]
-  );
-
   return (
-    <div
-      className={`flex flex-col w-full px-8 md:px-36 max-w-screen-xl mx-auto pt-24 opacity-0 ${
-        inAnimationView ? "animate-fadeInAfterDelay" : ""
-      }`}
-      ref={setRefs}
+    <FadeInSection
+      className={`flex flex-col w-full max-w-screen-xl mx-auto pt-24`}
+      section={Section.Projects}
       id="projects"
     >
-      <div className="flex flex-col md:flex-row gap-4 md:gap-0 flex-[4] items-start">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-0 flex-[4] items-start px-8 md:px-36">
         <h2
           className={`flex-[1] w-full ${serif.className} text-3xl text-center md:text-left`}
         >
@@ -104,23 +72,25 @@ const Projects: FC = () => {
           well as for celebrities like Patrick Mahomes and Dana Taylor.
         </p>
       </div>
-      <div className="flex mt-12">
-        {projects.map((project, index) => (
-          <Slide
-            key={`slide-${index}`}
-            {...project}
-            slideState={projectSlideStates[index]}
-            onHoverStart={() => {
-              hoverchange({ hover: true, index });
-            }}
-            onHoverEnd={() => {
-              hoverchange({ hover: false, index });
-            }}
-            index={index}
-          />
-        ))}
+      <div className="overflow-x-scroll overflow-y-visible md:overflow-x-visible md:overflow-y-visible w-full">
+        <div className="flex mt-12 w-[400%] md:w-full pb-20 md:pb-0">
+          {projects.map((project, index) => (
+            <Slide
+              key={`slide-${index}`}
+              {...project}
+              slideState={projectSlideStates[index]}
+              onHoverStart={() => {
+                hoverchange({ hover: true, index });
+              }}
+              onHoverEnd={() => {
+                hoverchange({ hover: false, index });
+              }}
+              index={index}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </FadeInSection>
   );
 };
 
