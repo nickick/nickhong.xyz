@@ -19,8 +19,12 @@ const Project: FC<ProjectProps> = ({
   const onClick = useCallback(() => {
     setFocusedProject(name);
   }, [name, setFocusedProject]);
+
   return (
-    <div className="h-full border border-[rgba(255,255,255,0.3)] hover:shadow-inner transition-shadow">
+    <motion.div
+      className="h-full border border-[rgba(255,255,255,0.3)] hover:shadow-inner transition-shadow"
+      layoutId={name}
+    >
       <div className="p-3">{name}</div>
       <motion.div
         className="min-h-[20rem] md:min-h-[30rem] w-full bg-cover bg-center"
@@ -29,7 +33,7 @@ const Project: FC<ProjectProps> = ({
         }}
         layoutId={image}
       />
-    </div>
+    </motion.div>
   );
 };
 

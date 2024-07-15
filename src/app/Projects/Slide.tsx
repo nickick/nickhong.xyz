@@ -8,6 +8,7 @@ type SlideProps = {
   onHoverEnd: () => void;
   index: number;
   slideState: ProjectSlideState;
+  onClick: () => void;
 };
 
 const Slide: FC<SlideProps> = ({
@@ -15,6 +16,7 @@ const Slide: FC<SlideProps> = ({
   onHoverEnd,
   index,
   slideState,
+  onClick,
   ...projectProps
 }) => {
   const rotationInitial = -5;
@@ -55,6 +57,8 @@ const Slide: FC<SlideProps> = ({
     }
   }, [focusCard, index, resetCard, slideProjectCard, slideState]);
 
+  const project = projectProps as ProjectProps;
+
   return (
     <motion.div
       style={{
@@ -73,8 +77,9 @@ const Slide: FC<SlideProps> = ({
           width: "100%",
           rotateY: rotation,
         }}
+        onClick={onClick}
       >
-        <Project {...(projectProps as ProjectProps)} />
+        <Project {...project} />
       </motion.div>
     </motion.div>
   );

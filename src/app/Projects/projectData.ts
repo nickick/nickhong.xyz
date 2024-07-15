@@ -1,4 +1,24 @@
-export const projects = [
+export type Project = {
+  name: string;
+  href: string;
+  description: string[];
+  image: string;
+  contributors: (
+    | {
+        link: string;
+        icon: string;
+        name?: undefined;
+      }
+    | {
+        name: string;
+        icon: string;
+        link?: undefined;
+      }
+  )[];
+  imageOnLeft: boolean;
+};
+
+export const projects: Project[] = [
   {
     name: "FirstDayOut",
     href: "https://firstdayout.driftershoots.com",

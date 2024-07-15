@@ -3,6 +3,7 @@ import { FC, useCallback, useState } from "react";
 import { FadeInSection } from "../FadeInSection";
 import { serif } from "../fonts";
 import { projects } from "./projectData";
+import { ProjectModal } from "./ProjectModal";
 import { Slide } from "./Slide";
 
 export enum ProjectSlideState {
@@ -13,7 +14,7 @@ export enum ProjectSlideState {
 }
 
 const Projects: FC = () => {
-  const [focusedProject, setFocusedProject] = useState(null);
+  const [focusedProject, setFocusedProject] = useState<string | null>(null);
 
   const selectedProject = projects.find(
     (project) => project.name === focusedProject
@@ -56,7 +57,7 @@ const Projects: FC = () => {
 
   return (
     <FadeInSection
-      className={`flex flex-col w-full max-w-screen-xl mx-auto pt-24`}
+      className={`flex flex-col w-full max-w-screen-xl mx-auto pt-24 z-[30]`}
       section={Section.Projects}
       id="projects"
     >
@@ -79,6 +80,7 @@ const Projects: FC = () => {
               key={`slide-${index}`}
               {...project}
               slideState={projectSlideStates[index]}
+              onClick={() => setFocusedProject(project.name)}
               onHoverStart={() => {
                 hoverchange({ hover: true, index });
               }}
@@ -90,6 +92,7 @@ const Projects: FC = () => {
           ))}
         </div>
       </div>
+      <ProjectModal selectedProject={selectedProject} setClosed={handleClose} />
     </FadeInSection>
   );
 };
