@@ -118,7 +118,7 @@ const Projects: FC = () => {
           ))}
         </div>
       </div>
-      <div className="border-gray-300 border-b mx-8 md:mx-36 border-opacity-50" />
+      <div className="md:mt-16 border-gray-700 border-b mx-8 md:mx-36" />
     </FadeInSection>
   );
 };
