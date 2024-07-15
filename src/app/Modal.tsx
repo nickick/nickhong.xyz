@@ -28,7 +28,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal }) => {
     >
       <div className="sm:max-w-3xl sm:w-full m-3 sm:mx-auto h-[90vh] w-full z-[100] flex flex-col items-center justify-center">
         <div
-          className={`flex flex-col border-opacity-50 shadow-sm pointer-events-auto h-96 w-full overflow-hidden transition-all`}
+          className={`flex flex-col border-opacity-50 shadow-sm pointer-events-auto w-full overflow-hidden transition-all`}
           style={{
             WebkitBackdropFilter: `${!!children ? "blur(20px)" : "blur(0)"}`,
           }}

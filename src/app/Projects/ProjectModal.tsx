@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { FC } from "react";
 import { Project } from "./projectData";
+import { serif } from "../fonts";
+import Image from "next/image";
 
 type ProjectModalProps = {
   selectedProject: Project;
@@ -44,13 +46,62 @@ const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
     >
       {selectedProject && (
         <motion.div
-          className={`h-96 w-96 bg-cover bg-center`}
+          className={`h-[34rem] w-96 bg-cover bg-center`}
           style={{
             backgroundImage: `url('${selectedProject.image}')`,
           }}
           layoutId={selectedProject.image}
         />
       )}
+      <div className="w-full p-8 flex flex-col">
+        <motion.div
+          layoutId={`${selectedProject.name}-label`}
+          className={`${serif.className} text-3xl`}
+        >
+          {selectedProject.name}
+        </motion.div>
+        <div className="flex gap-4 my-4">
+          <a
+            href={selectedProject.href}
+            target="_blank"
+            rel="noreferrer"
+            className="animate-[fadeIn_1s_both]"
+          >
+            <Image
+              src="/icons/link.svg"
+              alt={`Link for ${selectedProject.name}`}
+              height={50}
+              width={50}
+              className="w-10 h-10 rounded-full p-2 border border-gray-300 hover:border-white transition-colors"
+            />
+          </a>
+          {selectedProject.contributors.map(({ link, icon }, index) => (
+            <div key={`contributor-${index}`}>
+              <a
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                className={`animate-[fadeIn_1s_both_${(index * 0.2).toFixed(
+                  1
+                )}s]`}
+              >
+                <Image
+                  src={icon}
+                  alt={`Twitter for ${link}`}
+                  height={50}
+                  width={50}
+                  className="w-10 h-auto rounded-full"
+                />
+              </a>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2">
+          {selectedProject.description.map((desc, index) => (
+            <div dangerouslySetInnerHTML={{ __html: desc }} key={index} />
+          ))}
+        </div>
+      </div>
     </motion.div>
   );
 };

@@ -1,5 +1,6 @@
 import { FC, useCallback } from "react";
 import { motion } from "framer-motion";
+import { serif } from "../fonts";
 
 export type ProjectProps = {
   name: string;
@@ -15,7 +16,12 @@ const Project: FC<ProjectProps> = ({ name, href, image, index }) => {
         1 + index * 0.2
       }s]`}
     >
-      <div className="p-3">{name}</div>
+      <motion.div
+        className={`p-3 ${serif.className} text-3xl`}
+        layoutId={`${name}-label`}
+      >
+        {name}
+      </motion.div>
       <motion.div
         className="min-h-[20rem] md:min-h-[30rem] w-full bg-cover bg-center"
         style={{
