@@ -8,7 +8,7 @@ import { NavIcon } from "./NavIcon";
 import { socialLinks } from "./socialLinks";
 
 const mobileScreenPosition =
-  "absolute h-96 w-96 top-1/4 left-1/2 z-20 transform translate-x-[-50%] translate-y-[-90%]";
+  "absolute h-96 w-96 top-1/4 left-1/2 z-20 transform translate-x-[-50%] translate-y-[-95%]";
 
 const cutoutSize = "h-96 w-96 md:h-[30rem] md:w-[30rem]";
 
@@ -68,7 +68,7 @@ const Hero: FC<{}> = ({}) => {
             {/* Cutout */}
             <div
               className={`absolute ${cutoutSize} left-1/2 top-0 md:left-0 md:top-1/2 transform
-              -translate-x-1/2 -translate-y-[90%]
+              -translate-x-1/2 -translate-y-[95%]
               md:translate-x-[0%] md:-translate-y-1/2`}
               style={{
                 mask: "url(/cutout.png)",
@@ -91,7 +91,7 @@ const Hero: FC<{}> = ({}) => {
         </div>
         {/* Right text */}
         <div
-          className="absolute top-1/2 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
+          className="absolute top-1/3 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
           style={{
             flex: 5,
           }}
@@ -122,7 +122,7 @@ const Hero: FC<{}> = ({}) => {
             })}
           </div>
         </div>
-        <div className="flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-3/4 md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[30] animate-fadeInFromLeftAfterDelay">
+        <div className="flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-[60%] md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[30] animate-fadeInFromLeftAfterDelay">
           <Image
             src="/icons/down-carets.svg"
             width={50}
