@@ -48,7 +48,7 @@ export default function NavIcon({
         `animate-[fadeIn_1s_both_${1 + index * 0.2}s] ${
           active ? "text-black" : "text-white"
         } ${
-          active ? "bg-gray-300" : "bg-backgroundBlack"
+          active ? "bg-gray-300" : "bg-transparent"
         } mx-2 tracking-widest rounded px-2 py-1`,
         className
       )}
