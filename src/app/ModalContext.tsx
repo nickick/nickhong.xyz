@@ -6,6 +6,9 @@ export const ModalContext = createContext({
   // modal contents
   modalContents: null as React.ReactNode | null,
   setModalContents: (contents: React.ReactNode | null) => {},
+  // modal class name
+  modalClassName: "",
+  setModalClassName: (className: string) => {},
   // fn to call when modal is closed
   onCloseFn: () => {},
   setOnCloseFn: (fn: () => void | null) => {},
@@ -15,16 +18,19 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [modalContents, setModalContents] = useState<React.ReactNode | null>(
     null
   );
+  const [modalClassName, setModalClassName] = useState<string>("");
   const [onCloseFn, setOnCloseFn] = useState<() => void>(() => () => {});
 
   const providerValue = useMemo(
     () => ({
       modalContents,
       setModalContents,
+      modalClassName,
+      setModalClassName,
       onCloseFn,
       setOnCloseFn,
     }),
-    [modalContents, onCloseFn]
+    [modalClassName, modalContents, onCloseFn]
   );
 
   return (

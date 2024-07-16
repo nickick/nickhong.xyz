@@ -2,13 +2,15 @@ import { motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
 import { BodyLock } from "./BodyLock";
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 type ModalProps = {
   children: React.ReactNode;
+  className?: string;
   closeModal: () => void;
 };
 
-const Modal: FC<ModalProps> = ({ children, closeModal }) => {
+const Modal: FC<ModalProps> = ({ children, className, closeModal }) => {
   const [bodyLock, setBodyLock] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,7 +30,10 @@ const Modal: FC<ModalProps> = ({ children, closeModal }) => {
     >
       <div className="w-[calc(100vw-2rem)] mx-auto md:max-w-3xl m-3 sm:mx-auto h-[90vh] md:h-[90vh] md:w-full z-[100] flex flex-col items-center justify-center">
         <div
-          className={`flex flex-col border-opacity-50 shadow-sm pointer-events-auto w-full overflow-hidden transition-all overflow-y-scroll md:overflow-y-hidden`}
+          className={twMerge(
+            `flex flex-col border-opacity-50 shadow-sm pointer-events-auto w-full overflow-hidden transition-all overflow-y-scroll md:overflow-y-hidden relative`,
+            className
+          )}
           style={{
             WebkitBackdropFilter: `${!!children ? "blur(20px)" : "blur(0)"}`,
           }}
@@ -39,6 +44,7 @@ const Modal: FC<ModalProps> = ({ children, closeModal }) => {
             animate="visible"
             exit="exit"
           >
+            <div className="pointer-events-none absolute inset-0 z-50 shadow-inner" />
             {children}
             {bodyLock && <BodyLock />}
             {!!children && (

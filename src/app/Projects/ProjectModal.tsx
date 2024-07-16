@@ -29,7 +29,7 @@ const dropIn = {
 const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
   return (
     <motion.div
-      className={`flex shadow-inner flex-col-reverse ${
+      className={`flex flex-col-reverse ${
         selectedProject?.imageOnLeft ? "md:flex-row-reverse" : "md:flex-row"
       } ${
         !!selectedProject

@@ -70,7 +70,7 @@ const Slide: FC<SlideProps> = ({
         position: "relative",
         zIndex: 15 - index,
       }}
-      className="w-64 md:w-full bg-black"
+      className="w-64 md:w-full bg-black group"
       layoutId={project.name.concat()}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}

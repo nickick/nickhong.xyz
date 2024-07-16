@@ -27,6 +27,9 @@ const config: Config = {
     extend: {
       boxShadow: {
         inner: "inset 0 0 10px 0 rgba(255,255,255,0.5)",
+        innerToBottom: "inset 0 -1px 5px 0 rgba(255,255,255,0.5)",
+        innerToLeft: "inset -1px 0 5px 0 rgba(255,255,255,0.5)",
+        innerToRight: "inset 1px 0 5px 0 rgba(255,255,255,0.5)",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

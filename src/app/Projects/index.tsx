@@ -70,14 +70,21 @@ const Projects: FC = () => {
     [resetFocusStates, setFocusState]
   );
 
-  const { setModalContents, setOnCloseFn } = useContext(ModalContext);
+  const { setModalContents, setModalClassName, setOnCloseFn } =
+    useContext(ModalContext);
 
   useEffect(() => {
     if (selectedProject) {
       setModalContents(<ProjectModal selectedProject={selectedProject} />);
       setOnCloseFn(handleClose);
     }
-  }, [handleClose, selectedProject, setModalContents, setOnCloseFn]);
+  }, [
+    handleClose,
+    selectedProject,
+    setModalClassName,
+    setModalContents,
+    setOnCloseFn,
+  ]);
 
   return (
     <FadeInSection
