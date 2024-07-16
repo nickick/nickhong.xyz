@@ -110,7 +110,7 @@ const Projects: FC = () => {
         </p>
       </div>
       <div className="overflow-x-scroll overflow-y-visible md:overflow-x-visible md:overflow-y-visible w-full">
-        <div className="flex md:justify-center items-center mt-12 w-[400%] md:w-full pb-20 md:pb-0 ml-16 md:ml-16">
+        <div className="flex md:justify-center items-center mt-12 md:mt-24 w-[400%] md:w-full pb-20 md:pb-0 ml-16 md:ml-16">
           {projects.map((project, index) => (
             <Slide
               key={`slide-${index}`}
@@ -131,7 +131,7 @@ const Projects: FC = () => {
           ))}
         </div>
       </div>
-      <div className="md:mt-16 border-gray-700 border-b mx-8 md:mx-36" />
+      <div className="md:mt-24 border-gray-700 border-b mx-8 md:mx-36" />
     </FadeInSection>
   );
 };
