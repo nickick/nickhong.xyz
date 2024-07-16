@@ -1,30 +1,8 @@
-import { FC, useEffect } from "react";
-import { serif } from "./fonts";
-import { useInView } from "react-intersection-observer";
-import useActiveSection, {
-  AddOrDelete,
-  Section,
-} from "./hooks/useActiveSection";
+import { FC } from "react";
 import { FadeInSection } from "./FadeInSection";
-
-const Link = ({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="underline hover:text-gray-200 transition-colors"
-    >
-      {children}
-    </a>
-  );
-};
+import { serif } from "./fonts";
+import { Section } from "./hooks/useActiveSection";
+import { Link } from "./Link";
 
 const OtherWork: FC = ({}) => {
   return (

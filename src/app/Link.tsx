@@ -12,7 +12,7 @@ const LinkWrapper: FC<LinkProps> = ({ children, href }) => {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="underline opacity-90 hover:opacity-100 transition-all"
+      className="underline opacity-90 hover:opacity-100 hover:bg-gray-300 hover:text-black px-1 -mx-1 rounded transition-all"
     >
       {children}
     </Link>
