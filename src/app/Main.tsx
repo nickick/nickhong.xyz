@@ -9,6 +9,7 @@ import { OtherWork } from "./OtherWork";
 import { Contact } from "./Contact";
 import { Footer } from "./Footer";
 import { ModalProvider } from "./ModalContext";
+import { About } from "./About";
 
 const Main: FC = ({}) => {
   return (
@@ -16,6 +17,7 @@ const Main: FC = ({}) => {
       <ModalProvider>
         <Navbar />
         <Hero />
+        <About />
         <Projects />
         <OtherWork />
         <Contact />

@@ -14,7 +14,7 @@ const cutoutSize = "h-96 w-96 md:h-[30rem] md:w-[30rem]";
 
 const Hero: FC<{}> = ({}) => {
   const onDownClick = useCallback(() => {
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   return (
@@ -105,7 +105,7 @@ const Hero: FC<{}> = ({}) => {
             </div>
           </h1>
           <div className="md:text-2xl">
-            I&apos;m a Web3 engineer based in NYC.
+            I&apos;m a Web3 engineer in the NFT space.
           </div>
           <div className="flex text-white items-center">
             {socialLinks.map(({ text, href, icon }, index) => {
