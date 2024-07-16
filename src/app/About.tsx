@@ -14,7 +14,7 @@ const About = () => {
         <h2
           className={`flex-[1] w-full ${serif.className} text-3xl text-center md:text-left`}
         >
-          About
+          About me
         </h2>
         <div className="flex-[3] text-xl gap-8 flex flex-col leading-relaxed">
           <p>
