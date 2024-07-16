@@ -50,6 +50,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
               setOnCloseFn(() => {});
               setModalContents(null);
             }}
+            className={modalClassName}
           >
             {modalContents}
           </Modal>

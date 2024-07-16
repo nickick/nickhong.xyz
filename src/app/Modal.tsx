@@ -8,9 +8,15 @@ type ModalProps = {
   children: React.ReactNode;
   className?: string;
   closeModal: () => void;
+  layoutId?: string;
 };
 
-const Modal: FC<ModalProps> = ({ children, className, closeModal }) => {
+const Modal: FC<ModalProps> = ({
+  children,
+  className,
+  closeModal,
+  layoutId,
+}) => {
   const [bodyLock, setBodyLock] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,7 +50,6 @@ const Modal: FC<ModalProps> = ({ children, className, closeModal }) => {
             animate="visible"
             exit="exit"
           >
-            <div className="pointer-events-none absolute inset-0 z-50 shadow-inner" />
             {children}
             {bodyLock && <BodyLock />}
             {!!children && (

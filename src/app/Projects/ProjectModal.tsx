@@ -29,7 +29,7 @@ const dropIn = {
 const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
   return (
     <motion.div
-      className={`flex flex-col-reverse ${
+      className={`relative flex flex-col-reverse ${
         selectedProject?.imageOnLeft ? "md:flex-row-reverse" : "md:flex-row"
       } ${
         !!selectedProject
@@ -44,6 +44,7 @@ const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
         WebkitBackdropFilter: `${!!selectedProject ? "blur(20px)" : "blur(0)"}`,
       }}
     >
+      <div className="pointer-events-none absolute inset-0 z-50 shadow-inner" />
       {selectedProject && (
         <motion.div
           className={`h-[34rem] w-full md:w-96 bg-cover bg-center`}
