@@ -53,7 +53,7 @@ const ProjectModal: FC<ProjectModalProps> = ({ selectedProject }) => {
           layoutId={selectedProject.image}
         />
       )}
-      <div className="w-full p-8 flex flex-col">
+      <div className="w-full p-8 flex flex-col text-white">
         <motion.div
           layoutId={`${selectedProject.name}-label`}
           className={`${serif.className} text-3xl`}

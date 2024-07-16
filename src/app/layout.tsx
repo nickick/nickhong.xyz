@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sansSerif.className} mx-auto`}
+        className={`${sansSerif.className} mx-auto text-white`}
         style={{
           background: "#080808",
         }}
