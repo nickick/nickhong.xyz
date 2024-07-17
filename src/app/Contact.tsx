@@ -19,11 +19,8 @@ const Contact: FC = ({}) => {
           Contact
         </h2>
         <div className="flex-[3] text-xl gap-8 flex flex-col leading-relaxed">
-          <p>
-            I&apos;m currently open to new Web3 project work and employment,
-            especially from cool cats in the NFT space.
-          </p>
-          <p>If that&apos;s you, smash one of these buttons!</p>
+          <p>I&apos;m currently open to new project work and employment.</p>
+          <p>Contact me anywhere below!</p>
           <div className="flex text-white justify-center md:justify-start mt-8 md:mt-0">
             {socialLinks.map(({ text, href, icon }, index) => {
               return (
