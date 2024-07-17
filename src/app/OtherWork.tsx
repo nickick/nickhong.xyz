@@ -20,19 +20,19 @@ const OtherWork: FC = ({}) => {
         <div className="flex-[3] text-xl gap-8 flex flex-col leading-relaxed">
           <p>
             Before journeying into Web3, I worked for 10 years as a fullstack
-            Software Engineer / Engineering Manager at several Web2 companies:{" "}
-            <Link href="https://medium.com">Medium</Link> ,{" "}
+            Software Engineer / Engineering Manager at a few Web2 companies you
+            might recognize: <Link href="https://medium.com">Medium</Link> ,{" "}
             <Link href="https://eaze.com">Eaze</Link>,{" "}
             <Link href="https://instacart.com">Instacart</Link>, and{" "}
             <Link href="https://therealreal.com">TheRealReal</Link>.
           </p>
           <p>
-            I&apos;m a skilled fullstack engineer, with experience in React.js,
-            Solidity, Next.js, Express.js, Node.js, and Ruby on Rails.
-          </p>
-          <p>
-            I&apos;ve also had 4 years of experience managing high performance
-            engineering teams in fast-moving, high-pressure startups.
+            I&apos;ve become a strong fullstack engineer and how to effectively
+            build products in interdisciplinary teams through these companies. I
+            self-manage well and can manage entire engineering teams through
+            Agile processes to integrate into broader company directives. My
+            technical skills include expertise in React.js, Solidity, Next.js,
+            Express.js, Node.js, AWS, and Ruby on Rails.
           </p>
           <p>
             For more details, take a look at my{" "}

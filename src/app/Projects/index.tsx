@@ -100,13 +100,7 @@ const Projects: FC = () => {
         </h2>
         <p className="flex-[3] w-full text-xl gap-4 leading-relaxed">
           I&apos;ve worked as a Solidity/React engineer on several projects in
-          the NFT space for artists like{" "}
-          <Link href="https://x.com/driftershoots">DrifterShoots</Link> and{" "}
-          <Link href="https://x.com/ImBrendanNorth">Brendan North</Link>, as
-          well as for celebrities like{" "}
-          <Link href="https://x.com/patrickmahomes">Patrick Mahomes</Link> and{" "}
-          <Link href="https://x.com/itsdanataylor">Dana Taylor</Link>. These
-          projects have raised over $7 milliion to date.
+          the NFT space for artists that have raised over $7 milliion to date.
         </p>
       </div>
       <div className="overflow-x-scroll overflow-y-visible md:overflow-x-visible md:overflow-y-visible w-full">
