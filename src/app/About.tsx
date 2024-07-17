@@ -27,25 +27,36 @@ const About = () => {
             that loves to build apps and websites. I&apos;m also currently open
             to new employment!
           </p>
-          <p>
-            I&apos;ve been an engineer at some companies you might recognize
-            like <Link href="https://instacart.com">Instacart</Link> and{" "}
-            <Link href="https://therealreal.com">TheRealReal</Link>. I&apos;ve
-            also managed engineering teams in hypergrowth environments at{" "}
-            <Link href="https://eaze.co">Eaze</Link> and through the craziness
-            of shifting to remote work at{" "}
-            <Link href="https://medium.com">Medium</Link>, . Recently, I&apos;ve
-            driven $7M+ in NFT sales as a key project technical driver for
-            A-list celebrities like{" "}
-            <Link href="https://museumofmahomes.com">Patrick Mahomes</Link> and
-            the best artists in the NFT space like{" "}
-            <Link href="https://x.com/driftershoots/">DrifterShoots</Link>. One
-            of those projects holds the record for the most{" "}
-            <Link href="https://firstdayout.driftershoots.com/">
-              commercially successful photo
-            </Link>{" "}
-            of all time!
-          </p>
+          <div>
+            <p>Some highlights of my career:</p>
+            <ul className="list-disc">
+              <li className="ml-4">
+                $7M+ in revenue as a key technical owner on several NFT projects
+                for A-list celebrities like{" "}
+                <Link href="https://museumofmahomes.com">Patrick Mahomes</Link>{" "}
+                and the best artists in the NFT space like{" "}
+                <Link href="https://x.com/driftershoots/">DrifterShoots</Link>.
+              </li>
+              <li className="ml-4">
+                Key technical driver for FirstDayOut, a NFT project that made
+                for the most{" "}
+                <Link href="https://firstdayout.driftershoots.com/">
+                  commercially successful photo
+                </Link>{" "}
+                of all time
+              </li>
+              <li className="ml-4">
+                Managed engineering teams through hypergrowth (12 employees to
+                200+) at <Link href="https://eaze.co">Eaze</Link>{" "}
+              </li>
+              <li className="ml-4">
+                Worked at some companies you might recognize like{" "}
+                <Link href="https://medium.com">Medium</Link>,{" "}
+                <Link href="https://instacart.com">Instacart</Link>, and{" "}
+                <Link href="https://therealreal.com">TheRealReal</Link>
+              </li>
+            </ul>
+          </div>
           <p>
             My current professional obsession is with UX in the crypto space - I
             am enamored with the democratization of data through publicly
