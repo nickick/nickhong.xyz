@@ -38,16 +38,23 @@ const About = () => {
                 <Link href="https://x.com/driftershoots/">DrifterShoots</Link>.
               </li>
               <li className="ml-4">
-                Key technical driver for FirstDayOut, a NFT project that made
-                for the most{" "}
+                Key technical driver for{" "}
                 <Link href="https://firstdayout.driftershoots.com/">
+                  FirstDayOut
+                </Link>
+                , a historic NFT project that made for the most{" "}
+                <Link href="https://hypebeast.com/2022/4/drift-first-day-out-jail-nft-sale">
                   commercially successful photo
                 </Link>{" "}
                 of all time
               </li>
               <li className="ml-4">
-                Managed engineering teams through hypergrowth (12 employees to
-                200+) at <Link href="https://eaze.co">Eaze</Link>{" "}
+                Managed engineering teams at{" "}
+                <Link href="https://eaze.co">Eaze</Link> through{" "}
+                <Link href="https://techcrunch.com/2021/08/19/eaze-to-become-americas-largest-cannabis-delivery-service-after-buying-green-dragon/">
+                  hypergrowth
+                </Link>{" "}
+                (12 employees to 200+)
               </li>
               <li className="ml-4">
                 Worked at some companies you might recognize like{" "}
