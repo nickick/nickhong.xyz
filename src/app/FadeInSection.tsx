@@ -1,10 +1,11 @@
-import { FC, useCallback, useEffect } from "react";
+import { FC, useCallback, useContext, useEffect } from "react";
 import useActiveSection, {
   AddOrDelete,
   Section,
 } from "./hooks/useActiveSection";
 import { useInView } from "react-intersection-observer";
 import { twMerge } from "tailwind-merge";
+import { LoadedContext } from "./LoadedContext";
 
 /**
  * Wrapper section that allows scrolling to with bookmark anchors and fades in when in view.
@@ -42,6 +43,11 @@ const FadeInSection: FC<FadeInSectionProps> = ({
     }
   }, [inView, section, setSectionInView]);
 
+  const { isLoaded } = useContext(LoadedContext);
+  const animationClass = isLoaded
+    ? "animate-fadeIn"
+    : "animate-fadeInAfterDelay";
+
   const setRefs = useCallback(
     (node: Element | null) => {
       ref(node);
@@ -49,10 +55,11 @@ const FadeInSection: FC<FadeInSectionProps> = ({
     },
     [ref, inViewRef]
   );
+
   return (
     <div
       className={twMerge(
-        `opacity-0 ${inAnimationView ? "animate-fadeIn" : ""}`,
+        `opacity-0 ${inAnimationView ? animationClass : ""}`,
         className
       )}
       id={id}

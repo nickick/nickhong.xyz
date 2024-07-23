@@ -1,6 +1,9 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 
-export const LoadedContext = createContext({});
+export const LoadedContext = createContext({
+  isLoaded: false,
+  animationDelay: 0,
+});
 
 export function LoadedProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -8,7 +11,7 @@ export function LoadedProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setTimeout(() => {
       setIsLoaded(true);
-    }, 3000);
+    }, 2000);
   }, []);
 
   const animationDelay = isLoaded ? 0 : 1;
