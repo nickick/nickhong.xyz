@@ -18,27 +18,27 @@ const About = () => {
         </h2>
         <div className="flex-[3] text-xl gap-8 flex flex-col leading-relaxed">
           <p>
-            I&apos;m a lifelong nerd (MIT &apos;10, D&D/Rifts tabletop gamer,
-            anime lover, and PC gamer), a hobbyist competitive kickboxer, and a{" "}
+            I&apos;m a lifelong nerd (MIT &apos;10, PC gamer, D&D/Rifts tabletop
+            gamer, and anime lover), a hobbyist competitive Muay Thai fighter,
+            and a{" "}
             <Link href="https://www.tiktok.com/@millenialnick">
               {" "}
               sporadic content creator
             </Link>{" "}
-            that loves to build apps and websites. I&apos;m also currently open
-            to new employment!
+            that loves to build apps and websites.
           </p>
           <div>
             <p>Some highlights of my career:</p>
             <ul className="list-disc">
               <li className="ml-4">
-                $7M+ in revenue as a key technical owner on several NFT projects
-                for A-list celebrities like{" "}
+                $7M+ in revenue as a Web3 owner on several NFT projects for
+                A-list celebrities like{" "}
                 <Link href="https://museumofmahomes.com">Patrick Mahomes</Link>{" "}
                 and the best artists in the NFT space like{" "}
-                <Link href="https://x.com/driftershoots/">DrifterShoots</Link>.
+                <Link href="https://x.com/driftershoots/">DrifterShoots</Link>
               </li>
               <li className="ml-4">
-                Key technical driver for{" "}
+                Key driver for{" "}
                 <Link href="https://firstdayout.driftershoots.com/">
                   FirstDayOut
                 </Link>
@@ -46,7 +46,7 @@ const About = () => {
                 <Link href="https://hypebeast.com/2022/4/drift-first-day-out-jail-nft-sale">
                   commercially successful photo
                 </Link>{" "}
-                of all time
+                of all time ($6.8M raised in 24 hours!)
               </li>
               <li className="ml-4">
                 Managed engineering teams at{" "}

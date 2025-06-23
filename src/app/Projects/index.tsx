@@ -2,11 +2,10 @@ import { Section } from "@/app/hooks/useActiveSection";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { FadeInSection } from "../FadeInSection";
 import { serif } from "../fonts";
+import { ModalContext } from "../ModalContext";
 import { projects } from "./projectData";
 import { ProjectModal } from "./ProjectModal";
 import { Slide } from "./Slide";
-import { ModalContext } from "../ModalContext";
-import { Link } from "../Link";
 
 export enum ProjectSlideState {
   LEFT,
@@ -99,8 +98,8 @@ const Projects: FC = () => {
           Web3 Projects
         </h2>
         <p className="flex-[3] w-full text-xl gap-4 leading-relaxed">
-          I&apos;ve worked as a Solidity/React engineer on several projects in
-          the NFT space for artists that have raised over $7 milliion to date.
+          I&apos;ve helped artists and celebrities raise over $7 million to date
+          in the NFT space.
         </p>
       </div>
       <div className="overflow-x-scroll overflow-y-visible md:overflow-x-visible md:overflow-y-visible w-full">

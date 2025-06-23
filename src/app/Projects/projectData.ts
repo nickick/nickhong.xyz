@@ -24,10 +24,10 @@ export const projects: Project[] = [
     href: "https://museumofmahomes.com",
     description: [
       "Museum of Mahomes is <a href='https://twitter.com/patrickmahomes' target='_blank' class='underline'>@patrickmahomes</a>&apos;s official NFT collection.",
-      "This project was an incredible challenge. It involved complex minting mechanics, fiat credit card processing, a burn-to-physical shipment component, and an incredibly tight deadline.",
-      "I was brought on to rescue the project and make the entire mint site to use <a href='https://x.com/0xfoobar' target='_blank' class='underline'>0xfoobar</a>'s smart contract work, in less than 3 weeks, with an unmoveable deadline enforced by NFL promotional bans.",
-      "In that time, I brought on another amazing contractor, <a href='https://x.com/tom_hirst' target='_blank' class='underline'>Tom Hirst</a>, and managed to deliver on a beautiful, fully functional mint <a href='https://museumofmahomes.com' target='_blank' class='underline'>site</a>.",
-      "A quote from the client, after Tom and I jumped in to save the project: 'Omg. I haven't been able to sleep for 3 days straight. I'm finally going to be able to get some tonight.'",
+      "This project was incredibly challenging. It involved complex minting mechanics, fiat credit card processing, a burn-to-physical shipment component, and an unmoveable deadline.",
+      "I jumped in to rescue the project. Because of NFL promotional bans, we had less than 3 weeks to make the entire mint site using <a href='https://x.com/0xfoobar' target='_blank' class='underline'>0xfoobar</a>'s smart contract work.",
+      "To help deliver, I brought on another amazing contractor, <a href='https://x.com/tom_hirst' target='_blank' class='underline'>Tom Hirst</a>. We landed a beautiful, fully functional mint <a href='https://museumofmahomes.com' target='_blank' class='underline'>site</a> - just in time.",
+      "A quote from the client, after Tom and I had corrected the launch towards an on-time finish: 'Omg. I haven't been able to sleep for 3 days straight. I'm finally going to be able to get some tonight.'",
     ],
     image: "/portfolio/museumofmahomes.webp",
     contributors: [

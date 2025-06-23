@@ -28,11 +28,11 @@ const OtherWork: FC = ({}) => {
           </p>
           <p>
             I&apos;ve become a strong fullstack engineer and learned how to
-            effectively build products in interdisciplinary teams through these
-            companies. I self-manage well and can manage entire engineering
-            teams through agile processes to integrate into broader company
-            directives. My technical skills include expertise in React.js,
-            Solidity, Next.js, Express.js, Node.js, AWS, and Ruby on Rails.
+            effectively build products in interdisciplinary teams. I self-manage
+            well and can manage entire engineering teams through agile processes
+            to integrate into broader company directives. My technical skills
+            include expertise in React.js, Solidity, Next.js, Express.js,
+            Node.js, AWS, and Ruby on Rails.
           </p>
           <p>
             For more details, take a look at my{" "}
