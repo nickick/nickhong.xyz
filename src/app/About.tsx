@@ -19,9 +19,12 @@ const About = () => {
         <div className="flex-[3] text-xl gap-8 flex flex-col leading-relaxed">
           <p>
             I&apos;m a lifelong nerd (MIT &apos;10, PC gamer, D&D/Rifts tabletop
-            gamer, and anime lover), a hobbyist competitive Muay Thai fighter,
-            and a{" "}
-            <Link href="https://www.tiktok.com/@millenialnick">
+            gamer, and anime lover), a hobbyist competitive{" "}
+            <Link href="https://tiktok.com/@millenialnickpov/video/7146271986208001323?_t=ZT-90un5JRYfl8&_r=1">
+              Muay Thai fighter
+            </Link>
+            , and a{" "}
+            <Link href="https://www.tiktok.com/@millenialnickpov">
               {" "}
               sporadic content creator
             </Link>{" "}
@@ -33,9 +36,13 @@ const About = () => {
               <li className="ml-4">
                 $7M+ in revenue as a Web3 owner on several NFT projects for
                 A-list celebrities like{" "}
-                <Link href="https://museumofmahomes.com">Patrick Mahomes</Link>{" "}
+                <Link href="https://x.com/museumofmahomes?lang=en">
+                  Patrick Mahomes
+                </Link>{" "}
                 and the best artists in the NFT space like{" "}
-                <Link href="https://x.com/driftershoots/">DrifterShoots</Link>
+                <Link href="https://www.instagram.com/driftershoots/?hl=en">
+                  DrifterShoots
+                </Link>
               </li>
               <li className="ml-4">
                 Key driver for{" "}
@@ -49,6 +56,12 @@ const About = () => {
                 of all time ($6.8M raised in 24 hours!)
               </li>
               <li className="ml-4">
+                Senior Web3 Engineer at{" "}
+                <Link href="https://privy.io">Privy</Link> and{" "}
+                <Link href="https://originprotocol.com">Origin Protocol</Link>,
+                building Web3 frontend infra and products
+              </li>
+              <li className="ml-4">
                 Managed engineering teams at{" "}
                 <Link href="https://eaze.co">Eaze</Link> through{" "}
                 <Link href="https://techcrunch.com/2021/08/19/eaze-to-become-americas-largest-cannabis-delivery-service-after-buying-green-dragon/">
@@ -57,8 +70,12 @@ const About = () => {
                 (12 employees to 200+)
               </li>
               <li className="ml-4">
+                Managed engineering teams at{" "}
+                <Link href="https://medium.com">Medium</Link> through COVID-19
+                remote transition
+              </li>
+              <li className="ml-4">
                 Worked at some companies you might recognize like{" "}
-                <Link href="https://medium.com">Medium</Link>,{" "}
                 <Link href="https://instacart.com">Instacart</Link>, and{" "}
                 <Link href="https://therealreal.com">TheRealReal</Link>
               </li>
