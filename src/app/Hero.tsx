@@ -105,7 +105,7 @@ const Hero: FC<{}> = ({}) => {
             </div>
           </h1>
           <div className="md:text-2xl">
-            I&apos;m a designer & developer in the NFT space.
+            I&apos;m a fullstack developer in Web3.
           </div>
           <div className="flex text-white items-center">
             {socialLinks.map(({ text, href, icon }, index) => {
