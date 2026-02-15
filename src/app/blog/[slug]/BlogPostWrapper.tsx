@@ -391,7 +391,7 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
         </Link>
 
         <article>
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             {post.tags.map((tag) => (
               <span
                 key={tag}
@@ -402,17 +402,16 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
             ))}
           </div>
 
-          <div className="flex items-start justify-between gap-4 mb-6">
-            <h1 className={`${serif.className} text-3xl md:text-5xl text-white`}>
-              {post.title}
-            </h1>
-            <button
-              onClick={handleCopyAll}
-              className="flex-shrink-0 px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded transition-all"
-            >
-              {allCopied ? 'Copied All!' : 'Copy All Code'}
-            </button>
-          </div>
+          <button
+            onClick={handleCopyAll}
+            className="mb-4 px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded transition-all"
+          >
+            {allCopied ? 'Copied All!' : 'Copy All Code'}
+          </button>
+
+          <h1 className={`${serif.className} text-3xl md:text-5xl text-white mb-6`}>
+            {post.title}
+          </h1>
 
           <time className="text-sm text-gray-500 block mb-12">
             {new Date(post.date).toLocaleDateString("en-US", {
