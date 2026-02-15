@@ -19,6 +19,8 @@ A VPS is a solid, always-on, and cost-effective way to run an OpenClaw setup. Bu
 
 Spin up a fresh VPS and watch your logs. [The internet is a dark forest](https://gwern.net/dark-forest) - you'll get brute force attempts at guessing your password within 5 minutes of spinning up a fresh VPS. Follow this guide to keep your OpenClaw box safe.
 
+> Unironically we will be doing all of [these steps](https://x.com/kailentit/status/2019821067553108379), though there's an [agent version of the guide](/blog/vps-security-agent-guide) to do it in one shot on Claude.
+
 **Want an AI-native guide?** You can also give [the agent walkthrough](/blog/vps-security-agent-guide) to your AI assistant and have it execute these steps for you.
 
 Here's what you need to do to survive.
