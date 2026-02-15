@@ -69,19 +69,16 @@ export default function NavIcon({
         // Store anchor to scroll after navigation
         sessionStorage.setItem("scrollToAnchor", hash);
         
-        // Navigate after drawer closes
-        setTimeout(() => {
-          router.push(path || "/");
-        }, 300);
+        // Navigate immediately
+        router.push(path || "/");
       } else if (!isSamePage) {
         // Different page, no anchor
         e.preventDefault();
         onClose?.();
         markNavigation();
         
-        setTimeout(() => {
-          router.push(href);
-        }, 300);
+        // Navigate immediately
+        router.push(href);
       }
       // If same page and no hash, let default behavior (reload)
     },
