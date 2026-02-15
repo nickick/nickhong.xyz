@@ -3,6 +3,7 @@ import { sansSerif } from "./fonts";
 import "./globals.css";
 import { LoadedProvider } from "./LoadedContext";
 import { RootLayoutClient } from "./RootLayoutClient";
+import { ScrollHandler } from "./ScrollHandler";
 
 export const metadata: Metadata = {
   title: "nickhong.xyz",
@@ -24,6 +25,7 @@ export default function RootLayout({
       >
         <LoadedProvider>
           <RootLayoutClient>{children}</RootLayoutClient>
+          <ScrollHandler />
         </LoadedProvider>
       </body>
     </html>

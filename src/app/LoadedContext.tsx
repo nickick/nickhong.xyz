@@ -66,6 +66,28 @@ export function LoadedProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Handle anchor scroll after navigation
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    const anchorToScroll = sessionStorage.getItem("scrollToAnchor");
+    if (anchorToScroll) {
+      sessionStorage.removeItem("scrollToAnchor");
+      // Wait for page to be fully loaded and DOM ready
+      const scrollToAnchor = () => {
+        const element = document.getElementById(anchorToScroll);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      };
+      
+      // Try immediately and after a delay
+      scrollToAnchor();
+      setTimeout(scrollToAnchor, 100);
+      setTimeout(scrollToAnchor, 500);
+    }
+  }, []); // Run once on mount
+
   // Mark that navigation occurred (for client-side nav)
   const markNavigation = useCallback(() => {
     globalHasLoaded = true;

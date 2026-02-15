@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useContext } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "./Button";
 import { twMerge } from "tailwind-merge";
 import { LoadedContext } from "./LoadedContext";
@@ -28,40 +28,64 @@ export default function NavIcon({
   onClose,
 }: NavIconProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { isLoaded, markNavigation } = useContext(LoadedContext);
 
-  const scrollTo = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>) => {
-      if (anchor) {
-        e.preventDefault();
-        document.getElementById(anchor)?.scrollIntoView({
+  const scrollToAnchor = useCallback(
+    (anchorId: string) => {
+      const element = document.getElementById(anchorId);
+      if (element) {
+        element.scrollIntoView({
           behavior: "smooth",
         });
-        onClose?.();
       }
+      onClose?.();
     },
-    [anchor, onClose]
+    [onClose]
   );
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
-      if (anchor) {
-        scrollTo(e);
-      } else if (href[0] === "/") {
-        // Client-side navigation to a new page
+      // External links - let them work normally
+      const isExternal = icon || href[0] !== "/";
+      if (isExternal) {
+        return; // Let default behavior happen
+      }
+
+      // Parse href to get path and hash
+      const [path, hash] = href.split("#");
+      const isSamePage = path === pathname || (path === "/" && pathname === "/");
+
+      if (isSamePage && hash) {
+        // Same page anchor scroll
         e.preventDefault();
-        
-        // Close drawer first
+        scrollToAnchor(hash);
+      } else if (!isSamePage && hash) {
+        // Different page with anchor - navigate then scroll
+        e.preventDefault();
         onClose?.();
         markNavigation();
         
-        // Navigate after drawer closes (300ms for animation)
+        // Store anchor to scroll after navigation
+        sessionStorage.setItem("scrollToAnchor", hash);
+        
+        // Navigate after drawer closes
+        setTimeout(() => {
+          router.push(path || "/");
+        }, 300);
+      } else if (!isSamePage) {
+        // Different page, no anchor
+        e.preventDefault();
+        onClose?.();
+        markNavigation();
+        
         setTimeout(() => {
           router.push(href);
         }, 300);
       }
+      // If same page and no hash, let default behavior (reload)
     },
-    [anchor, href, scrollTo, markNavigation, onClose, router]
+    [href, pathname, icon, scrollToAnchor, markNavigation, onClose, router]
   );
 
   // Only set target for external links
