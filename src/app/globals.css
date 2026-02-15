@@ -67,3 +67,13 @@
     --ring: 240 4.9% 83.9%;
   }
 }
+
+/* Blog content blockquote styling */
+.blog-content blockquote {
+  font-style: italic;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  border-left: 2px solid #4b5563;
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
