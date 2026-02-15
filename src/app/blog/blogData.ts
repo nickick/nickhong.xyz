@@ -28,7 +28,7 @@ Here's what you need to do to survive.
 Never run operations as root. Create a dedicated user with sudo privileges:
 
 \`\`\`bash
-# Add a new user
+# Add a new user (you'll be prompted to set a password)
 adduser yourusername
 
 # Add to sudo group
@@ -41,6 +41,8 @@ su - yourusername
 sudo whoami
 # Should output: root
 \`\`\`
+
+**Important:** Store this password in a password manager like 1Password. You'll need it for sudo commands.
 
 ---
 
@@ -90,6 +92,25 @@ echo "your-public-key-content" >> ~/.ssh/authorized_keys
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 \`\`\`
+
+### 2.1 Configure SSH Client to Prevent Self-Banning
+
+On your local machine, create or edit \`~/.ssh/config\` to prevent accidental lockouts:
+
+\`\`\`bash
+# ~/.ssh/config
+Host my-vps
+    HostName YOUR_SERVER_IP
+    Port 2222
+    User yourusername
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    # Prevent multiple auth attempts that could trigger fail2ban
+    IdentitiesOnly yes
+\`\`\`
+
+Now connect with: \`ssh my-vps\`
 
 Restart SSH and test your new port before closing your current session:
 
@@ -145,7 +166,7 @@ sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 sudo nano /etc/fail2ban/jail.local
 \`\`\`
 
-Key settings for your custom SSH port:
+Key settings for your custom SSH port (strict - 24 hour ban after 3 failures):
 
 \`\`\`ini
 [sshd]
@@ -154,7 +175,7 @@ port = 2222
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3
-bantime = 3600
+bantime = 86400
 findtime = 600
 \`\`\`
 
@@ -170,7 +191,36 @@ sudo fail2ban-client status sshd
 
 ---
 
-## 5. Monitor and Update
+## 5. What To Do If You Ban Yourself
+
+If you trigger fail2ban and lock yourself out:
+
+1. **Access your VPS provider's control panel**
+2. **Look for "KVM", "Console", or "Rescue" access**
+3. **Connect via the web console** (this bypasses SSH)
+4. **Unban your IP:**
+
+\`\`\`bash
+# Check banned IPs
+sudo fail2ban-client status sshd
+
+# Unban your IP (replace with your actual IP)
+sudo fail2ban-client set sshd unbanip YOUR_IP_ADDRESS
+\`\`\`
+
+5. **Review your SSH config** to prevent future bans:
+   - Ensure \`IdentitiesOnly yes\` is set
+   - Verify you're using the correct key
+   - Consider adding your IP to fail2ban whitelist (with caution):
+
+\`\`\`bash
+# Add to /etc/fail2ban/jail.local under [DEFAULT]
+ignoreip = 127.0.0.1/8 YOUR_HOME_IP
+\`\`\`
+
+---
+
+## 6. Monitor and Update
 
 Set up automatic security updates:
 
@@ -255,17 +305,14 @@ which fail2ban-client
 Create non-root user with sudo access:
 
 \`\`\`bash
-# Create user
-adduser --gecos "" --disabled-password openclaw
+# Create user with password (inform user to store in password manager)
+adduser --gecos "" openclaw
 
 # Add to sudo group
 usermod -aG sudo openclaw
-
-# Set a random password (will be disabled later)
-passwd openclaw
 \`\`\`
 
-**Report:** User 'openclaw' created with sudo privileges.
+**Report:** User 'openclaw' created with sudo privileges. Instruct user to store password in 1Password or similar password manager.
 
 ---
 
@@ -312,8 +359,8 @@ PasswordAuthentication no
 PubkeyAuthentication yes
 AllowUsers openclaw
 MaxAuthTries 3
-ClientAliveInterval 300
-ClientAliveCountMax 2
+ClientAliveInterval 60
+ClientAliveCountMax 3
 
 # Cryptography
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
@@ -332,7 +379,37 @@ sshd -t
 
 ---
 
-## Phase 5: Configure Firewall
+## Phase 5: Configure SSH Client (Prevent Self-Banning)
+
+Create SSH config on client machine to prevent accidental fail2ban triggers:
+
+\`\`\`bash
+# Create SSH config directory if needed
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
+# Add VPS entry to SSH config
+cat >> ~/.ssh/config << EOF
+
+Host vps-openclaw
+    HostName localhost
+    Port $SSH_PORT
+    User openclaw
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    IdentitiesOnly yes
+    StrictHostKeyChecking accept-new
+EOF
+
+chmod 600 ~/.ssh/config
+\`\`\`
+
+**Report:** SSH client configured. User can connect with: ssh vps-openclaw
+
+---
+
+## Phase 6: Configure Firewall
 
 Set up UFW with essential rules:
 
@@ -362,9 +439,9 @@ ufw status verbose
 
 ---
 
-## Phase 6: Install and Configure Fail2Ban
+## Phase 7: Install and Configure Fail2Ban (Strict)
 
-Install automated IP banning:
+Install automated IP banning with strict settings (24 hour ban):
 
 \`\`\`bash
 # Update package list
@@ -373,10 +450,10 @@ apt-get update
 # Install Fail2Ban
 apt-get install -y fail2ban
 
-# Create jail.local with SSH protection
+# Create jail.local with strict SSH protection (24hr ban)
 cat > /etc/fail2ban/jail.local << EOF
 [DEFAULT]
-bantime = 3600
+bantime = 86400
 findtime = 600
 maxretry = 3
 backend = systemd
@@ -387,7 +464,8 @@ port = $SSH_PORT
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3
-bantime = 3600
+bantime = 86400
+findtime = 600
 EOF
 
 # Start and enable
@@ -398,11 +476,11 @@ systemctl start fail2ban
 fail2ban-client status sshd
 \`\`\`
 
-**Report:** Fail2Ban installed and monitoring SSH on port $SSH_PORT.
+**Report:** Fail2Ban installed with strict settings (24hr ban after 3 failures) on port $SSH_PORT.
 
 ---
 
-## Phase 7: Disable Root Password
+## Phase 8: Disable Root Password
 
 Lock root account password:
 
@@ -418,7 +496,7 @@ su - openclaw -c "sudo whoami"
 
 ---
 
-## Phase 8: Enable Automatic Updates
+## Phase 9: Enable Automatic Updates
 
 Install unattended security updates:
 
@@ -448,7 +526,7 @@ systemctl start unattended-upgrades
 
 ---
 
-## Phase 9: Restart SSH and Verify
+## Phase 10: Restart SSH and Verify
 
 Apply SSH changes and test:
 
@@ -508,7 +586,33 @@ sudo systemctl is-active unattended-upgrades
 
 ---
 
-# PART 3: COMPROMISE DETECTION COMMANDS
+# PART 3: UNBAN PROCEDURE (If Needed)
+
+If the user bans themselves, provide these recovery steps:
+
+## Recovery via VPS Provider Console
+
+1. **Access VPS provider control panel**
+2. **Find "KVM Console", "Web Console", or "Rescue Mode"**
+3. **Connect through provider's web interface** (bypasses SSH)
+4. **Unban the IP:**
+
+\`\`\`bash
+# Check banned IPs
+sudo fail2ban-client status sshd
+
+# Unban specific IP (replace with actual IP)
+sudo fail2ban-client set sshd unbanip BANNED_IP
+\`\`\`
+
+5. **Update SSH client config** to prevent future bans:
+   - Ensure IdentitiesOnly yes is set
+   - Verify correct key is specified
+   - Check ServerAlive settings
+
+---
+
+# PART 4: COMPROMISE DETECTION COMMANDS
 
 If you suspect compromise, run these checks:
 
@@ -567,21 +671,27 @@ Provide the client with:
    - User: openclaw
    - Port: $SSH_PORT
    - Auth: SSH key only
+   - Connect with: ssh vps-openclaw
 
 2. **Security Status:**
    - Root login: Disabled
    - Password auth: Disabled
    - Firewall: Active
-   - Fail2Ban: Active
+   - Fail2Ban: Active (24hr ban after 3 failures)
    - Auto-updates: Enabled
 
 3. **Verification Results:** All checks passed/failed
 
 4. **Compromise Check Results:** (if run)
 
-5. **Next Steps:**
+5. **Recovery Info:**
+   - If banned: Use provider's KVM console to unban
+   - SSH config: ~/.ssh/config configured for safe connection
+
+6. **Next Steps:**
    - Store SSH key securely
    - Save these connection details
+   - Store sudo password in 1Password
    - Regular monitoring recommended
 
 ---
@@ -589,10 +699,11 @@ Provide the client with:
 ## AGENT EXECUTION NOTES
 
 - All commands assume root SSH access initially
-- After Phase 9, switch to 'openclaw' user with key auth
+- After Phase 10, switch to 'openclaw' user with key auth
 - If any command fails, stop and report the error
 - Document any deviations from this guide
 - Client should verify they can connect before you disconnect
+- Emphasize password manager usage for sudo password
     `,
     date: "2026-02-15",
     tags: ["security", "vps", "automation", "agent", "hardening"],
