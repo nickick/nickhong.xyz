@@ -63,7 +63,40 @@ sudo passwd -l root
 
 ## 2. Lock Down SSH: Custom Port + Key Auth + No Root
 
+**WARNING:** The order of operations here is critical. Many people have locked themselves out by enabling the firewall before SSH is actually listening on the new port.
+
 Default SSH on port 22 is a magnet for attacks. Move it and harden it.
+
+### Step 2.1: Configure SSH Client First (On Your Local Machine)
+
+Before touching the server, set up your local SSH config:
+
+\`\`\`bash
+# ~/.ssh/config
+Host my-vps
+    HostName YOUR_SERVER_IP
+    Port 2222
+    User yourusername
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    IdentitiesOnly yes
+\`\`\`
+
+### Step 2.2: Install SSH Key on Server
+
+\`\`\`bash
+# On your local machine, copy your public key
+cat ~/.ssh/id_ed25519.pub
+
+# On the server, as your user
+mkdir -p ~/.ssh
+echo "your-public-key-content" >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+\`\`\`
+
+### Step 2.3: Edit SSH Config
 
 Edit \`/etc/ssh/sshd_config\`:
 
@@ -82,72 +115,63 @@ PubkeyAuthentication yes
 AllowUsers yourusername
 \`\`\`
 
-Set up SSH keys before disabling password auth:
+### Step 2.4: CRITICAL - Restart SSH and Verify
+
+**Do NOT skip this step. Do NOT proceed to firewall until this works.**
 
 \`\`\`bash
-# On your local machine
-cat ~/.ssh/id_ed25519.pub
-
-# On the server, as your user
-mkdir -p ~/.ssh
-echo "your-public-key-content" >> ~/.ssh/authorized_keys
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys
-\`\`\`
-
-### 2.1 Configure SSH Client to Prevent Self-Banning
-
-On your local machine, create or edit \`~/.ssh/config\` to prevent accidental lockouts:
-
-\`\`\`bash
-# ~/.ssh/config
-Host my-vps
-    HostName YOUR_SERVER_IP
-    Port 2222
-    User yourusername
-    IdentityFile ~/.ssh/id_ed25519
-    ServerAliveInterval 60
-    ServerAliveCountMax 3
-    # Prevent multiple auth attempts that could trigger fail2ban
-    IdentitiesOnly yes
-\`\`\`
-
-Now connect with: \`ssh my-vps\`
-
-Restart SSH and test your new port before closing your current session:
-
-\`\`\`bash
+# Restart SSH to bind to new port
 sudo systemctl restart sshd
 
-# Test in new terminal (don't close current one!)
-ssh -p 2222 yourusername@your-server-ip
+# Verify SSH is actually listening on new port
+ss -tlnp | grep 2222
+# Should show sshd listening on port 2222
+
+# Test in NEW terminal (keep current one open!)
+ssh -p 2222 yourusername@YOUR_SERVER_IP
 \`\`\`
+
+**Only proceed after you've successfully connected on the new port in a separate terminal.**
 
 ---
 
 ## 3. Firewall Everything with UFW
 
-Block everything by default, allow only what you need:
+**SAFETY FIRST:** Keep port 22 open initially, enable new port, test, then close port 22.
 
 \`\`\`bash
-# Enable UFW
+# Enable UFW with defaults
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
-# Allow your custom SSH port
-sudo ufw allow 2222/tcp
+# Allow BOTH ports during transition (safety!)
+sudo ufw allow 22/tcp      # Keep old port temporarily
+sudo ufw allow 2222/tcp    # New port
 
-# Allow OpenClaw gateway port (if exposed)
-sudo ufw allow 3000/tcp
-
-# Allow HTTP/HTTPS if running web server
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+# Allow other services
+sudo ufw allow 3000/tcp    # OpenClaw gateway (if exposed)
+sudo ufw allow 80/tcp      # HTTP
+sudo ufw allow 443/tcp     # HTTPS
 
 # Enable firewall
 sudo ufw enable
 
-# Check status
+# Verify status
+sudo ufw status
+\`\`\`
+
+### Step 3.1: Test and Remove Port 22
+
+After confirming you can connect on port 2222:
+
+\`\`\`bash
+# Test new port works in a NEW terminal
+ssh my-vps
+
+# If successful, remove port 22 access
+sudo ufw delete allow 22/tcp
+
+# Verify only new port remains
 sudo ufw status
 \`\`\`
 
@@ -375,15 +399,25 @@ sed -i "s/SSH_PORT_PLACEHOLDER/$SSH_PORT/g" /etc/ssh/sshd_config
 
 # Validate config
 sshd -t
+
+# CRITICAL: Restart SSH immediately to bind to new port
+systemctl restart sshd
+
+# Verify SSH is actually listening on new port BEFORE proceeding
+ss -tlnp | grep $SSH_PORT || { echo "ERROR: SSH not listening on port $SSH_PORT"; exit 1; }
+
+echo "SSH is now listening on port $SSH_PORT"
+echo "CRITICAL: Have user open NEW terminal and verify SSH works on new port before proceeding"
+echo "Command to test: ssh -p $SSH_PORT openclaw@YOUR_SERVER_IP"
 \`\`\`
 
-**Report:** SSH configured on port $SSH_PORT. Root login disabled. Password auth disabled.
+**STOP:** Do NOT proceed until user confirms they can connect on the new SSH port.
 
 ---
 
 ## Phase 5: Configure SSH Client (Prevent Self-Banning)
 
-Create SSH config on client machine to prevent accidental fail2ban triggers:
+Create SSH config on client machine:
 
 \`\`\`bash
 # Create SSH config directory if needed
@@ -411,9 +445,9 @@ chmod 600 ~/.ssh/config
 
 ---
 
-## Phase 6: Configure Firewall
+## Phase 6: Configure Firewall (SAFETY FIRST)
 
-Set up UFW with essential rules:
+**CRITICAL:** Keep port 22 open during transition to prevent lockout.
 
 \`\`\`bash
 # Reset UFW to defaults
@@ -423,12 +457,13 @@ ufw --force reset
 ufw default deny incoming
 ufw default allow outgoing
 
-# Allow new SSH port
-ufw allow $SSH_PORT/tcp
+# Allow BOTH old and new SSH ports (safety!)
+ufw allow 22/tcp      # Keep old port temporarily
+ufw allow $SSH_PORT/tcp  # New port
 
-# Allow standard web ports (optional)
-ufw allow 80/tcp
-ufw allow 443/tcp
+# Allow other services
+ufw allow 80/tcp      # HTTP
+ufw allow 443/tcp     # HTTPS
 
 # Enable firewall
 ufw --force enable
@@ -437,11 +472,27 @@ ufw --force enable
 ufw status verbose
 \`\`\`
 
-**Report:** Firewall active. Only SSH port $SSH_PORT and web ports allowed.
+**Report:** Firewall active with BOTH ports 22 and $SSH_PORT open.
 
 ---
 
-## Phase 7: Install and Configure Fail2Ban (Strict)
+## Phase 7: Test and Remove Port 22
+
+After user confirms they can connect on new port:
+
+\`\`\`bash
+# Verify user can connect on new port, then remove port 22
+ufw delete allow 22/tcp
+
+# Verify only new port remains
+ufw status verbose
+\`\`\`
+
+**Report:** Port 22 removed. Only SSH port $SSH_PORT allowed.
+
+---
+
+## Phase 8: Install and Configure Fail2Ban (Strict)
 
 Install automated IP banning with strict settings (24 hour ban):
 
