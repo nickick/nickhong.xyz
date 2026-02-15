@@ -474,6 +474,11 @@ chmod 600 ~/.ssh/config
 **CRITICAL:** Keep port 22 open during transition to prevent lockout.
 
 \`\`\`bash
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
 # Reset UFW to defaults
 ufw --force reset
 
@@ -494,6 +499,14 @@ ufw --force enable
 
 # Show status
 ufw status verbose
+
+echo "OK: Firewall enabled with both ports 22 and $SSH_PORT"
+echo ""
+echo "VERIFY THROUGH FIREWALL"
+echo "Open a NEW terminal and run:"
+echo "  ssh -p $SSH_PORT -o BatchMode=yes openclaw@YOUR_SERVER_IP whoami"
+echo ""
+echo "Expected output: openclaw"
 \`\`\`
 
 **Report:** Firewall active with BOTH ports 22 and $SSH_PORT open.
@@ -502,14 +515,29 @@ ufw status verbose
 
 ## Phase 7: Test and Remove Port 22
 
-After user confirms they can connect on new port:
+After confirming you can connect on the new port through the firewall:
 
 \`\`\`bash
-# Verify user can connect on new port, then remove port 22
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
+# Verify user can connect on new port BEFORE removing port 22
+if ssh -p $SSH_PORT -o BatchMode=yes -o ConnectTimeout=5 openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
+    echo "OK: SSH connection on port $SSH_PORT verified"
+else
+    echo "ERROR: Cannot connect on port $SSH_PORT. Aborting port 22 removal."
+    exit 1
+fi
+
+# Remove port 22 from firewall
 ufw delete allow 22/tcp
 
 # Verify only new port remains
 ufw status verbose
+
+echo "OK: Port 22 removed. Only SSH port $SSH_PORT allowed."
 \`\`\`
 
 **Report:** Port 22 removed. Only SSH port $SSH_PORT allowed.
@@ -521,6 +549,11 @@ ufw status verbose
 Install automated IP banning with strict settings (24 hour ban):
 
 \`\`\`bash
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
 # Update package list
 apt-get update
 
@@ -545,39 +578,44 @@ bantime = 86400
 findtime = 600
 EOF
 
-# Start and enable
-systemctl enable fail2ban
-systemctl start fail2ban
+# Start and enable (with --now to start immediately)
+systemctl enable --now fail2ban
 
 # Verify
 fail2ban-client status sshd
+
+echo "OK: Fail2Ban installed and running on port $SSH_PORT"
 \`\`\`
 
 **Report:** Fail2Ban installed with strict settings (24hr ban after 3 failures) on port $SSH_PORT.
 
 ---
 
-## Phase 8: Disable Root Password
+## Phase 9: Disable Root Password
 
 Lock root account password:
 
 \`\`\`bash
+set -e
+
 # Lock root password (prevents password login even with keys)
 passwd -l root
 
 # Verify openclaw can still sudo
-su - openclaw -c "sudo whoami"
+su - openclaw -c "sudo whoami" | grep -q "root" && echo "OK: Root locked, openclaw sudo works"
 \`\`\`
 
 **Report:** Root password locked. OpenClaw user has working sudo access.
 
 ---
 
-## Phase 9: Enable Automatic Updates
+## Phase 10: Enable Automatic Updates
 
 Install unattended security updates:
 
 \`\`\`bash
+set -e
+
 # Install
 apt-get install -y unattended-upgrades
 
@@ -595,27 +633,46 @@ Unattended-Upgrade::Automatic-Reboot "false";
 EOF
 
 # Enable
-systemctl enable unattended-upgrades
-systemctl start unattended-upgrades
+systemctl enable --now unattended-upgrades
+
+echo "OK: Automatic security updates enabled"
 \`\`\`
 
 **Report:** Automatic security updates enabled.
 
 ---
 
-## Phase 10: Restart SSH and Verify
+## Phase 11: Final Verification
+
+**Note:** SSH was already restarted in Phase 4. This phase verifies everything is working.
 
 Apply SSH changes and test:
 
 \`\`\`bash
-# Restart SSH
-systemctl restart sshd
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
 
 # Verify SSH is listening on new port
-ss -tlnp | grep $SSH_PORT
+ss -tlnp | grep ":$SSH_PORT " || { echo "ERROR: SSH not on port $SSH_PORT"; exit 1; }
 
 # Test that root login fails (should timeout or refuse)
-timeout 5 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p $SSH_PORT root@localhost 2>&1 || echo "Root login correctly blocked"
+timeout 5 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p $SSH_PORT root@localhost 2>&1 || echo "OK: Root login correctly blocked"
+
+# Verify openclaw can connect
+if ssh -p $SSH_PORT -o BatchMode=yes openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
+    echo "OK: openclaw user can connect"
+else
+    echo "ERROR: openclaw user cannot connect"
+    exit 1
+fi
+
+echo ""
+echo "=== ALL VERIFICATIONS PASSED ==="
+echo "You may now close the original root SSH session."
+echo ""
+echo "From now on, connect as: ssh -p $SSH_PORT openclaw@YOUR_SERVER_IP"
 \`\`\`
 
 **CRITICAL:** Now you must reconnect as 'openclaw' user on port $SSH_PORT using the SSH key.
