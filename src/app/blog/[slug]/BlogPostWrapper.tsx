@@ -19,7 +19,23 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(code);
+      // Filter out bash comments (lines starting with #) for cleaner copying
+      const lines = code.split('\n');
+      const filteredLines = lines.filter(line => {
+        const trimmed = line.trim();
+        // Keep the line if it's not a comment, or if it's a shebang, or if it's indented code with trailing comment
+        if (trimmed.startsWith('#')) {
+          // Keep shebang lines
+          if (trimmed.startsWith('#!')) return true;
+          // Keep lines that have actual code before the comment
+          if (line.includes('  #') || line.includes('\t#')) return true;
+          // Filter out pure comment lines
+          return false;
+        }
+        return true;
+      });
+      const filteredCode = filteredLines.join('\n').trim();
+      await navigator.clipboard.writeText(filteredCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
