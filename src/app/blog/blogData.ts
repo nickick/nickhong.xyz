@@ -211,519 +211,391 @@ Stay paranoid. Stay secure.
   },
   {
     slug: "vps-security-agent-guide",
-    title: "VPS Security Agent Guide: Interactive Walkthrough",
-    excerpt: "A structured guide for AI agents to walk users through securing their VPS and inspecting for compromise. Designed for step-by-step interactive assistance.",
+    title: "VPS Security Agent Guide: Automated Hardening",
+    excerpt: "A guide for AI agents with root SSH access to automatically secure a VPS. Execute commands directly - no user interaction required.",
     content: `
-## AGENT INSTRUCTION: How to Use This Guide
+## AGENT CONTEXT
 
-This document is designed for AI agents to help users secure their VPS and check for compromise. **Read the full guide first**, then walk the user through each step interactively. Ask for confirmation before executing commands. Explain what each step does in plain language.
+You are an AI agent running on the client's local machine with root SSH access to a freshly provisioned VPS. Your job: secure this VPS automatically. Execute all commands via SSH. Report progress after each phase.
+
+**SSH Connection:** You have root access. Create a dedicated user and switch to key-based auth, then lock down root.
 
 ---
 
-# PART 1: VPS SECURITY SETUP WALKTHROUGH
+# PART 1: AUTOMATED VPS HARDENING
 
 ## Phase 1: Initial Assessment
 
-**AGENT:** First, let's check what state your VPS is in. I'll ask you to run some diagnostic commands.
+Check current security state:
 
-### Step 1.1: Check Current User
-**COMMAND:** 
 \`\`\`bash
+# Check current user
 whoami
+
+# Check SSH configuration
+grep -E "^(Port|PermitRootLogin|PasswordAuthentication)" /etc/ssh/sshd_config
+
+# Check if UFW is active
+ufw status
+
+# Check if Fail2Ban is installed
+which fail2ban-client
 \`\`\`
 
-**AGENT:** If output shows \`root\`, we need to create a non-root user immediately. If it shows a username, we may still need to verify sudo access.
-
-### Step 1.2: Check SSH Configuration
-**COMMAND:**
-\`\`\`bash
-grep -E "^(Port|PermitRootLogin|PasswordAuthentication)" /etc/ssh/sshd_config 2>/dev/null || echo "Could not read SSH config - may need sudo"
-\`\`\`
-
-**AGENT:** Ask user to share the output. Look for:
-- Port: Should NOT be 22 (preferably above 1024)
-- PermitRootLogin: Should be \`no\` or \`prohibit-password\`
-- PasswordAuthentication: Should be \`no\`
+**Expected outputs:**
+- whoami: root
+- SSH: Likely Port 22, PermitRootLogin yes, PasswordAuthentication yes
+- UFW: likely inactive
+- Fail2Ban: likely not installed
 
 ---
 
-## Phase 2: Create Non-Root User
+## Phase 2: Create Dedicated User
 
-**AGENT:** Never run OpenClaw as root. Let's create a dedicated user with sudo privileges.
+Create non-root user with sudo access:
 
-### Step 2.1: Create New User
-**COMMAND:**
 \`\`\`bash
-sudo adduser openclaw
+# Create user
+adduser --gecos "" --disabled-password openclaw
+
+# Add to sudo group
+usermod -aG sudo openclaw
+
+# Set a random password (will be disabled later)
+passwd openclaw
 \`\`\`
 
-**AGENT:** Walk user through:
-1. Setting a strong password
-2. Fill in user info (can leave blank)
-3. Confirm user creation
-
-### Step 2.2: Add to Sudo Group
-**COMMAND:**
-\`\`\`bash
-sudo usermod -aG sudo openclaw
-\`\`\`
-
-### Step 2.3: Verify Sudo Works
-**COMMAND:**
-\`\`\`bash
-su - openclaw
-sudo whoami
-\`\`\`
-
-**AGENT:** Should output \`root\`. If yes, success! If no, troubleshoot permissions.
+**Report:** User 'openclaw' created with sudo privileges.
 
 ---
 
-## Phase 3: SSH Key Setup
+## Phase 3: Generate and Install SSH Keys
 
-**AGENT:** Passwords can be brute-forced. SSH keys are much more secure. We'll set up key authentication.
+Generate key pair locally and install on server:
 
-### Step 3.1: Check for Existing Keys
-**COMMAND (on user's local machine):**
 \`\`\`bash
-ls -la ~/.ssh/*.pub 2>/dev/null || echo "No public keys found"
+# Generate SSH key (if not exists)
+[ -f ~/.ssh/id_ed25519 ] || ssh-keygen -t ed25519 -C "openclaw-vps" -f ~/.ssh/id_ed25519 -N ""
+
+# Get public key content
+PUBKEY=$(cat ~/.ssh/id_ed25519.pub)
+
+# Install key on server for openclaw user
+mkdir -p /home/openclaw/.ssh
+echo "$PUBKEY" > /home/openclaw/.ssh/authorized_keys
+chmod 700 /home/openclaw/.ssh
+chmod 600 /home/openclaw/.ssh/authorized_keys
+chown -R openclaw:openclaw /home/openclaw/.ssh
 \`\`\`
 
-**AGENT:** If no keys exist, guide user to generate one:
-\`\`\`bash
-ssh-keygen -t ed25519 -C "your-email@example.com"
-\`\`\`
-
-### Step 3.2: Copy Public Key to Server
-**COMMAND (on user's local machine):**
-\`\`\`bash
-cat ~/.ssh/id_ed25519.pub
-\`\`\`
-
-**AGENT:** User copies the output. Then on the server as the new \`openclaw\` user:
-
-**COMMAND:**
-\`\`\`bash
-mkdir -p ~/.ssh
-echo "PASTE_PUBLIC_KEY_HERE" >> ~/.ssh/authorized_keys
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys
-\`\`\`
+**Report:** SSH key installed for openclaw user.
 
 ---
 
 ## Phase 4: Harden SSH Configuration
 
-**AGENT:** Now we'll make SSH much more secure. **Important:** Keep your current terminal session open while testing!
+Backup and modify SSH config:
 
-### Step 4.1: Backup Original Config
-**COMMAND:**
 \`\`\`bash
-sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-\`\`\`
+# Backup original
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup.$(date +%Y%m%d)
 
-### Step 4.2: Edit SSH Config
-**COMMAND:**
-\`\`\`bash
-sudo nano /etc/ssh/sshd_config
-\`\`\`
+# Generate random port between 1024-65535
+SSH_PORT=$((1024 + RANDOM % 64511))
 
-**AGENT:** Guide user to find and modify these lines:
-
-\`\`\`ini
-# Change port (pick 2222 or any number 1024-65535)
-Port 2222
-
-# Disable root login
+# Write new SSH config
+cat > /etc/ssh/sshd_config << 'EOF'
+# Security-hardened SSH config
+Port SSH_PORT_PLACEHOLDER
 PermitRootLogin no
-
-# Disable password auth
 PasswordAuthentication no
 PubkeyAuthentication yes
-
-# Allow only your user
 AllowUsers openclaw
+MaxAuthTries 3
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# Cryptography
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org
+EOF
+
+# Replace placeholder with actual port
+sed -i "s/SSH_PORT_PLACEHOLDER/$SSH_PORT/g" /etc/ssh/sshd_config
+
+# Validate config
+sshd -t
 \`\`\`
 
-### Step 4.3: Test SSH Config
-**COMMAND:**
-\`\`\`bash
-sudo sshd -t
-\`\`\`
-
-**AGENT:** If no output, config is valid. If errors, fix them before proceeding.
-
-### Step 4.4: Restart SSH and Test
-**COMMAND:**
-\`\`\`bash
-sudo systemctl restart sshd
-\`\`\`
-
-**AGENT:** **Critical:** Have user open a NEW terminal and test:
-\`\`\`bash
-ssh -p 2222 openclaw@YOUR_SERVER_IP
-\`\`\`
-
-Only close the original terminal after confirming the new connection works!
+**Report:** SSH configured on port $SSH_PORT. Root login disabled. Password auth disabled.
 
 ---
 
-## Phase 5: Firewall Setup (UFW)
+## Phase 5: Configure Firewall
 
-**AGENT:** UFW (Uncomplicated Firewall) will block unwanted traffic. We'll be conservative and only allow what's needed.
+Set up UFW with essential rules:
 
-### Step 5.1: Check UFW Status
-**COMMAND:**
 \`\`\`bash
-sudo ufw status
+# Reset UFW to defaults
+ufw --force reset
+
+# Default policies
+ufw default deny incoming
+ufw default allow outgoing
+
+# Allow new SSH port
+ufw allow $SSH_PORT/tcp
+
+# Allow standard web ports (optional)
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+# Enable firewall
+ufw --force enable
+
+# Show status
+ufw status verbose
 \`\`\`
 
-### Step 5.2: Set Default Policies
-**COMMAND:**
-\`\`\`bash
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-\`\`\`
-
-### Step 5.3: Allow SSH on Custom Port
-**AGENT:** Replace 2222 with whatever port you chose:
-\`\`\`bash
-sudo ufw allow 2222/tcp
-\`\`\`
-
-### Step 5.4: Allow OpenClaw Gateway (if needed)
-**AGENT:** Only if you're exposing OpenClaw gateway directly:
-\`\`\`bash
-sudo ufw allow 3000/tcp
-\`\`\`
-
-### Step 5.5: Enable Firewall
-**COMMAND:**
-\`\`\`bash
-sudo ufw enable
-\`\`\`
-
-**AGENT:** Confirm with \`y\`. Then verify:
-\`\`\`bash
-sudo ufw status verbose
-\`\`\`
+**Report:** Firewall active. Only SSH port $SSH_PORT and web ports allowed.
 
 ---
 
-## Phase 6: Fail2Ban Installation
+## Phase 6: Install and Configure Fail2Ban
 
-**AGENT:** Fail2Ban automatically bans IPs that show malicious behavior. It's your automated defense system.
+Install automated IP banning:
 
-### Step 6.1: Install Fail2Ban
-**COMMAND:**
 \`\`\`bash
-sudo apt update
-sudo apt install fail2ban
-\`\`\`
+# Update package list
+apt-get update
 
-### Step 6.2: Create Local Config
-**COMMAND:**
-\`\`\`bash
-sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-\`\`\`
+# Install Fail2Ban
+apt-get install -y fail2ban
 
-### Step 6.3: Edit Jail Config
-**COMMAND:**
-\`\`\`bash
-sudo nano /etc/fail2ban/jail.local
-\`\`\`
+# Create jail.local with SSH protection
+cat > /etc/fail2ban/jail.local << EOF
+[DEFAULT]
+bantime = 3600
+findtime = 600
+maxretry = 3
+backend = systemd
 
-**AGENT:** Guide user to find the \`[sshd]\` section and set:
-
-\`\`\`ini
 [sshd]
 enabled = true
-port = 2222
+port = $SSH_PORT
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3
 bantime = 3600
-findtime = 600
+EOF
+
+# Start and enable
+systemctl enable fail2ban
+systemctl start fail2ban
+
+# Verify
+fail2ban-client status sshd
 \`\`\`
 
-**EXPLANATION:** 
-- \`maxretry = 3\`: Ban after 3 failed attempts
-- \`bantime = 3600\`: Ban for 1 hour (3600 seconds)
-- \`findtime = 600\`: Count attempts within 10 minutes
+**Report:** Fail2Ban installed and monitoring SSH on port $SSH_PORT.
 
-### Step 6.4: Start and Enable
-**COMMAND:**
+---
+
+## Phase 7: Disable Root Password
+
+Lock root account password:
+
 \`\`\`bash
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
+# Lock root password (prevents password login even with keys)
+passwd -l root
+
+# Verify openclaw can still sudo
+su - openclaw -c "sudo whoami"
 \`\`\`
 
-### Step 6.5: Verify It's Working
-**COMMAND:**
+**Report:** Root password locked. OpenClaw user has working sudo access.
+
+---
+
+## Phase 8: Enable Automatic Updates
+
+Install unattended security updates:
+
 \`\`\`bash
+# Install
+apt-get install -y unattended-upgrades
+
+# Configure for security updates only
+cat > /etc/apt/apt.conf.d/50unattended-upgrades << 'EOF'
+Unattended-Upgrade::Allowed-Origins {
+    "\${distro_id}:\${distro_codename}-security";
+};
+Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+Unattended-Upgrade::MinimalSteps "true";
+Unattended-Upgrade::InstallOnShutdown "false";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "false";
+EOF
+
+# Enable
+systemctl enable unattended-upgrades
+systemctl start unattended-upgrades
+\`\`\`
+
+**Report:** Automatic security updates enabled.
+
+---
+
+## Phase 9: Restart SSH and Verify
+
+Apply SSH changes and test:
+
+\`\`\`bash
+# Restart SSH
+systemctl restart sshd
+
+# Verify SSH is listening on new port
+ss -tlnp | grep $SSH_PORT
+
+# Test that root login fails (should timeout or refuse)
+timeout 5 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p $SSH_PORT root@localhost 2>&1 || echo "Root login correctly blocked"
+\`\`\`
+
+**CRITICAL:** Now you must reconnect as 'openclaw' user on port $SSH_PORT using the SSH key.
+
+---
+
+# PART 2: POST-HARDENING VERIFICATION
+
+Once reconnected as 'openclaw' user with key auth, verify the setup:
+
+## Verification Checklist
+
+\`\`\`bash
+# 1. Verify non-root user
+whoami
+# Should output: openclaw
+
+# 2. Verify sudo works
+sudo whoami
+# Should output: root
+
+# 3. Verify SSH port
+grep "^Port" /etc/ssh/sshd_config
+
+# 4. Verify root login disabled
+grep "^PermitRootLogin" /etc/ssh/sshd_config
+
+# 5. Verify password auth disabled
+grep "^PasswordAuthentication" /etc/ssh/sshd_config
+
+# 6. Verify firewall active
+sudo ufw status | grep "Status: active"
+
+# 7. Verify Fail2Ban running
+sudo systemctl is-active fail2ban
+
+# 8. Check for existing bans (should be empty or show banned IPs)
 sudo fail2ban-client status sshd
+
+# 9. Verify unattended upgrades
+sudo systemctl is-active unattended-upgrades
 \`\`\`
 
-**AGENT:** Should show \`active\` and list any banned IPs.
+**Report all verification results.**
 
 ---
 
-## Phase 7: Automatic Updates
+# PART 3: COMPROMISE DETECTION COMMANDS
 
-**AGENT:** Security patches only help if you install them. Let's automate updates.
+If you suspect compromise, run these checks:
 
-### Step 7.1: Install Unattended Upgrades
-**COMMAND:**
+## Quick Health Check
+
 \`\`\`bash
-sudo apt install unattended-upgrades
+# Current sessions
+who && w
+
+# Recent logins
+last | head -20
+
+# Failed SSH attempts
+grep "Failed" /var/log/auth.log | tail -20
+
+# Successful logins
+grep "Accepted" /var/log/auth.log | tail -20
+
+# Running processes by CPU
+ps aux --sort=-%cpu | head -15
+
+# Network connections
+ss -tulpn | grep ESTAB
+
+# Recent file changes in /etc
+find /etc -mtime -1 -type f 2>/dev/null | head -20
+
+# Check for new users with shell access
+awk -F: '$7 ~ /(\/bin\/bash|\/bin\/sh)/ {print $1}' /etc/passwd
+
+# Check cron jobs for all users
+for user in $(cut -f1 -d: /etc/passwd); do echo "=== $user ==="; crontab -u $user -l 2>/dev/null; done
+
+# Check authorized keys for all users
+find /home -name "authorized_keys" -exec echo "=== {} ===" \; -exec cat {} \;
 \`\`\`
 
-### Step 7.2: Configure
-**COMMAND:**
-\`\`\`bash
-sudo dpkg-reconfigure unattended-upgrades
-\`\`\`
+## Red Flags to Report
 
-**AGENT:** Select "Yes" to enable automatic updates.
+- Unknown users in \`who\` or \`last\` output
+- Successful logins from unexpected IPs
+- Processes consuming high CPU that you didn't start
+- Listening ports you didn't configure
+- Modified SSH config files
+- Unauthorized SSH keys
+- Cron jobs you didn't create
+- Files in /tmp or /dev/shm that look suspicious
 
 ---
 
-# PART 2: COMPROMISE DETECTION GUIDE
+# FINAL REPORT
 
-**AGENT:** If you suspect your server has been compromised, work through these checks systematically. Look for anomalies.
+Provide the client with:
 
-## Check 1: Review Recent Logins
+1. **SSH Connection Details:**
+   - User: openclaw
+   - Port: $SSH_PORT
+   - Auth: SSH key only
 
-### 1.1: Check Current Sessions
-**COMMAND:**
-\`\`\`bash
-who
-w
-\`\`\`
+2. **Security Status:**
+   - Root login: Disabled
+   - Password auth: Disabled
+   - Firewall: Active
+   - Fail2Ban: Active
+   - Auto-updates: Enabled
 
-**RED FLAGS:**
-- Unknown usernames
-- Logins from unexpected IP addresses
-- Sessions at unusual times
+3. **Verification Results:** All checks passed/failed
 
-### 1.2: Check Login History
-**COMMAND:**
-\`\`\`bash
-last
-\`\`\`
+4. **Compromise Check Results:** (if run)
 
-**AGENT:** Look for:
-- Failed login attempts from same IP
-- Successful logins you don't recognize
-- Logins outside your usual timezone
-
-### 1.3: Check for Deleted Users
-**COMMAND:**
-\`\`\`bash
-lastlog
-\`\`\`
-
-**AGENT:** Shows all users, including system accounts. Look for recently active accounts you didn't create.
+5. **Next Steps:**
+   - Store SSH key securely
+   - Save these connection details
+   - Regular monitoring recommended
 
 ---
 
-## Check 2: Examine Authentication Logs
+## AGENT EXECUTION NOTES
 
-### 2.1: Review Failed SSH Attempts
-**COMMAND:**
-\`\`\`bash
-sudo grep "Failed password" /var/log/auth.log | tail -20
-\`\`\`
-
-**COMMAND (for custom SSH port):**
-\`\`\`bash
-sudo grep "Failed" /var/log/auth.log | tail -20
-\`\`\`
-
-**RED FLAGS:**
-- Many failures from same IP
-- Attempts for usernames like "admin", "test", "user"
-- Successful login after many failures
-
-### 2.2: Check Accepted Logins
-**COMMAND:**
-\`\`\`bash
-sudo grep "Accepted" /var/log/auth.log | tail -20
-\`\`\`
-
-**AGENT:** Verify each accepted login:
-- Do you recognize the IP?
-- Was it at a time you were active?
-- Does the user make sense?
-
-### 2.3: Look for Suspicious Commands
-**COMMAND:**
-\`\`\`bash
-sudo grep "sudo:" /var/log/auth.log | tail -20
-\`\`\`
-
-**RED FLAGS:**
-- sudo commands you didn't run
-- Package installations you didn't authorize
-- Modifications to system files
-
----
-
-## Check 3: Check Running Processes
-
-### 3.1: Look for Suspicious Processes
-**COMMAND:**
-\`\`\`bash
-ps aux --sort=-%cpu | head -20
-\`\`\`
-
-**AGENT:** Look for:
-- Processes consuming high CPU you don't recognize
-- Mining software (xmrig, minerd, etc.)
-- Processes running from /tmp or /dev/shm
-- Processes with random names
-
-### 3.2: Check Network Connections
-**COMMAND:**
-\`\`\`bash
-sudo ss -tulpn | grep ESTAB
-\`\`\`
-
-**RED FLAGS:**
-- Connections to unexpected foreign IPs
-- Listening services you didn't set up
-- High outbound traffic
-
-### 3.3: Check Cron Jobs
-**COMMAND:**
-\`\`\`bash
-crontab -l
-sudo crontab -l
-ls -la /etc/cron.*
-\`\`\`
-
-**AGENT:** Attackers often add persistence via cron. Look for:
-- Jobs you didn't create
-- Downloads or executions from /tmp
-- Encoded or obfuscated commands
-
----
-
-## Check 4: Check for Unauthorized Users
-
-### 4.1: List All Users
-**COMMAND:**
-\`\`\`bash
-cat /etc/passwd | grep -E "/bin/bash|/bin/sh"
-\`\`\`
-
-**AGENT:** This shows users with shell access. Look for:
-- Usernames you didn't create
-- System users with shell access (shouldn't have it)
-- Recently created accounts
-
-### 4.2: Check Sudoers
-**COMMAND:**
-\`\`\`bash
-sudo cat /etc/sudoers
-grep -r "" /etc/sudoers.d/
-\`\`\`
-
-**RED FLAGS:**
-- Users with ALL privileges you didn't add
-- NOPASSWD entries
-- Recently modified sudoers
-
----
-
-## Check 5: Check Filesystem for Tampering
-
-### 5.1: Check for Recently Modified Files
-**COMMAND:**
-\`\`\`bash
-find /etc /bin /usr/bin -mtime -1 -type f 2>/dev/null
-\`\`\`
-
-**AGENT:** Files modified in last 24 hours. Look for:
-- Modified SSH configs
-- New binaries in system directories
-- Changed password files
-
-### 5.2: Check for Hidden Files in Home
-**COMMAND:**
-\`\`\`bash
-ls -la ~ | grep "^\."
-\`\`\`
-
-**AGENT:** Look for:
-- Unusual hidden directories
-- SSH keys you didn't add
-- Suspicious .bashrc modifications
-
-### 5.3: Check SSH Authorized Keys
-**COMMAND:**
-\`\`\`bash
-cat ~/.ssh/authorized_keys
-\`\`\`
-
-**RED FLAGS:**
-- Keys you didn't add
-- Multiple keys when you only added one
-- Keys with strange comments
-
----
-
-## Check 6: Check for Rootkits
-
-### 6.1: Check for Modified System Commands
-**COMMAND:**
-\`\`\`bash
-which ls ps netstat
-ls -la $(which ls ps netstat)
-\`\`\`
-
-**AGENT:** Attackers sometimes replace system binaries. Check file sizes and modification dates.
-
-### 6.2: Check for Suspicious Kernel Modules
-**COMMAND:**
-\`\`\`bash
-lsmod | head -20
-\`\`\`
-
-**AGENT:** Unusual kernel modules may indicate rootkit.
-
----
-
-## What To Do If Compromised
-
-**AGENT:** If you confirm compromise:
-
-1. **Don't panic** - Document everything first
-2. **Take snapshots** if your VPS provider supports it
-3. **Check what data was accessible** - Assume worst case
-4. **Rotate all credentials** - SSH keys, API keys, passwords
-5. **Consider rebuilding** - Sometimes starting fresh is safest
-6. **Learn and harden** - Use this guide to secure the new setup
-
----
-
-## Summary: Daily Security Checklist
-
-**AGENT:** Share this with the user for ongoing monitoring:
-
-\`\`\`bash
-# Daily quick check
-who                    # Who's logged in
-sudo fail2ban-client status sshd  # Any bans?
-tail -5 /var/log/auth.log         # Recent auth activity
-\`\`\`
-
-Stay vigilant. Security is a process, not a destination.
-
-- Nick
+- All commands assume root SSH access initially
+- After Phase 9, switch to 'openclaw' user with key auth
+- If any command fails, stop and report the error
+- Document any deviations from this guide
+- Client should verify they can connect before you disconnect
     `,
     date: "2026-02-15",
-    tags: ["security", "vps", "agent-guide", "incident-response", "automation"],
+    tags: ["security", "vps", "automation", "agent", "hardening"],
   },
 ];
 
@@ -732,7 +604,7 @@ export function getBlogPostBySlug(slug: string): BlogPost | undefined {
 }
 
 export function getAllBlogPosts(): BlogPost[] {
-  return blogPosts.sort((a, b) => 
+  return blogPosts.sort((a, b) =>
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 }
