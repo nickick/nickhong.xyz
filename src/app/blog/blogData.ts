@@ -308,6 +308,11 @@ You are an AI agent running on the client's local machine with root SSH access t
 
 **GOLDEN RULE:** Never enable a firewall blocking your only access route until you've verified the new route works.
 
+**SYSTEM-SPECIFIC NOTES:**
+- SSH service name may be 'ssh' (Ubuntu) or 'sshd' (other distros)
+- Ubuntu 20.04+ uses systemd socket activation - may need to disable 'ssh.socket'
+- Use -o IdentitiesOnly=yes from first connection to avoid MaxAuthTries issues
+
 ---
 
 # PART 1: AUTOMATED VPS HARDENING
@@ -458,7 +463,12 @@ sed -i "s/SSH_PORT_PLACEHOLDER/$SSH_PORT/g" /etc/ssh/sshd_config
 sshd -t && echo "SSH config validated successfully"
 
 # CRITICAL: Restart SSH immediately to bind to new port
-systemctl restart sshd
+# Note: Service name may be 'ssh' (Ubuntu) or 'sshd' (other distros)
+systemctl restart sshd 2>/dev/null || systemctl restart ssh
+
+# On Ubuntu 20.04+, also disable socket activation if port 22 persists
+systemctl stop ssh.socket 2>/dev/null || true
+systemctl disable ssh.socket 2>/dev/null || true
 
 # Verify SSH is actually listening on new port BEFORE proceeding
 ss -tlnp | grep ":$SSH_PORT " || { echo "ERROR: SSH not listening on port $SSH_PORT"; exit 1; }
@@ -467,7 +477,7 @@ echo "OK: SSH is now listening on port $SSH_PORT"
 echo ""
 echo "CRITICAL: VERIFY BEFORE PROCEEDING"
 echo "Open a NEW terminal and run:"
-echo "  ssh -i ~/.ssh/vps_openclaw_YYYYMMDD -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new openclaw@YOUR_SERVER_IP whoami"
+echo "  ssh -i ~/.ssh/vps_openclaw_YYYYMMDD -p $SSH_PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new openclaw@YOUR_SERVER_IP whoami"
 echo ""
 echo "Expected output: openclaw"
 echo ""
@@ -676,6 +686,9 @@ Install unattended security updates:
 
 \`\`\`bash
 set -e
+
+# Pre-configure to avoid interactive prompts
+echo 'unattended-upgrades unattended-upgrades/enable_auto_updates boolean true' | debconf-set-selections
 
 # Install
 apt-get install -y unattended-upgrades
