@@ -47,7 +47,7 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => {
     <div className="my-6 rounded-lg overflow-hidden relative group">
       <button
         onClick={handleCopy}
-        className="absolute top-3 right-3 z-10 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-800/80 hover:bg-gray-700 border border-gray-600 rounded transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+        className="absolute top-3 right-3 z-10 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded transition-all"
         aria-label="Copy code"
       >
         {copied ? 'Copied!' : 'Copy'}
@@ -334,6 +334,38 @@ interface BlogPostWrapperProps {
 
 export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
   const parts = parseContent(post.content);
+  const [allCopied, setAllCopied] = useState(false);
+
+  const handleCopyAll = async () => {
+    try {
+      // Extract all code blocks
+      const codeBlocks = parts
+        .filter((part): part is { type: 'code'; content: string; language?: string } => part.type === 'code')
+        .map(part => part.content);
+      
+      // Filter out comments from each block
+      const filteredBlocks = codeBlocks.map(code => {
+        const lines = code.split('\n');
+        const filteredLines = lines.filter(line => {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#')) {
+            if (trimmed.startsWith('#!')) return true;
+            if (line.includes('  #') || line.includes('\t#')) return true;
+            return false;
+          }
+          return true;
+        });
+        return filteredLines.join('\n').trim();
+      });
+      
+      const allCode = filteredBlocks.join('\n\n# --- Next Phase ---\n\n');
+      await navigator.clipboard.writeText(allCode);
+      setAllCopied(true);
+      setTimeout(() => setAllCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy all:', err);
+    }
+  };
 
   return (
     <TooltipProvider delayDuration={100}>
@@ -370,9 +402,17 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
             ))}
           </div>
 
-          <h1 className={`${serif.className} text-3xl md:text-5xl text-white mb-6`}>
-            {post.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <h1 className={`${serif.className} text-3xl md:text-5xl text-white`}>
+              {post.title}
+            </h1>
+            <button
+              onClick={handleCopyAll}
+              className="flex-shrink-0 px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded transition-all"
+            >
+              {allCopied ? 'Copied All!' : 'Copy All Code'}
+            </button>
+          </div>
 
           <time className="text-sm text-gray-500 block mb-12">
             {new Date(post.date).toLocaleDateString("en-US", {
