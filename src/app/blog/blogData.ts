@@ -17,7 +17,7 @@ export const blogPosts: BlogPost[] = [
 
 Spin up a fresh VPS and watch your logs. Within minutes-sometimes seconds-you'll see automated bots probing for weaknesses. SSH brute force attempts, vulnerability scanners, cryptocurrency miners looking for unguarded resources. The internet is a dark forest, and your newly exposed server is fresh meat.
 
-This isn't theoretical. When I spun up a VPS for OpenClaw, I saw over 1,000 failed SSH login attempts in the first hour. The bots are always watching.
+This isn't theoretical. I saw incoming brute-force attempts within 5 minutes of spinning up my new server. I've also had to recover from having a machine taken over on a VPS because I was a little too lazy the first time I went through this. Don't make my mistake.
 
 Here's what you need to do to survive.
 

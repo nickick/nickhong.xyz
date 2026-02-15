@@ -1,32 +1,16 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import Link from "next/link";
 import { Highlight, themes } from "prism-react-renderer";
 import { BlogPost } from "../blogData";
 import { serif } from "../../fonts";
-
-// Tooltip component
-const Tooltip = ({ children, explanation }: { children: React.ReactNode; explanation: string }) => {
-  const [show, setShow] = useState(false);
-  
-  return (
-    <span className="relative inline-block">
-      <span
-        className="border-b border-dotted border-blue-400 cursor-help text-blue-300 hover:text-blue-200"
-        onMouseEnter={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}
-      >
-        {children}
-      </span>
-      {show && (
-        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-sm text-gray-200 rounded-lg shadow-lg border border-gray-700 w-64 z-50">
-          {explanation}
-        </span>
-      )}
-    </span>
-  );
-};
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Code block component with syntax highlighting
 const CodeBlock = ({ code, language }: { code: string; language: string }) => {
@@ -65,7 +49,21 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => {
   );
 };
 
-// Tooltips dictionary for common security phrases
+// Tooltip wrapper for key terms
+const TermTooltip = ({ term, explanation }: { term: string; explanation: string }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span className="border-b border-dotted border-blue-400 cursor-help text-blue-300 hover:text-blue-200">
+        {term}
+      </span>
+    </TooltipTrigger>
+    <TooltipContent className="max-w-xs">
+      <p>{explanation}</p>
+    </TooltipContent>
+  </Tooltip>
+);
+
+// Security tooltips dictionary
 const securityTooltips: Record<string, string> = {
   "Never run operations as root": "Attackers constantly scan for root access. If they compromise root, they own your entire system. A non-root user limits the damage scope.",
   "SSH brute force attempts": "Bots try thousands of common username/password combinations against port 22. A custom port makes you invisible to 99% of automated scans.",
@@ -77,45 +75,67 @@ const securityTooltips: Record<string, string> = {
   "unattended-upgrades": "Security patches don't help if you don't install them. This automatically applies security updates so you're always protected.",
 };
 
-function addTooltips(html: string): string {
-  let result = html;
-  for (const [phrase, explanation] of Object.entries(securityTooltips)) {
-    // Replace the phrase with a tooltip-wrapped version, but only if not already in a tag
-    const regex = new RegExp(`(?<![\\w<])(${phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(?![\\w>])`, 'g');
-    result = result.replace(regex, `<span class="tooltip-phrase" data-explanation="${explanation}">$1</span>`);
+function parseContent(content: string): Array<{ type: 'text' | 'code'; content: string; language?: string }> {
+  const parts: Array<{ type: 'text' | 'code'; content: string; language?: string }> = [];
+  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = codeBlockRegex.exec(content)) !== null) {
+    // Add text before code block
+    if (match.index > lastIndex) {
+      parts.push({ type: 'text', content: content.slice(lastIndex, match.index) });
+    }
+    // Add code block
+    parts.push({ type: 'code', content: match[2].trim(), language: match[1] || 'bash' });
+    lastIndex = match.index + match[0].length;
   }
-  return result;
+
+  // Add remaining text
+  if (lastIndex < content.length) {
+    parts.push({ type: 'text', content: content.slice(lastIndex) });
+  }
+
+  return parts;
 }
 
-function formatContent(content: string): { html: string; codeBlocks: Array<{ id: string; code: string; language: string }> } {
-  const codeBlocks: Array<{ id: string; code: string; language: string }> = [];
-  let blockId = 0;
+function renderTextWithTooltips(text: string): JSX.Element {
+  let elements: Array<JSX.Element | string> = [text];
   
-  // Replace em-dashes with hyphens
-  let processedContent = content.replace(/[\u2014]/g, '-');
-  
-  // Extract code blocks first
-  processedContent = processedContent.replace(
-    /```(\w+)?\n([\s\S]*?)```/g,
-    (match, lang, code) => {
-      const id = `code-block-${blockId++}`;
-      codeBlocks.push({
-        id,
-        code: code.trim(),
-        language: lang || "bash",
-      });
-      return `<div data-code-block="${id}"></div>`;
-    }
-  );
-  
+  // Replace each tooltip term with a component
+  Object.entries(securityTooltips).forEach(([term, explanation]) => {
+    const newElements: Array<JSX.Element | string> = [];
+    
+    elements.forEach((el, idx) => {
+      if (typeof el === 'string') {
+        const parts = el.split(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'g'));
+        parts.forEach((part, partIdx) => {
+          if (part === term) {
+            newElements.push(
+              <TermTooltip key={`${idx}-${partIdx}`} term={term} explanation={explanation} />
+            );
+          } else {
+            newElements.push(part);
+          }
+        });
+      } else {
+        newElements.push(el);
+      }
+    });
+    
+    elements = newElements;
+  });
+
   // Convert markdown to HTML
-  let html = processedContent
+  const html = elements
+    .map(el => typeof el === 'string' ? el : el)
+    .join('')
     // Headers
     .replace(/### (.+)/g, '<h3 class="text-xl font-semibold text-white mt-8 mb-3">$1</h3>')
     .replace(/## (.+)/g, '<h2 class="text-2xl font-semibold text-white mt-12 mb-4">$1</h2>')
     // Bold
     .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
-    // Inline code (single backticks)
+    // Inline code
     .replace(/`([^`]+)`/g, '<code class="bg-gray-800 text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
     // Horizontal rules
     .replace(/^---$/gm, '<hr class="border-gray-800 my-8" />')
@@ -134,10 +154,7 @@ function formatContent(content: string): { html: string; codeBlocks: Array<{ id:
       return match;
     });
 
-  // Add tooltips
-  html = addTooltips(html);
-
-  return { html, codeBlocks };
+  return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 interface BlogPostWrapperProps {
@@ -145,111 +162,14 @@ interface BlogPostWrapperProps {
 }
 
 export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
-  const { html, codeBlocks } = formatContent(post.content);
-  const [tooltip, setTooltip] = useState<{ show: boolean; text: string; x: number; y: number }>({ show: false, text: '', x: 0, y: 0 });
-  
-  const handleMouseEnter = (e: React.MouseEvent, explanation: string) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    setTooltip({
-      show: true,
-      text: explanation,
-      x: rect.left + rect.width / 2,
-      y: rect.top,
-    });
-  };
-  
-  const handleMouseLeave = () => {
-    setTooltip({ show: false, text: '', x: 0, y: 0 });
-  };
-  
-  // Split HTML by code block placeholders
-  const parts = html.split(/(<div data-code-block="[^"]+"><\/div>)/);
-  
+  const parts = parseContent(post.content);
+
   return (
-    <div className="max-w-3xl mx-auto w-full px-4 md:px-12 pt-24 pb-16">
-      <Link
-        href="/blog"
-        className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8"
-      >
-        <svg
-          className="w-4 h-4 mr-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-        Back to Blog
-      </Link>
-
-      <article>
-        <div className="flex flex-wrap gap-2 mb-6">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs uppercase tracking-wider text-gray-500 bg-gray-900 px-2 py-1 rounded"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <h1 className={`${serif.className} text-3xl md:text-5xl text-white mb-6`}>
-          {post.title}
-        </h1>
-
-        <time className="text-sm text-gray-500 block mb-12">
-          {new Date(post.date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </time>
-
-        <div className="blog-content relative">
-          {parts.map((part, index) => {
-            const match = part.match(/<div data-code-block="([^"]+)"><\/div>/);
-            if (match) {
-              const block = codeBlocks.find(b => b.id === match[1]);
-              if (block) {
-                return <CodeBlock key={index} code={block.code} language={block.language} />;
-              }
-            }
-            // Process tooltip phrases
-            const processedPart = part.replace(
-              /<span class="tooltip-phrase" data-explanation="([^"]+)">([^<]+)<\/span>/g,
-              (match, explanation, text) => {
-                return `<mark class="border-b border-dotted border-blue-400 cursor-help text-blue-300 hover:text-blue-200 bg-transparent" data-tooltip="${explanation}">${text}</mark>`;
-              }
-            );
-            return <div key={index} dangerouslySetInnerHTML={{ __html: processedPart }} />;
-          })}
-        </div>
-      </article>
-
-      {/* Global tooltip */}
-      {tooltip.show && (
-        <div 
-          className="fixed px-3 py-2 bg-gray-800 text-sm text-gray-200 rounded-lg shadow-lg border border-gray-700 w-64 z-50 pointer-events-none"
-          style={{ 
-            left: tooltip.x - 128, 
-            top: tooltip.y - 10,
-            transform: 'translateY(-100%)'
-          }}
-        >
-          {tooltip.text}
-        </div>
-      )}
-
-      <div className="mt-16 pt-8 border-t border-gray-800">
+    <TooltipProvider delayDuration={100}>
+      <div className="max-w-3xl mx-auto w-full px-4 md:px-12 pt-24 pb-16">
         <Link
           href="/blog"
-          className="inline-flex items-center text-gray-400 hover:text-white transition-colors"
+          className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8"
         >
           <svg
             className="w-4 h-4 mr-2"
@@ -264,9 +184,65 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to all posts
+          Back to Blog
         </Link>
+
+        <article>
+          <div className="flex flex-wrap gap-2 mb-6">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-xs uppercase tracking-wider text-gray-500 bg-gray-900 px-2 py-1 rounded"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <h1 className={`${serif.className} text-3xl md:text-5xl text-white mb-6`}>
+            {post.title}
+          </h1>
+
+          <time className="text-sm text-gray-500 block mb-12">
+            {new Date(post.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+
+          <div className="blog-content">
+            {parts.map((part, index) => {
+              if (part.type === 'code') {
+                return <CodeBlock key={index} code={part.content} language={part.language || 'bash'} />;
+              }
+              return <div key={index}>{renderTextWithTooltips(part.content)}</div>;
+            })}
+          </div>
+        </article>
+
+        <div className="mt-16 pt-8 border-t border-gray-800">
+          <Link
+            href="/blog"
+            className="inline-flex items-center text-gray-400 hover:text-white transition-colors"
+          >
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back to all posts
+          </Link>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
