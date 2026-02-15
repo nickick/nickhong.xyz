@@ -100,36 +100,8 @@ function parseContent(content: string): Array<{ type: 'text' | 'code'; content: 
 }
 
 function renderTextWithTooltips(text: string): JSX.Element {
-  let elements: Array<JSX.Element | string> = [text];
-  
-  // Replace each tooltip term with a component
-  Object.entries(securityTooltips).forEach(([term, explanation]) => {
-    const newElements: Array<JSX.Element | string> = [];
-    
-    elements.forEach((el, idx) => {
-      if (typeof el === 'string') {
-        const parts = el.split(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'g'));
-        parts.forEach((part, partIdx) => {
-          if (part === term) {
-            newElements.push(
-              <TermTooltip key={`${idx}-${partIdx}`} term={term} explanation={explanation} />
-            );
-          } else {
-            newElements.push(part);
-          }
-        });
-      } else {
-        newElements.push(el);
-      }
-    });
-    
-    elements = newElements;
-  });
-
-  // Convert markdown to HTML
-  const html = elements
-    .map(el => typeof el === 'string' ? el : el)
-    .join('')
+  // First convert markdown to HTML
+  let processedText = text
     // Headers
     .replace(/### (.+)/g, '<h3 class="text-xl font-semibold text-white mt-8 mb-3">$1</h3>')
     .replace(/## (.+)/g, '<h2 class="text-2xl font-semibold text-white mt-12 mb-4">$1</h2>')
@@ -154,7 +126,20 @@ function renderTextWithTooltips(text: string): JSX.Element {
       return match;
     });
 
-  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  // Replace tooltip terms with markers
+  let idCounter = 0;
+  const tooltipsToRender: Array<{ id: string; term: string; explanation: string }> = [];
+  
+  Object.entries(securityTooltips).forEach(([term, explanation]) => {
+    const regex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+    processedText = processedText.replace(regex, () => {
+      const id = `tooltip-${idCounter++}`;
+      tooltipsToRender.push({ id, term, explanation });
+      return `<span data-tooltip-id="${id}" class="border-b border-dotted border-blue-400 cursor-help text-blue-300 hover:text-blue-200">${term}</span>`;
+    });
+  });
+
+  return <div dangerouslySetInnerHTML={{ __html: processedText }} />;
 }
 
 interface BlogPostWrapperProps {
