@@ -10,7 +10,7 @@ export const BlogPostList: FC = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 md:px-12 pt-24 pb-16">
-      <div className="mb-16">
+      <div className="mb-16 animate-[fadeIn_1s_both_1s]">
         <h1 className={`${serif.className} text-4xl md:text-5xl text-white mb-6`}>
           Blog
         </h1>
@@ -19,11 +19,11 @@ export const BlogPostList: FC = () => {
         </p>
       </div>
 
-      <div className="space-y-12">
-        {posts.map((post) => (
+      <div className="space-y-12 animate-[fadeIn_1s_both_1.2s]">
+        {posts.map((post, index) => (
           <article
             key={post.slug}
-            className="border-b border-gray-800 pb-12 last:border-b-0"
+            className={`border-b border-gray-800 pb-12 last:border-b-0 animate-[fadeIn_1s_both_${1.4 + index * 0.2}s]`}
           >
             <Link href={`/blog/${post.slug}`} className="group block">
               <div className="flex flex-wrap gap-2 mb-4">

@@ -337,7 +337,7 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className="max-w-3xl mx-auto w-full px-4 md:px-12 pt-24 pb-16">
+      <div className="max-w-3xl mx-auto w-full px-4 md:px-12 pt-24 pb-16 animate-[fadeIn_1s_both_1s]">
         <Link
           href="/blog"
           className="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-8"
