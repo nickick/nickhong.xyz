@@ -29,7 +29,7 @@ export default function ActiveNav() {
           text={text}
           href={href}
           icon={icon}
-          anchor={text.toLowerCase()}
+          anchor={href.includes("#") ? text.toLowerCase() : undefined}
           active={text === activeSection}
           index={index}
           className="md:mx-0 lg:mx-2 uppercase text-xs py-2"

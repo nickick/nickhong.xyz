@@ -1,7 +1,8 @@
 "use client";
 import { Spin as Hamburger } from "hamburger-react";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import ActiveNav from "../ActiveNav";
+import { LoadedContext } from "../LoadedContext";
 import MobileDrawer from "../MobileDrawer";
 import NavIcon from "../NavIcon";
 import { socialLinks } from "../socialLinks";
@@ -11,12 +12,16 @@ type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = ({}) => {
   const [isOpen, setOpen] = useState(false);
+  const { isLoaded } = useContext(LoadedContext);
+
+  // Only animate hamburger on initial load
+  const hamburgerAnimation = isLoaded ? "" : "animate-fadeInAfterDelay";
 
   return (
     <div className="sticky top-0 w-full z-50 max-w-screen-2xl mx-auto">
       <div className="w-full relative flex justify-between px-4 md:px-12 pt-8">
         <div className="absolute inset-0 h-24 w-full bg-gradient-to-t from-[rgba(8,8,8,0)] via-[rgba(8,8,8,0.7)] to-[rgba(8,8,8,1)]" />
-        <div className="md:hidden z-50 animate-fadeInAfterDelay">
+        <div className={`md:hidden z-50 ${hamburgerAnimation}`}>
           <Hamburger
             toggled={isOpen}
             toggle={setOpen}

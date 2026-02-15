@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { sansSerif } from "./fonts";
 import "./globals.css";
+import { LoadedProvider } from "./LoadedContext";
+import { RootLayoutClient } from "./RootLayoutClient";
 
 export const metadata: Metadata = {
   title: "nickhong.xyz",
@@ -20,7 +22,9 @@ export default function RootLayout({
           background: "#080808",
         }}
       >
-        {children}
+        <LoadedProvider>
+          <RootLayoutClient>{children}</RootLayoutClient>
+        </LoadedProvider>
       </body>
     </html>
   );

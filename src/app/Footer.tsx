@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import ActiveNav from "./ActiveNav";
 import { Logo } from "./Navbar/Logo";

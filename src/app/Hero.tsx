@@ -1,8 +1,9 @@
 "use client";
 import { Section } from "@/app/hooks/useActiveSection";
 import Image from "next/image";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FadeInSection } from "./FadeInSection";
+import { LoadedContext } from "./LoadedContext";
 import { serif } from "./fonts";
 import { NavIcon } from "./NavIcon";
 import { socialLinks } from "./socialLinks";
@@ -17,6 +18,22 @@ const Hero: FC<{}> = ({}) => {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
+  const { isLoaded } = useContext(LoadedContext);
+  const initialIsLoadedRef = useRef(isLoaded);
+  const [hasMounted, setHasMounted] = useState(false);
+  
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  
+  // Animate only on fresh page load (when isLoaded starts as false)
+  // Once animation class is applied, never remove it to prevent jump
+  const shouldAnimate = !initialIsLoadedRef.current;
+  
+  const imageAnimation = shouldAnimate ? "animate-fadeInAfterDelay" : "";
+  const textAnimation = shouldAnimate ? "animate-fadeInAfterDelay" : "";
+  const caretAnimation = shouldAnimate ? "animate-fadeInFromLeftAfterDelay" : "";
+
   return (
     <FadeInSection
       className="flex flex-col justify-center min-h-[90hv] w-full max-w-screen-2xl mx-auto h-[90vh] relative"
@@ -26,7 +43,7 @@ const Hero: FC<{}> = ({}) => {
       <div className="flex flex-col md:flex-row w-full h-full">
         {/* Left image */}
         <div
-          className="relative w-full animate-fadeInAfterDelay"
+          className={`relative w-full ${imageAnimation}`}
           style={{ flex: 5 }}
         >
           <div
@@ -91,7 +108,7 @@ const Hero: FC<{}> = ({}) => {
         </div>
         {/* Right text */}
         <div
-          className="absolute top-1/3 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 animate-fadeInAfterDelay"
+          className={`absolute top-1/3 md:top-0 md:relative w-full md:h-full flex flex-col gap-6 justify-center items-center md:items-start mb-[5px] md:mb-0 z-20 ${textAnimation}`}
           style={{
             flex: 5,
           }}
@@ -122,7 +139,7 @@ const Hero: FC<{}> = ({}) => {
             })}
           </div>
         </div>
-        <div className="flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-[60%] md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[30] animate-fadeInFromLeftAfterDelay">
+        <div className={`flex absolute right-1/2 md:right-1/3 lg:right-[3rem] xl:right-[12.5%] top-[60%] md:top-[70%] lg:top-1/2 -translate-y-1/2 z-[30] ${caretAnimation}`}>
           <Image
             src="/icons/down-carets.svg"
             width={50}

@@ -1,0 +1,8 @@
+version: "3"
+agent:
+  authtoken: 39JwzkI4yTb8T0Hpffcpl7556rx_7tk4A5cgrHga82g2aoxiJ
+tunnels:
+  nickhong:
+    proto: http
+    addr: 3200
+    domain: nickhong.ngrok.app

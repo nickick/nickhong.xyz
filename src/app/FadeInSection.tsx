@@ -44,9 +44,12 @@ const FadeInSection: FC<FadeInSectionProps> = ({
   }, [inView, section, setSectionInView]);
 
   const { isLoaded } = useContext(LoadedContext);
-  const animationClass = isLoaded
-    ? "animate-fadeIn"
-    : "animate-fadeInAfterDelay";
+  
+  // On client-side nav: visible immediately
+  // On initial load: opacity-0 then fade in
+  const baseClasses = isLoaded 
+    ? "opacity-100" 
+    : `opacity-0 ${inAnimationView ? "animate-fadeInAfterDelay" : ""}`;
 
   const setRefs = useCallback(
     (node: Element | null) => {
@@ -58,10 +61,7 @@ const FadeInSection: FC<FadeInSectionProps> = ({
 
   return (
     <div
-      className={twMerge(
-        `opacity-0 ${inAnimationView ? animationClass : ""}`,
-        className
-      )}
+      className={twMerge(baseClasses, className)}
       id={id}
       ref={setRefs}
     >

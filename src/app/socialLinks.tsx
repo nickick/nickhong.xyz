@@ -22,6 +22,11 @@ export const leftNav = [
     icon: "",
   },
   {
+    text: "Blog",
+    href: "/blog",
+    icon: "",
+  },
+  {
     text: "Contact",
     href: "/#contact",
     icon: "",
