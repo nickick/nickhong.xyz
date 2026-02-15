@@ -2,33 +2,89 @@
 
 import { FC } from "react";
 import Link from "next/link";
+import { Highlight, themes } from "prism-react-renderer";
 import { BlogPost } from "../blogData";
 import { serif } from "../../fonts";
 
-function formatContent(content: string): string {
-  // Convert markdown-like content to HTML
-  let html = content
+// Code block component with syntax highlighting
+const CodeBlock = ({ code, language }: { code: string; language: string }) => {
+  return (
+    <Highlight theme={themes.vsDark} code={code.trim()} language={language}>
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <pre
+          className={`${className} rounded-lg p-4 my-6 overflow-x-auto text-sm`}
+          style={{ ...style, background: "#1e1e1e" }}
+        >
+          {tokens.map((line, i) => (
+            <div key={i} {...getLineProps({ line })} className="table-row">
+              <span className="table-cell text-gray-500 text-right pr-4 select-none" style={{ minWidth: "2.5rem" }}>
+                {i + 1}
+              </span>
+              <span className="table-cell">
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+              </span>
+            </div>
+          ))}
+        </pre>
+      )}
+    </Highlight>
+  );
+};
+
+// Inline code component
+const InlineCode = ({ children }: { children: string }) => (
+  <code className="bg-gray-800 text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono">
+    {children}
+  </code>
+);
+
+function formatContent(content: string): { html: string; codeBlocks: Array<{ id: string; code: string; language: string }> } {
+  const codeBlocks: Array<{ id: string; code: string; language: string }> = [];
+  let blockId = 0;
+  
+  // Extract code blocks first
+  let processedContent = content.replace(
+    /```(\w+)?\n([\s\S]*?)```/g,
+    (match, lang, code) => {
+      const id = `code-block-${blockId++}`;
+      codeBlocks.push({
+        id,
+        code: code.trim(),
+        language: lang || "bash",
+      });
+      return `<div data-code-block="${id}"></div>`;
+    }
+  );
+  
+  // Convert markdown to HTML
+  let html = processedContent
     // Headers
-    .replace(/### (.+)/g, '<h3>$1</h3>')
-    .replace(/## (.+)/g, '<h2>$1</h2>')
+    .replace(/### (.+)/g, '<h3 class="text-xl font-semibold text-white mt-8 mb-3">$1</h3>')
+    .replace(/## (.+)/g, '<h2 class="text-2xl font-semibold text-white mt-12 mb-4">$1</h2>')
     // Bold
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
+    // Inline code (single backticks)
+    .replace(/`([^`]+)`/g, '<code class="bg-gray-800 text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
+    // Horizontal rules
+    .replace(/^---$/gm, '<hr class="border-gray-800 my-8" />')
     // Lists
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.+<\/li>\n?)+/g, '<ul class="list-disc pl-6 my-4">$&</ul>')
+    .replace(/^- (.+)$/gm, '<li class="text-gray-300 my-2">$1</li>')
+    .replace(/(<li class="text-gray-300 my-2">.+<\/li>\n?)+/g, '<ul class="list-disc pl-6 my-4">$1</ul>')
     // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    // Paragraphs (lines surrounded by empty lines)
-    .replace(/\n\n([^<\n].*?)\n\n/g, '<p>$1</p>\n\n')
-    // Wrap remaining text in paragraphs if not already wrapped
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">$1</a>')
+    // Paragraphs
+    .replace(/\n\n([^\n<].*?\n?)\n\n/g, '<p class="text-gray-300 leading-relaxed mb-6">$1</p>\n\n')
+    // Wrap remaining text
     .replace(/^([^<\n].+)$/gm, (match) => {
       if (!match.startsWith('<') && !match.startsWith('—')) {
-        return `<p>${match}</p>`;
+        return `<p class="text-gray-300 leading-relaxed mb-6">${match}</p>`;
       }
       return match;
     });
 
-  return html;
+  return { html, codeBlocks };
 }
 
 interface BlogPostWrapperProps {
@@ -36,6 +92,11 @@ interface BlogPostWrapperProps {
 }
 
 export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
+  const { html, codeBlocks } = formatContent(post.content);
+  
+  // Split HTML by code block placeholders and interleave with CodeBlock components
+  const parts = html.split(/(<div data-code-block="[^"]+"><\/div>)/);
+  
   return (
     <div className="max-w-3xl mx-auto w-full px-4 md:px-12 pt-24 pb-16">
       <Link
@@ -82,20 +143,18 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
           })}
         </time>
 
-        <div
-          className="prose prose-invert prose-lg max-w-none
-            prose-headings:text-white prose-headings:font-semibold
-            prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4
-            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-            prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6
-            prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-white
-            prose-ul:text-gray-300 prose-ol:text-gray-300
-            prose-li:my-2
-            prose-blockquote:border-l-gray-600 prose-blockquote:text-gray-400
-            prose-hr:border-gray-800"
-          dangerouslySetInnerHTML={{ __html: formatContent(post.content) }}
-        />
+        <div className="blog-content">
+          {parts.map((part, index) => {
+            const match = part.match(/<div data-code-block="([^"]+)"><\/div>/);
+            if (match) {
+              const block = codeBlocks.find(b => b.id === match[1]);
+              if (block) {
+                return <CodeBlock key={index} code={block.code} language={block.language} />;
+              }
+            }
+            return <div key={index} dangerouslySetInnerHTML={{ __html: part }} />;
+          })}
+        </div>
       </article>
 
       <div className="mt-16 pt-8 border-t border-gray-800">

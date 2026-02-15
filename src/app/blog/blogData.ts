@@ -134,7 +134,7 @@ sudo nano /etc/fail2ban/jail.local
 
 Key settings for your custom SSH port:
 
-\`\`\`
+\`\`\`ini
 [sshd]
 enabled = true
 port = 2222
@@ -197,7 +197,7 @@ Stay paranoid. Stay secure.
 ];
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === post.slug);
+  return blogPosts.find((post) => post.slug === slug);
 }
 
 export function getAllBlogPosts(): BlogPost[] {
