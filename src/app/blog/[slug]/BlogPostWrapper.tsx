@@ -13,26 +13,47 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// Code block component with syntax highlighting
-const CodeBlock = ({ code, language }: { code: string; language: string }) => (
-  <div className="my-6 rounded-lg overflow-hidden">
-    <SyntaxHighlighter
-      language={language}
-      style={vscDarkPlus}
-      showLineNumbers
-      lineNumberStyle={{ minWidth: "2.5rem", paddingRight: "1rem", color: "#6e7681" }}
-      customStyle={{
-        margin: 0,
-        padding: "1.5rem",
-        fontSize: "0.875rem",
-        background: "#1e1e1e",
-        borderRadius: "0.5rem",
-      }}
-    >
-      {code}
-    </SyntaxHighlighter>
-  </div>
-);
+// Code block component with syntax highlighting and copy button
+const CodeBlock = ({ code, language }: { code: string; language: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  return (
+    <div className="my-6 rounded-lg overflow-hidden relative group">
+      <button
+        onClick={handleCopy}
+        className="absolute top-3 right-3 z-10 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-800/80 hover:bg-gray-700 border border-gray-600 rounded transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+        aria-label="Copy code"
+      >
+        {copied ? 'Copied!' : 'Copy'}
+      </button>
+      <SyntaxHighlighter
+        language={language}
+        style={vscDarkPlus}
+        showLineNumbers
+        lineNumberStyle={{ minWidth: "2.5rem", paddingRight: "1rem", color: "#6e7681" }}
+        customStyle={{
+          margin: 0,
+          padding: "1.5rem",
+          fontSize: "0.875rem",
+          background: "#1e1e1e",
+          borderRadius: "0.5rem",
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
+  );
+};
 
 // Security tooltips dictionary
 const securityTooltips: Record<string, string> = {
