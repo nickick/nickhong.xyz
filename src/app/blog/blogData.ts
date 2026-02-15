@@ -15,7 +15,7 @@ export const blogPosts: BlogPost[] = [
     content: `
 ## The Dark Forest Awaits
 
-Spin up a fresh VPS and watch your logs. Within minutes—sometimes seconds—you'll see automated bots probing for weaknesses. SSH brute force attempts, vulnerability scanners, cryptocurrency miners looking for unguarded resources. The internet is a dark forest, and your newly exposed server is fresh meat.
+Spin up a fresh VPS and watch your logs. Within minutes-sometimes seconds-you'll see automated bots probing for weaknesses. SSH brute force attempts, vulnerability scanners, cryptocurrency miners looking for unguarded resources. The internet is a dark forest, and your newly exposed server is fresh meat.
 
 This isn't theoretical. When I spun up a VPS for OpenClaw, I saw over 1,000 failed SSH login attempts in the first hour. The bots are always watching.
 
@@ -41,6 +41,19 @@ su - yourusername
 sudo whoami
 # Should output: root
 \`\`\`
+
+---
+
+## 1.5. Disable Root Password (Optional but Recommended)
+
+If you want to completely prevent root login via password (even with keys), lock the root account:
+
+\`\`\`bash
+# As root or sudo user, lock root password
+sudo passwd -l root
+\`\`\`
+
+**Note:** This prevents any password-based root access. Ensure your sudo user works correctly before doing this! If you need root access later, you can use \`sudo -i\` or \`sudo su -\` from your sudo-enabled user.
 
 ---
 
@@ -185,13 +198,13 @@ last
 
 After implementing these measures, my server went from thousands of daily brute force attempts to near-zero successful intrusions. The bots still knock, but they can't get in.
 
-OpenClaw gives you powerful capabilities—make sure your foundation is solid. A compromised VPS isn't just your problem; it's a liability for everything connected to it.
+OpenClaw gives you powerful capabilities-make sure your foundation is solid. A compromised VPS isn't just your problem; it's a liability for everything connected to it.
 
 **Want an interactive guide?** Check out the [Agent Walkthrough Guide](/blog/vps-security-agent-guide) - a structured guide designed for AI agents to walk you through securing your VPS step by step, plus instructions for checking if your server has been compromised.
 
 Stay paranoid. Stay secure.
 
-— Nick
+- Nick
     `,
     date: "2026-02-15",
     tags: ["security", "vps", "openclaw", "ssh", "hardening"],
@@ -707,7 +720,7 @@ tail -5 /var/log/auth.log         # Recent auth activity
 
 Stay vigilant. Security is a process, not a destination.
 
-— Nick
+- Nick
     `,
     date: "2026-02-15",
     tags: ["security", "vps", "agent-guide", "incident-response", "automation"],
