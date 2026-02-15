@@ -347,6 +347,8 @@ usermod -aG sudo openclaw
 Generate key pair locally and install on server:
 
 \`\`\`bash
+set -e
+
 # Generate SSH key (if not exists)
 [ -f ~/.ssh/id_ed25519 ] || ssh-keygen -t ed25519 -C "openclaw-vps" -f ~/.ssh/id_ed25519 -N ""
 
@@ -359,6 +361,9 @@ echo "$PUBKEY" > /home/openclaw/.ssh/authorized_keys
 chmod 700 /home/openclaw/.ssh
 chmod 600 /home/openclaw/.ssh/authorized_keys
 chown -R openclaw:openclaw /home/openclaw/.ssh
+
+# Verify key was installed
+grep "openclaw-vps" /home/openclaw/.ssh/authorized_keys && echo "SSH key installed successfully"
 \`\`\`
 
 **Report:** SSH key installed for openclaw user.
@@ -367,14 +372,28 @@ chown -R openclaw:openclaw /home/openclaw/.ssh
 
 ## Phase 4: Harden SSH Configuration
 
+**:warning: LOCKOUT PREVENTION CRITICAL PATH**
+
+- [ ] Phase 4: SSH restarted and listening on new port
+- [ ] Phase 4: Successfully connected on new port from separate session
+- [ ] Phase 5: Firewall allows BOTH old and new ports during transition
+- [ ] Phase 9: Final verification before closing original session
+
+**DO NOT close this SSH session until you have successfully connected via the new port with the openclaw user**
+
 Backup and modify SSH config:
 
 \`\`\`bash
+set -e
+
 # Backup original
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup.$(date +%Y%m%d)
 
 # Generate random port between 1024-65535
 SSH_PORT=$((1024 + RANDOM % 64511))
+
+# Store SSH_PORT for persistence across phases
+echo "$SSH_PORT" > /root/.openclaw-ssh-port
 
 # Write new SSH config
 cat > /etc/ssh/sshd_config << 'EOF'
@@ -398,20 +417,26 @@ EOF
 sed -i "s/SSH_PORT_PLACEHOLDER/$SSH_PORT/g" /etc/ssh/sshd_config
 
 # Validate config
-sshd -t
+sshd -t && echo "SSH config validated successfully"
 
 # CRITICAL: Restart SSH immediately to bind to new port
 systemctl restart sshd
 
 # Verify SSH is actually listening on new port BEFORE proceeding
-ss -tlnp | grep $SSH_PORT || { echo "ERROR: SSH not listening on port $SSH_PORT"; exit 1; }
+ss -tlnp | grep ":$SSH_PORT " || { echo "ERROR: SSH not listening on port $SSH_PORT"; exit 1; }
 
-echo "SSH is now listening on port $SSH_PORT"
-echo "CRITICAL: Have user open NEW terminal and verify SSH works on new port before proceeding"
-echo "Command to test: ssh -p $SSH_PORT openclaw@YOUR_SERVER_IP"
+echo "✓ SSH is now listening on port $SSH_PORT"
+echo ""
+echo "=== CRITICAL: VERIFY BEFORE PROCEEDING ==="
+echo "Open a NEW terminal and run:"
+echo "  ssh -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new openclaw@YOUR_SERVER_IP whoami"
+echo ""
+echo "Expected output: openclaw"
+echo ""
+echo "DO NOT proceed until this works. DO NOT close this session."
 \`\`\`
 
-**STOP:** Do NOT proceed until user confirms they can connect on the new SSH port.
+**STOP:** Do NOT proceed until you confirm the test command above returns `openclaw`.
 
 ---
 
@@ -420,6 +445,11 @@ echo "Command to test: ssh -p $SSH_PORT openclaw@YOUR_SERVER_IP"
 Create SSH config on client machine:
 
 \`\`\`bash
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
 # Create SSH config directory if needed
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
@@ -428,7 +458,7 @@ chmod 700 ~/.ssh
 cat >> ~/.ssh/config << EOF
 
 Host vps-openclaw
-    HostName localhost
+    HostName YOUR_SERVER_IP
     Port $SSH_PORT
     User openclaw
     IdentityFile ~/.ssh/id_ed25519
@@ -439,17 +469,25 @@ Host vps-openclaw
 EOF
 
 chmod 600 ~/.ssh/config
+
+echo "✓ SSH client configured"
+echo "Test with: ssh vps-openclaw whoami"
 \`\`\`
 
-**Report:** SSH client configured. User can connect with: ssh vps-openclaw
+**Report:** SSH client configured. User can connect with: `ssh vps-openclaw`
 
 ---
 
 ## Phase 6: Configure Firewall (SAFETY FIRST)
 
-**CRITICAL:** Keep port 22 open during transition to prevent lockout.
+**:warning: CRITICAL:** Keep port 22 open during transition to prevent lockout.
 
 \`\`\`bash
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
 # Reset UFW to defaults
 ufw --force reset
 
@@ -470,6 +508,14 @@ ufw --force enable
 
 # Show status
 ufw status verbose
+
+echo "✓ Firewall enabled with both ports 22 and $SSH_PORT"
+echo ""
+echo "=== VERIFY THROUGH FIREWALL ==="
+echo "Open a NEW terminal and run:"
+echo "  ssh -p $SSH_PORT -o BatchMode=yes openclaw@YOUR_SERVER_IP whoami"
+echo ""
+echo "Expected output: openclaw"
 \`\`\`
 
 **Report:** Firewall active with BOTH ports 22 and $SSH_PORT open.
@@ -478,14 +524,29 @@ ufw status verbose
 
 ## Phase 7: Test and Remove Port 22
 
-After user confirms they can connect on new port:
+After confirming you can connect on the new port through the firewall:
 
 \`\`\`bash
-# Verify user can connect on new port, then remove port 22
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
+# Verify user can connect on new port BEFORE removing port 22
+if ssh -p $SSH_PORT -o BatchMode=yes -o ConnectTimeout=5 openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
+    echo "✓ SSH connection on port $SSH_PORT verified"
+else
+    echo "ERROR: Cannot connect on port $SSH_PORT. Aborting port 22 removal."
+    exit 1
+fi
+
+# Remove port 22 from firewall
 ufw delete allow 22/tcp
 
 # Verify only new port remains
 ufw status verbose
+
+echo "✓ Port 22 removed. Only SSH port $SSH_PORT allowed."
 \`\`\`
 
 **Report:** Port 22 removed. Only SSH port $SSH_PORT allowed.
@@ -533,16 +594,18 @@ fail2ban-client status sshd
 
 ---
 
-## Phase 8: Disable Root Password
+## Phase 9: Disable Root Password
 
 Lock root account password:
 
 \`\`\`bash
+set -e
+
 # Lock root password (prevents password login even with keys)
 passwd -l root
 
 # Verify openclaw can still sudo
-su - openclaw -c "sudo whoami"
+su - openclaw -c "sudo whoami" | grep -q "root" && echo "✓ Root locked, openclaw sudo works"
 \`\`\`
 
 **Report:** Root password locked. OpenClaw user has working sudo access.
@@ -579,19 +642,37 @@ systemctl start unattended-upgrades
 
 ---
 
-## Phase 10: Restart SSH and Verify
+## Phase 10: Final Verification (Phase 4 Restart Already Done)
+
+**Note:** SSH was already restarted in Phase 4. This phase verifies everything is working.
 
 Apply SSH changes and test:
 
 \`\`\`bash
-# Restart SSH
-systemctl restart sshd
+set -e
+
+# Read SSH_PORT from stored file
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
 
 # Verify SSH is listening on new port
-ss -tlnp | grep $SSH_PORT
+ss -tlnp | grep ":$SSH_PORT " || { echo "ERROR: SSH not on port $SSH_PORT"; exit 1; }
 
 # Test that root login fails (should timeout or refuse)
-timeout 5 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p $SSH_PORT root@localhost 2>&1 || echo "Root login correctly blocked"
+timeout 5 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p $SSH_PORT root@localhost 2>&1 || echo "✓ Root login correctly blocked"
+
+# Verify openclaw can connect
+if ssh -p $SSH_PORT -o BatchMode=yes openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
+    echo "✓ openclaw user can connect"
+else
+    echo "ERROR: openclaw user cannot connect"
+    exit 1
+fi
+
+echo ""
+echo "=== ALL VERIFICATIONS PASSED ==="
+echo "You may now close the original root SSH session."
+echo ""
+echo "From now on, connect as: ssh -p $SSH_PORT openclaw@YOUR_SERVER_IP"
 \`\`\`
 
 **CRITICAL:** Now you must reconnect as 'openclaw' user on port $SSH_PORT using the SSH key.
@@ -639,9 +720,63 @@ sudo systemctl is-active unattended-upgrades
 
 ---
 
-# PART 3: UNBAN PROCEDURE (If Needed)
+# PART 3: ROLLBACK / RECOVERY (If Locked Out)
 
-If the user bans themselves, provide these recovery steps:
+## :lock: IF LOCKED OUT - Emergency Recovery
+
+If you cannot connect via SSH after hardening:
+
+### Method 1: Provider Console (Recommended)
+
+1. **Access your VPS provider's control panel**
+2. **Find "KVM Console", "VNC Console", "Web Console", or "Rescue Mode"**
+3. **Connect via the provider's web interface** (this bypasses network/firewall entirely)
+4. **Once connected via console, fix the issue:**
+
+```bash
+# If firewall is blocking access:
+ufw disable
+# OR add port 22 back temporarily:
+ufw allow 22/tcp
+
+# If SSH isn't starting:
+systemctl status sshd
+systemctl restart sshd
+
+# Check SSH config for errors:
+sshd -t
+```
+
+### Method 2: Disable Firewall
+
+```bash
+# Via provider console, disable UFW completely:
+ufw --force disable
+
+# Then fix SSH and re-enable carefully
+```
+
+### Method 3: Reset SSH to Defaults
+
+```bash
+# Restore backup config (if you made one):
+cp /etc/ssh/sshd_config.backup.$(date +%Y%m%d) /etc/ssh/sshd_config
+systemctl restart sshd
+
+# Or manually reset to defaults:
+cat > /etc/ssh/sshd_config << 'EOF'
+Port 22
+PermitRootLogin yes
+PasswordAuthentication yes
+EOF
+systemctl restart sshd
+```
+
+---
+
+# PART 4: UNBAN PROCEDURE (If Needed)
+
+If the user bans themselves with fail2ban, provide these recovery steps:
 
 ## Recovery via VPS Provider Console
 
@@ -665,7 +800,7 @@ sudo fail2ban-client set sshd unbanip BANNED_IP
 
 ---
 
-# PART 4: COMPROMISE DETECTION COMMANDS
+# PART 5: COMPROMISE DETECTION COMMANDS
 
 If you suspect compromise, run these checks:
 
