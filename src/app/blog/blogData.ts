@@ -19,6 +19,8 @@ Spin up a fresh VPS and watch your logs. Within minutes-sometimes seconds-you'll
 
 This isn't theoretical. I saw incoming brute-force attempts within 5 minutes of spinning up my new server. I've also had to recover from having a machine taken over on a VPS because I was a little too lazy the first time I went through this. Don't make my mistake.
 
+**Want an AI-native guide?** You can also give [the agent walkthrough](/blog/vps-security-agent-guide) to your AI assistant and have it execute these steps for you.
+
 Here's what you need to do to survive.
 
 ---
@@ -246,11 +248,11 @@ last
 
 ## The Result
 
-After implementing these measures, my server went from thousands of daily brute force attempts to near-zero successful intrusions. The bots still knock, but they can't get in.
+After implementing these measures, my server went from hundreds of failed SSH attempts daily to near-zero successful intrusions. The bots still knock, but they can't get in.
 
-OpenClaw gives you powerful capabilities-make sure your foundation is solid. A compromised VPS isn't just your problem; it's a liability for everything connected to it.
+OpenClaw gets more powerful the more access you give it-to your calendar, messages, files, and other services. But that also means a compromised OpenClaw server becomes more damaging. The foundation matters more here than on a typical VPS.
 
-**Want an interactive guide?** Check out the [Agent Walkthrough Guide](/blog/vps-security-agent-guide) - a structured guide designed for AI agents to walk you through securing your VPS step by step, plus instructions for checking if your server has been compromised.
+**Want an AI-native guide?** Check out the [Agent Walkthrough Guide](/blog/vps-security-agent-guide) - a structured guide designed for AI agents to walk you through securing your VPS step by step, plus instructions for checking if your server has been compromised.
 
 Stay paranoid. Stay secure.
 
