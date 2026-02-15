@@ -2,7 +2,8 @@
 
 import { FC, useState } from "react";
 import Link from "next/link";
-import { Highlight, themes } from "prism-react-renderer";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { BlogPost } from "../blogData";
 import { serif } from "../../fonts";
 import {
@@ -14,37 +15,23 @@ import {
 
 // Code block component with syntax highlighting
 const CodeBlock = ({ code, language }: { code: string; language: string }) => (
-  <Highlight theme={themes.vsDark} code={code.trim()} language={language}>
-    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-      <pre
-        className={`${className} rounded-lg p-4 my-6 overflow-x-auto text-sm font-mono`}
-        style={{ ...style, background: "#1e1e1e" }}
-      >
-        {tokens.map((line, i) => (
-          <div key={i} {...getLineProps({ line })} className="table-row">
-            <span className="table-cell text-gray-500 text-right pr-4 select-none" style={{ minWidth: "2.5rem" }}>
-              {i + 1}
-            </span>
-            <span className="table-cell">
-              {line.map((token, key) => {
-                const tokenProps = getTokenProps({ token });
-                return (
-                  <span
-                    key={key}
-                    {...tokenProps}
-                    style={{
-                      ...tokenProps.style,
-                      color: tokenProps.style?.color || "#d4d4d4",
-                    }}
-                  />
-                );
-              })}
-            </span>
-          </div>
-        ))}
-      </pre>
-    )}
-  </Highlight>
+  <div className="my-6 rounded-lg overflow-hidden">
+    <SyntaxHighlighter
+      language={language}
+      style={vscDarkPlus}
+      showLineNumbers
+      lineNumberStyle={{ minWidth: "2.5rem", paddingRight: "1rem", color: "#6e7681" }}
+      customStyle={{
+        margin: 0,
+        padding: "1.5rem",
+        fontSize: "0.875rem",
+        background: "#1e1e1e",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
 );
 
 // Security tooltips dictionary
