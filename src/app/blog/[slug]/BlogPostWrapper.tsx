@@ -50,10 +50,10 @@ const CodeBlock = ({ code, language }: { code: string; language: string }) => (
 // Security tooltips dictionary
 const securityTooltips: Record<string, string> = {
   "Never run operations as root": "Attackers constantly scan for root access. If they compromise root, they own your entire system. A non-root user limits the damage scope.",
-  "SSH brute force": "Bots try thousands of common username/password combinations against port 22. A custom port makes you invisible to 99% of automated scans.",
+  "SSH brute force attempts": "Bots try thousands of common username/password combinations against port 22. A custom port makes you invisible to 99% of automated scans.",
   "dark forest": "The internet is hostile by default. Any exposed service is immediately probed by bots, scanners, and attackers looking for easy targets.",
-  "PasswordAuthentication": "Passwords can be guessed or brute-forced. SSH keys are cryptographically secure and impossible to brute-force in practice.",
-  "PermitRootLogin": "Even with key auth, disabling root login prevents privilege escalation attacks where an attacker tries to become root.",
+  "PasswordAuthentication no": "Passwords can be guessed or brute-forced. SSH keys are cryptographically secure and impossible to brute-force in practice.",
+  "PermitRootLogin no": "Even with key auth, disabling root login prevents privilege escalation attacks where an attacker tries to become root.",
   "UFW": "Uncomplicated Firewall. Blocks all incoming connections by default, only allowing what you explicitly permit. Essential defense layer.",
   "Fail2Ban": "Watches logs for suspicious patterns (like failed logins) and automatically bans the source IP for a set time. Your automated bouncer.",
   "unattended-upgrades": "Security patches don't help if you don't install them. This automatically applies security updates so you're always protected.",
