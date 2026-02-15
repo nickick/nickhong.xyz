@@ -13,7 +13,7 @@ export const blogPosts: BlogPost[] = [
     title: "Securing Your VPS for OpenClaw: A Survival Guide",
     excerpt: "Essential security hardening steps for your VPS before deploying OpenClaw, based on real experience with automated attacks hitting fresh servers within minutes.",
     content: `
-## The Dark Forest Awaits
+## Basic Security Guide VPS for OpenClaw Setup
 
 A VPS is a solid, always-on, and cost-effective way to run an OpenClaw setup. But it requires additional security steps to make sure it doesn't get taken over by random cryptominer malware.
 
@@ -298,6 +298,18 @@ You are an AI agent running on the client's local machine with root SSH access t
 
 ---
 
+# LOCKOUT PREVENTION SUMMARY
+
+**CRITICAL PHASE ORDER:**
+1. Phase 4: Configure SSH + **RESTART SSH IMMEDIATELY** (before firewall)
+2. Phase 5: Configure SSH client
+3. Phase 6: Enable firewall (BOTH ports 22 + new port allowed)
+4. Phase 7: Remove port 22 (only after verification)
+
+**GOLDEN RULE:** Never enable a firewall blocking your only access route until you've verified the new route works.
+
+---
+
 # PART 1: AUTOMATED VPS HARDENING
 
 ## Phase 1: Initial Assessment
@@ -471,6 +483,7 @@ chmod 600 ~/.ssh/config
 
 ## Phase 6: Configure Firewall (SAFETY FIRST)
 
+**CRITICAL:** SSH was already restarted in Phase 4 and is listening on the new port.
 **CRITICAL:** Keep port 22 open during transition to prevent lockout.
 
 \`\`\`bash
@@ -487,7 +500,7 @@ ufw default deny incoming
 ufw default allow outgoing
 
 # Allow BOTH old and new SSH ports (safety!)
-ufw allow 22/tcp      # Keep old port temporarily
+ufw allow 22/tcp      # Keep old port temporarily - SSH already listening on new port
 ufw allow $SSH_PORT/tcp  # New port
 
 # Allow other services
