@@ -296,6 +296,12 @@ You are an AI agent running on the client's local machine with root SSH access t
 
 **SSH Connection:** You have root access. Create a dedicated user and switch to key-based auth, then lock down root.
 
+**Suggested Usage with Claude CLI:**
+\`\`\`bash
+# Use Claude CLI with Opus 4.5 or Opus 4.6
+claude --model claude-opus-4-5-20251101 "Use https://nickhong.xyz/blog/vps-security-agent-guide to set up and harden root@YOUR_SERVER_IP"
+\`\`\`
+
 ---
 
 # LOCKOUT PREVENTION SUMMARY
