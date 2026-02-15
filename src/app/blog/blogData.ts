@@ -17,9 +17,7 @@ export const blogPosts: BlogPost[] = [
 
 A VPS is a solid, always-on, and cost-effective way to run an OpenClaw setup. But it requires additional security steps to make sure it doesn't get taken over by random cryptominer malware.
 
-Spin up a fresh VPS and watch your logs. Within minutes—sometimes seconds—you'll see automated bots probing for weaknesses. SSH brute force attempts, vulnerability scanners, cryptocurrency miners looking for unguarded resources. The internet is a dark forest, and your newly exposed server is fresh meat.
-
-This isn't theoretical. I saw incoming brute-force attempts within 5 minutes of spinning up my new server. I've also had to recover from having a machine taken over on a VPS because I was a little too lazy the first time I went through this. Don't make my mistake.
+Spin up a fresh VPS and watch your logs. [The internet is a dark forest](https://gwern.net/dark-forest) - you'll get brute force attempts at guessing your password within 5 minutes of spinning up a fresh VPS. Follow this guide to keep your OpenClaw box safe.
 
 **Want an AI-native guide?** You can also give [the agent walkthrough](/blog/vps-security-agent-guide) to your AI assistant and have it execute these steps for you.
 
