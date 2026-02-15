@@ -347,6 +347,8 @@ usermod -aG sudo openclaw
 Generate key pair locally and install on server:
 
 \`\`\`bash
+set -e
+
 # Generate SSH key (if not exists)
 [ -f ~/.ssh/id_ed25519 ] || ssh-keygen -t ed25519 -C "openclaw-vps" -f ~/.ssh/id_ed25519 -N ""
 
@@ -359,6 +361,9 @@ echo "$PUBKEY" > /home/openclaw/.ssh/authorized_keys
 chmod 700 /home/openclaw/.ssh
 chmod 600 /home/openclaw/.ssh/authorized_keys
 chown -R openclaw:openclaw /home/openclaw/.ssh
+
+# Store SSH_PORT for persistence
+echo "$SSH_PORT" > /root/.openclaw-ssh-port
 \`\`\`
 
 **Report:** SSH key installed for openclaw user.
@@ -367,14 +372,27 @@ chown -R openclaw:openclaw /home/openclaw/.ssh
 
 ## Phase 4: Harden SSH Configuration
 
+**WARNING: LOCKOUT PREVENTION CRITICAL PATH**
+
+- Phase 4: SSH must be restarted and listening on new port
+- Phase 4: Successfully connect on new port from separate session
+- Phase 5: Firewall allows BOTH old and new ports during transition
+
+**DO NOT close this SSH session until you have successfully connected via the new port with the openclaw user**
+
 Backup and modify SSH config:
 
 \`\`\`bash
+set -e
+
 # Backup original
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup.$(date +%Y%m%d)
 
 # Generate random port between 1024-65535
 SSH_PORT=$((1024 + RANDOM % 64511))
+
+# Store SSH_PORT for persistence
+echo "$SSH_PORT" > /root/.openclaw-ssh-port
 
 # Write new SSH config
 cat > /etc/ssh/sshd_config << 'EOF'
@@ -398,20 +416,26 @@ EOF
 sed -i "s/SSH_PORT_PLACEHOLDER/$SSH_PORT/g" /etc/ssh/sshd_config
 
 # Validate config
-sshd -t
+sshd -t && echo "SSH config validated successfully"
 
 # CRITICAL: Restart SSH immediately to bind to new port
 systemctl restart sshd
 
 # Verify SSH is actually listening on new port BEFORE proceeding
-ss -tlnp | grep $SSH_PORT || { echo "ERROR: SSH not listening on port $SSH_PORT"; exit 1; }
+ss -tlnp | grep ":$SSH_PORT " || { echo "ERROR: SSH not listening on port $SSH_PORT"; exit 1; }
 
-echo "SSH is now listening on port $SSH_PORT"
-echo "CRITICAL: Have user open NEW terminal and verify SSH works on new port before proceeding"
-echo "Command to test: ssh -p $SSH_PORT openclaw@YOUR_SERVER_IP"
+echo "OK: SSH is now listening on port $SSH_PORT"
+echo ""
+echo "CRITICAL: VERIFY BEFORE PROCEEDING"
+echo "Open a NEW terminal and run:"
+echo "  ssh -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new openclaw@YOUR_SERVER_IP whoami"
+echo ""
+echo "Expected output: openclaw"
+echo ""
+echo "DO NOT proceed until this works. DO NOT close this session."
 \`\`\`
 
-**STOP:** Do NOT proceed until user confirms they can connect on the new SSH port.
+**STOP:** Do NOT proceed until you confirm the test command above returns openclaw.
 
 ---
 
