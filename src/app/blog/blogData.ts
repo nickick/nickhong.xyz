@@ -361,11 +361,14 @@ Generate key pair locally and install on server:
 \`\`\`bash
 set -e
 
-# Generate SSH key (if not exists)
-[ -f ~/.ssh/id_ed25519 ] || ssh-keygen -t ed25519 -C "openclaw-vps" -f ~/.ssh/id_ed25519 -N ""
+# Define unique key name (customize this!)
+SSH_KEY_NAME="vps_openclaw_$(date +%Y%m%d)"
+
+# Generate SSH key with explicit name
+[ -f ~/.ssh/\${SSH_KEY_NAME} ] || ssh-keygen -t ed25519 -C "openclaw-vps" -f ~/.ssh/\${SSH_KEY_NAME} -N ""
 
 # Get public key content
-PUBKEY=$(cat ~/.ssh/id_ed25519.pub)
+PUBKEY=$(cat ~/.ssh/\${SSH_KEY_NAME}.pub)
 
 # Install key on server for openclaw user
 mkdir -p /home/openclaw/.ssh
@@ -374,11 +377,35 @@ chmod 700 /home/openclaw/.ssh
 chmod 600 /home/openclaw/.ssh/authorized_keys
 chown -R openclaw:openclaw /home/openclaw/.ssh
 
-# Store SSH_PORT for persistence
+# Store key name and SSH_PORT for persistence
+echo "$SSH_KEY_NAME" > /root/.openclaw-key-name
 echo "$SSH_PORT" > /root/.openclaw-ssh-port
+
+echo "OK: SSH key installed: ~/.ssh/\${SSH_KEY_NAME}"
 \`\`\`
 
 **Report:** SSH key installed for openclaw user.
+
+---
+
+## CRITICAL: For Users with Multiple SSH Keys
+
+**WARNING:** If you have more than one SSH key (check with \`ssh-add -l\`), you MUST use explicit identity files.
+
+**Why:** SSH agents offer ALL loaded keys. With \`MaxAuthTries 3\` and 5+ keys in your agent, you'll hit Fail2Ban's ban limit before the right key is tried.
+
+**ALWAYS use the -i flag:**
+\`\`\`bash
+ssh-copy-id -i ~/.ssh/vps_openclaw_YYYYMMDD openclaw@YOUR_SERVER_IP
+ssh -i ~/.ssh/vps_openclaw_YYYYMMDD -p PORT openclaw@YOUR_SERVER_IP
+\`\`\`
+
+**If you get "Too many authentication failures":**
+- Your IP is likely banned by Fail2Ban for 24 hours
+- Use provider's web console to unban: \`fail2ban-client set sshd unbanip YOUR_IP\`
+- Fix your SSH config before reconnecting
+
+---
 
 ---
 
@@ -440,7 +467,7 @@ echo "OK: SSH is now listening on port $SSH_PORT"
 echo ""
 echo "CRITICAL: VERIFY BEFORE PROCEEDING"
 echo "Open a NEW terminal and run:"
-echo "  ssh -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new openclaw@YOUR_SERVER_IP whoami"
+echo "  ssh -i ~/.ssh/vps_openclaw_YYYYMMDD -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=accept-new openclaw@YOUR_SERVER_IP whoami"
 echo ""
 echo "Expected output: openclaw"
 echo ""
@@ -456,28 +483,47 @@ echo "DO NOT proceed until this works. DO NOT close this session."
 Create SSH config on client machine:
 
 \`\`\`bash
+set -e
+
+# Read stored values
+SSH_KEY_NAME=$(cat /root/.openclaw-key-name)
+SSH_PORT=$(cat /root/.openclaw-ssh-port)
+
 # Create SSH config directory if needed
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 # Add VPS entry to SSH config
+# Use unique host alias: vps-<project>-<location>-<user>
 cat >> ~/.ssh/config << EOF
 
 Host vps-openclaw
-    HostName localhost
-    Port $SSH_PORT
+    HostName YOUR_SERVER_IP
     User openclaw
-    IdentityFile ~/.ssh/id_ed25519
+    Port $SSH_PORT
+    IdentityFile ~/.ssh/\${SSH_KEY_NAME}
+    IdentitiesOnly yes
+    IdentityAgent none
+    AddKeysToAgent no
     ServerAliveInterval 60
     ServerAliveCountMax 3
-    IdentitiesOnly yes
     StrictHostKeyChecking accept-new
 EOF
 
 chmod 600 ~/.ssh/config
+
+echo "OK: SSH client configured"
+echo "Full command (safest): ssh -i ~/.ssh/\${SSH_KEY_NAME} -p \${SSH_PORT} openclaw@YOUR_SERVER_IP"
+echo "Or using alias (after verifying): ssh vps-openclaw"
 \`\`\`
 
-**Report:** SSH client configured. User can connect with: ssh vps-openclaw
+**Config explanations:**
+- \`IdentitiesOnly yes\` - Only use the specified key, don't try others
+- \`IdentityAgent none\` - Disables SSH agent for this host (prevents offering wrong keys)
+- \`AddKeysToAgent no\` - Prevents auto-adding keys to agent
+- Use unique host alias pattern: \`vps-<project>-<location>-<user>\` (e.g., \`vps-blog-sfo-openclaw\`)
+
+**Report:** SSH client configured. User can connect with: \`ssh vps-openclaw\`
 
 ---
 
@@ -489,7 +535,8 @@ chmod 600 ~/.ssh/config
 \`\`\`bash
 set -e
 
-# Read SSH_PORT from stored file
+# Read stored values
+SSH_KEY_NAME=$(cat /root/.openclaw-key-name)
 SSH_PORT=$(cat /root/.openclaw-ssh-port)
 
 # Reset UFW to defaults
@@ -517,7 +564,7 @@ echo "OK: Firewall enabled with both ports 22 and $SSH_PORT"
 echo ""
 echo "VERIFY THROUGH FIREWALL"
 echo "Open a NEW terminal and run:"
-echo "  ssh -p $SSH_PORT -o BatchMode=yes openclaw@YOUR_SERVER_IP whoami"
+echo "  ssh -i ~/.ssh/\${SSH_KEY_NAME} -p \${SSH_PORT} -o BatchMode=yes openclaw@YOUR_SERVER_IP whoami"
 echo ""
 echo "Expected output: openclaw"
 \`\`\`
@@ -533,11 +580,12 @@ After confirming you can connect on the new port through the firewall:
 \`\`\`bash
 set -e
 
-# Read SSH_PORT from stored file
+# Read stored values
+SSH_KEY_NAME=$(cat /root/.openclaw-key-name)
 SSH_PORT=$(cat /root/.openclaw-ssh-port)
 
 # Verify user can connect on new port BEFORE removing port 22
-if ssh -p $SSH_PORT -o BatchMode=yes -o ConnectTimeout=5 openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
+if ssh -i ~/.ssh/\${SSH_KEY_NAME} -p \${SSH_PORT} -o BatchMode=yes -o ConnectTimeout=5 openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
     echo "OK: SSH connection on port $SSH_PORT verified"
 else
     echo "ERROR: Cannot connect on port $SSH_PORT. Aborting port 22 removal."
@@ -664,21 +712,33 @@ Apply SSH changes and test:
 \`\`\`bash
 set -e
 
-# Read SSH_PORT from stored file
+# Read stored values
+SSH_KEY_NAME=$(cat /root/.openclaw-key-name)
 SSH_PORT=$(cat /root/.openclaw-ssh-port)
 
 # Verify SSH is listening on new port
 ss -tlnp | grep ":$SSH_PORT " || { echo "ERROR: SSH not on port $SSH_PORT"; exit 1; }
 
 # Test that root login fails (should timeout or refuse)
-timeout 5 ssh -o StrictHostKeyChecking=no -o BatchMode=yes -p $SSH_PORT root@localhost 2>&1 || echo "OK: Root login correctly blocked"
+timeout 5 ssh -i ~/.ssh/\${SSH_KEY_NAME} -p \${SSH_PORT} -o StrictHostKeyChecking=no -o BatchMode=yes root@localhost 2>&1 || echo "OK: Root login correctly blocked"
 
 # Verify openclaw can connect
-if ssh -p $SSH_PORT -o BatchMode=yes openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
+if ssh -i ~/.ssh/\${SSH_KEY_NAME} -p \${SSH_PORT} -o BatchMode=yes openclaw@localhost whoami 2>/dev/null | grep -q "openclaw"; then
     echo "OK: openclaw user can connect"
 else
     echo "ERROR: openclaw user cannot connect"
     exit 1
+fi
+
+echo ""
+echo "=== ALL VERIFICATIONS PASSED ==="
+echo "You may now close the original root SSH session."
+echo ""
+echo "From now on, connect as:"
+echo "  ssh -i ~/.ssh/\${SSH_KEY_NAME} -p \${SSH_PORT} openclaw@YOUR_SERVER_IP"
+\`\`\`
+
+**CRITICAL:** Now you must reconnect as 'openclaw' user on port $SSH_PORT using the SSH key.
 fi
 
 echo ""
@@ -817,8 +877,9 @@ Provide the client with:
 1. **SSH Connection Details:**
    - User: openclaw
    - Port: $SSH_PORT
-   - Auth: SSH key only
-   - Connect with: ssh vps-openclaw
+   - Key: ~/.ssh/vps_openclaw_YYYYMMDD
+   - Full command: ssh -i ~/.ssh/vps_openclaw_YYYYMMDD -p $SSH_PORT openclaw@YOUR_SERVER_IP
+   - Or using alias: ssh vps-openclaw
 
 2. **Security Status:**
    - Root login: Disabled
@@ -834,19 +895,38 @@ Provide the client with:
 5. **Recovery Info:**
    - If banned: Use provider's KVM console to unban
    - SSH config: ~/.ssh/config configured for safe connection
+   - Key file: ~/.ssh/vps_openclaw_YYYYMMDD
 
 6. **Next Steps:**
-   - Store SSH key securely
+   - Store SSH key securely (~/.ssh/vps_openclaw_YYYYMMDD)
    - Save these connection details
    - Store sudo password in 1Password
    - Regular monitoring recommended
 
 ---
 
+## TROUBLESHOOTING: "Too many authentication failures" / Connection Refused
+
+**Cause:** SSH agent offered multiple keys, hit Fail2Ban's 3-attempt limit.
+
+**Recovery:**
+1. Access provider's web console (KVM/Recovery)
+2. Unban your IP:
+\`\`\`bash
+fail2ban-client set sshd unbanip YOUR_IP
+\`\`\`
+3. On your local machine, disable SSH agent for this connection:
+\`\`\`bash
+SSH_AUTH_SOCK="" ssh -i ~/.ssh/vps_openclaw_YYYYMMDD -p PORT openclaw@YOUR_SERVER_IP
+\`\`\`
+4. Fix ~/.ssh/config to include IdentityAgent none
+
+---
+
 ## AGENT EXECUTION NOTES
 
 - All commands assume root SSH access initially
-- After Phase 10, switch to 'openclaw' user with key auth
+- After Phase 11, switch to 'openclaw' user with key auth
 - If any command fails, stop and report the error
 - Document any deviations from this guide
 - Client should verify they can connect before you disconnect
