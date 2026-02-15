@@ -9,164 +9,195 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "welcome-to-my-blog",
-    title: "Welcome to My Blog",
-    excerpt: "An introduction to my new blog where I'll be sharing thoughts on Web3 development, NFT projects, and the future of decentralized technology.",
+    slug: "securing-your-vps-for-openclaw",
+    title: "Securing Your VPS for OpenClaw: A Survival Guide",
+    excerpt: "Essential security hardening steps for your VPS before deploying OpenClaw, based on real experience with automated attacks hitting fresh servers within minutes.",
     content: `
-## Hello, World!
+## The Dark Forest Awaits
 
-Welcome to my new blog! I'm Nick Hong, a Web3 developer with over 4 years of experience building in the NFT and blockchain space.
+Spin up a fresh VPS and watch your logs. Within minutes—sometimes seconds—you'll see automated bots probing for weaknesses. SSH brute force attempts, vulnerability scanners, cryptocurrency miners looking for unguarded resources. The internet is a dark forest, and your newly exposed server is fresh meat.
 
-### What to Expect
+This isn't theoretical. When I spun up a VPS for OpenClaw, I saw over 1,000 failed SSH login attempts in the first hour. The bots are always watching.
 
-In this blog, I'll be sharing:
+Here's what you need to do to survive.
 
-- **Technical deep dives** into smart contract development and Web3 architecture
-- **Case studies** from projects I've worked on, including lessons learned
-- **Industry insights** about where I think the space is heading
-- **Tutorials** for developers looking to break into Web3
+---
 
-### My Journey So Far
+## 1. Create a Non-Root User Immediately
 
-I've been fortunate to work on some incredible projects with amazing artists and celebrities. From helping launch Patrick Mahomes' NFT collection to building the mint site for Driftershoots' record-breaking "First Day Out" drop, it's been a wild ride.
+Never run operations as root. Create a dedicated user with sudo privileges:
 
-The Web3 space moves fast. Really fast. But that's part of what makes it exciting. Every project is an opportunity to learn something new and push the boundaries of what's possible.
+\`\`\`bash
+# Add a new user
+adduser yourusername
 
-### Let's Connect
+# Add to sudo group
+usermod -aG sudo yourusername
 
-I'm always interested in connecting with other developers, artists, and anyone passionate about Web3. Feel free to reach out on [Twitter](https://twitter.com/pepperonick) or [LinkedIn](https://www.linkedin.com/in/nickhong/).
+# Switch to new user
+su - yourusername
 
-Stay tuned for more posts!
+# Verify sudo works
+sudo whoami
+# Should output: root
+\`\`\`
+
+---
+
+## 2. Lock Down SSH: Custom Port + Key Auth + No Root
+
+Default SSH on port 22 is a magnet for attacks. Move it and harden it.
+
+Edit \`/etc/ssh/sshd_config\`:
+
+\`\`\`bash
+# Change default port (pick something above 1024)
+Port 2222
+
+# Disable root login
+PermitRootLogin no
+
+# Disable password authentication (use keys only)
+PasswordAuthentication no
+PubkeyAuthentication yes
+
+# Allow only your specific user
+AllowUsers yourusername
+\`\`\`
+
+Set up SSH keys before disabling password auth:
+
+\`\`\`bash
+# On your local machine
+cat ~/.ssh/id_ed25519.pub
+
+# On the server, as your user
+mkdir -p ~/.ssh
+echo "your-public-key-content" >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+\`\`\`
+
+Restart SSH and test your new port before closing your current session:
+
+\`\`\`bash
+sudo systemctl restart sshd
+
+# Test in new terminal (don't close current one!)
+ssh -p 2222 yourusername@your-server-ip
+\`\`\`
+
+---
+
+## 3. Firewall Everything with UFW
+
+Block everything by default, allow only what you need:
+
+\`\`\`bash
+# Enable UFW
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Allow your custom SSH port
+sudo ufw allow 2222/tcp
+
+# Allow OpenClaw gateway port (if exposed)
+sudo ufw allow 3000/tcp
+
+# Allow HTTP/HTTPS if running web server
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Enable firewall
+sudo ufw enable
+
+# Check status
+sudo ufw status
+\`\`\`
+
+---
+
+## 4. Install Fail2Ban for Automated Defense
+
+Fail2Ban monitors logs and automatically bans IPs showing malicious patterns:
+
+\`\`\`bash
+# Install
+sudo apt install fail2ban
+
+# Create local config
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+# Edit jail.local
+sudo nano /etc/fail2ban/jail.local
+\`\`\`
+
+Key settings for your custom SSH port:
+
+\`\`\`
+[sshd]
+enabled = true
+port = 2222
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 3600
+findtime = 600
+\`\`\`
+
+Start and enable:
+
+\`\`\`bash
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+
+# Check banned IPs
+sudo fail2ban-client status sshd
+\`\`\`
+
+---
+
+## 5. Monitor and Update
+
+Set up automatic security updates:
+
+\`\`\`bash
+sudo apt install unattended-upgrades
+sudo dpkg-reconfigure unattended-upgrades
+\`\`\`
+
+Monitor your logs regularly:
+
+\`\`\`bash
+# Watch failed SSH attempts in real-time
+sudo tail -f /var/log/auth.log
+
+# See who's currently connected
+who
+
+# Check recent login history
+last
+\`\`\`
+
+---
+
+## The Result
+
+After implementing these measures, my server went from thousands of daily brute force attempts to near-zero successful intrusions. The bots still knock, but they can't get in.
+
+OpenClaw gives you powerful capabilities—make sure your foundation is solid. A compromised VPS isn't just your problem; it's a liability for everything connected to it.
+
+Stay paranoid. Stay secure.
 
 — Nick
     `,
-    date: "2026-02-09",
-    tags: ["web3", "introduction", "nft"],
-  },
-  {
-    slug: "building-scalable-nft-mint-sites",
-    title: "Building Scalable NFT Mint Sites: Lessons from the Field",
-    excerpt: "What I learned building high-traffic mint sites that handle thousands of concurrent users and millions in transaction volume.",
-    content: `
-## The Challenge of Scale
-
-When you're building an NFT mint site for a high-profile drop, the stakes are high. You're dealing with:
-
-- Thousands of concurrent users
-- Time-sensitive launches
-- High gas fees and network congestion
-- The pressure of handling millions of dollars in transactions
-
-### Key Lessons Learned
-
-#### 1. Frontend Performance Matters
-
-Users will abandon a slow site. Period. Here's what I prioritize:
-
-- **Image optimization**: Use WebP, lazy loading, and proper sizing
-- **Code splitting**: Only load what the user needs
-- **Caching strategies**: Cache metadata and images aggressively
-- **CDN**: Use a CDN for global asset delivery
-
-#### 2. Smart Contract Interactions
-
-Gas optimization is crucial. Some strategies:
-
-- Batch transactions when possible
-- Use merkle trees for allowlists
-- Implement proper error handling
-- Test on testnets extensively
-
-#### 3. Infrastructure
-
-Don't underestimate infrastructure needs:
-
-- Use auto-scaling for your backend
-- Implement rate limiting
-- Monitor everything
-- Have a rollback plan
-
-### Case Study: Museum of Mahomes
-
-The Museum of Mahomes project had an unmoveable deadline due to NFL promotional restrictions. We had less than 3 weeks to deliver a complex mint site with:
-
-- Fiat credit card processing
-- Complex minting mechanics
-- Burn-to-physical functionality
-
-The key to success was ruthless prioritization and bringing in the right help. Shoutout to [Tom Hirst](https://twitter.com/tom_hirst) for being an amazing collaborator.
-
-### Final Thoughts
-
-Building scalable NFT mint sites is as much about operations as it is about code. Plan for success, monitor everything, and always have a Plan B.
-
-What challenges have you faced building Web3 applications? I'd love to hear your stories.
-    `,
-    date: "2026-02-08",
-    tags: ["web3", "nft", "scalability", "engineering"],
-  },
-  {
-    slug: "the-future-of-digital-ownership",
-    title: "The Future of Digital Ownership",
-    excerpt: "Exploring how NFTs are evolving beyond JPEGs to represent true digital ownership and unlock new creator economies.",
-    content: `
-## Beyond the JPEG
-
-When most people hear "NFT," they think of expensive JPEGs. But that's like saying the internet is just for email. The technology underlying NFTs—verifiable digital ownership on a blockchain—has far broader implications.
-
-### Where We're Headed
-
-#### 1. Digital Identity
-
-Your NFTs could become your digital identity:
-
-- Proof of attendance at events
-- Credentials and certifications
-- Membership in communities
-- Reputation systems
-
-#### 2. Creator Economy 2.0
-
-NFTs enable new economic models:
-
-- Royalties that actually work
-- Fractional ownership of creative works
-- Programmable incentives
-- Direct creator-to-fan relationships
-
-#### 3. Real World Assets
-
-The bridge between physical and digital:
-
-- Real estate tokens
-- Supply chain verification
-- Ticketing and access control
-- Intellectual property rights
-
-### Challenges Ahead
-
-It's not all smooth sailing. We need to solve:
-
-- **User experience**: Web3 is still too complicated for mainstream users
-- **Scalability**: Layer 2 solutions are promising but still maturing
-- **Regulation**: Legal frameworks are still evolving
-- **Environmental concerns**: Proof of stake helps, but perception lags
-
-### Why I'm Optimistic
-
-Despite the challenges, I'm bullish on NFTs because of the fundamental value proposition: true digital ownership. In a world that's increasingly digital, the ability to own, transfer, and prove ownership of digital assets is transformative.
-
-The projects I'm most excited about are those solving real problems and creating new possibilities—not just speculating on JPEGs.
-
-What aspects of digital ownership are you most excited about? Let's discuss!
-    `,
-    date: "2026-02-07",
-    tags: ["web3", "nft", "digital-ownership", "future"],
+    date: "2026-02-15",
+    tags: ["security", "vps", "openclaw", "ssh", "hardening"],
   },
 ];
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === slug);
+  return blogPosts.find((post) => post.slug === post.slug);
 }
 
 export function getAllBlogPosts(): BlogPost[] {
