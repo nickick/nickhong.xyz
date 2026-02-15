@@ -334,38 +334,6 @@ interface BlogPostWrapperProps {
 
 export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
   const parts = parseContent(post.content);
-  const [allCopied, setAllCopied] = useState(false);
-
-  const handleCopyAll = async () => {
-    try {
-      // Extract all code blocks
-      const codeBlocks = parts
-        .filter((part): part is { type: 'code'; content: string; language?: string } => part.type === 'code')
-        .map(part => part.content);
-      
-      // Filter out comments from each block
-      const filteredBlocks = codeBlocks.map(code => {
-        const lines = code.split('\n');
-        const filteredLines = lines.filter(line => {
-          const trimmed = line.trim();
-          if (trimmed.startsWith('#')) {
-            if (trimmed.startsWith('#!')) return true;
-            if (line.includes('  #') || line.includes('\t#')) return true;
-            return false;
-          }
-          return true;
-        });
-        return filteredLines.join('\n').trim();
-      });
-      
-      const allCode = filteredBlocks.join('\n\n# --- Next Phase ---\n\n');
-      await navigator.clipboard.writeText(allCode);
-      setAllCopied(true);
-      setTimeout(() => setAllCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy all:', err);
-    }
-  };
 
   return (
     <TooltipProvider delayDuration={100}>
@@ -391,7 +359,7 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
         </Link>
 
         <article>
-          <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="flex flex-wrap gap-2 mb-6">
             {post.tags.map((tag) => (
               <span
                 key={tag}
@@ -401,13 +369,6 @@ export const BlogPostWrapper: FC<BlogPostWrapperProps> = ({ post }) => {
               </span>
             ))}
           </div>
-
-          <button
-            onClick={handleCopyAll}
-            className="mb-4 px-4 py-2 text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded transition-all"
-          >
-            {allCopied ? 'Copied All!' : 'Copy All Code'}
-          </button>
 
           <h1 className={`${serif.className} text-3xl md:text-5xl text-white mb-6`}>
             {post.title}
