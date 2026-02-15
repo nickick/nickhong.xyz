@@ -4,7 +4,7 @@ import { BlogPostList } from "./BlogPostList";
 
 export const metadata: Metadata = {
   title: "Blog | nickhong.xyz",
-  description: "Thoughts on Web3 development, NFT projects, and the future of decentralized technology.",
+  description: "Thoughts and guides on using AI to write code better and faster.",
 };
 
 export default function BlogPage() {

@@ -15,7 +15,7 @@ export const BlogPostList: FC = () => {
           Blog
         </h1>
         <p className="text-gray-400 text-lg max-w-2xl">
-          Thoughts on Web3 development, NFT projects, and the future of decentralized technology.
+          Thoughts and guides on using AI to write code better and faster.
         </p>
       </div>
 
