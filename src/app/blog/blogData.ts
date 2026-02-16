@@ -292,7 +292,7 @@ Stay paranoid. Stay secure.
     title: "VPS Security Agent Guide: Automated Hardening",
     excerpt: "A guide for AI agents with root SSH access to automatically secure a VPS. Execute commands directly - no user interaction required.",
     content: `
-> **Suggested Usage with Claude CLI:**
+> Suggested Usage with Claude CLI:
 > \`\`\`bash
 > # Use Claude CLI with Opus 4.5 or Opus 4.6
 > claude --model claude-opus-4-5-20251101 "Use https://nickhong.xyz/blog/vps-security-agent-guide to set up and harden root@YOUR_SERVER_IP"
