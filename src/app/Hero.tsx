@@ -122,7 +122,9 @@ const Hero: FC<{}> = ({}) => {
             </div>
           </h1>
           <div className="md:text-2xl">
-            I&apos;m a fullstack developer in Web3.
+            I&apos;m a Senior AI Engineer building agentic systems{" "}
+            <br className="hidden md:block" />
+            &amp; AI products.
           </div>
           <div className="flex text-white items-center">
             {socialLinks.map(({ text, href, icon }, index) => {

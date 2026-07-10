@@ -95,11 +95,12 @@ const Projects: FC = () => {
         <h2
           className={`flex-[1] w-full ${serif.className} text-3xl text-center md:text-left`}
         >
-          Web3 Projects
+          Launch Portfolio
         </h2>
         <p className="flex-[3] w-full text-xl gap-4 leading-relaxed">
-          I&apos;ve helped artists and celebrities raise over $7 million to date
-          in the NFT space.
+          High-stakes product launches I&apos;ve shipped &mdash; complex
+          mechanics, immovable deadlines, and over $7M raised for artists and
+          celebrities.
         </p>
       </div>
       <div className="overflow-x-scroll overflow-y-visible md:overflow-x-visible md:overflow-y-visible w-full">

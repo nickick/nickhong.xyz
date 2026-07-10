@@ -34,35 +34,36 @@ const About = () => {
             <p>Some highlights of my career:</p>
             <ul className="list-disc">
               <li className="ml-4">
-                $7M+ in revenue as a Web3 owner on several NFT projects for
-                A-list celebrities like{" "}
+                Building agentic systems and AI services for high-profile
+                ventures, and CTO at{" "}
+                <Link href="https://moltivate.ai">Moltivate.ai</Link>
+              </li>
+              <li className="ml-4">
+                Shipped revenue-generating products exceeding $7M under
+                immovable deadlines, including celebrity launches like{" "}
                 <Link href="https://x.com/museumofmahomes?lang=en">
-                  Patrick Mahomes
+                  Patrick Mahomes&apos; Museum of Mahomes
                 </Link>{" "}
-                and the best artists in the NFT space like{" "}
-                <Link href="https://www.instagram.com/driftershoots/?hl=en">
-                  DrifterShoots
-                </Link>
-              </li>
-              <li className="ml-4">
-                Key driver for{" "}
+                and{" "}
                 <Link href="https://firstdayout.driftershoots.com/">
-                  FirstDayOut
-                </Link>
-                , a historic NFT project that made for the most{" "}
-                <Link href="https://hypebeast.com/2022/4/drift-first-day-out-jail-nft-sale">
-                  commercially successful photo
+                  DrifterShoots&apos; FirstDayOut
                 </Link>{" "}
-                of all time ($6.8M raised in 24 hours!)
+                &mdash; the most{" "}
+                <Link href="https://hypebeast.com/2022/4/drift-first-day-out-jail-nft-sale">
+                  commercially successful photograph
+                </Link>{" "}
+                in history ($6.8M raised in 24 hours)
               </li>
               <li className="ml-4">
-                Senior Web3 Engineer at{" "}
-                <Link href="https://privy.io">Privy</Link> and{" "}
+                Senior Engineer at <Link href="https://privy.io">Privy</Link>{" "}
+                and{" "}
                 <Link href="https://originprotocol.com">Origin Protocol</Link>,
-                building Web3 frontend infra and products
+                building frontend infra and products serving 100M+ users
               </li>
               <li className="ml-4">
-                Managed engineering teams at{" "}
+                Led engineering teams at{" "}
+                <Link href="https://medium.com">Medium</Link> (Creator Partner
+                Program, $20M+ in payouts) and{" "}
                 <Link href="https://eaze.co">Eaze</Link> through{" "}
                 <Link href="https://techcrunch.com/2021/08/19/eaze-to-become-americas-largest-cannabis-delivery-service-after-buying-green-dragon/">
                   hypergrowth
@@ -70,28 +71,21 @@ const About = () => {
                 (12 employees to 200+)
               </li>
               <li className="ml-4">
-                Managed engineering teams at{" "}
-                <Link href="https://medium.com">Medium</Link> through COVID-19
-                remote transition
-              </li>
-              <li className="ml-4">
-                Worked at some companies you might recognize like{" "}
-                <Link href="https://instacart.com">Instacart</Link>, and{" "}
+                Earlier, built and shipped at{" "}
+                <Link href="https://instacart.com">Instacart</Link> and{" "}
                 <Link href="https://therealreal.com">TheRealReal</Link>
               </li>
             </ul>
           </div>
           <p>
-            My current professional obsession is with UX in the crypto space - I
-            am enamored with the democratization of data through publicly
-            available, permissionless state machines and their implications for
-            the future. We are finally turning the corner on user experiences
-            that are friendly to crypto newbies, and I would love to find other
-            like-minded nerds to push this frontier.
+            My current obsession is agentic AI &mdash; building systems that can
+            reason, use tools, and take real action on behalf of the people who
+            use them. We&apos;re at the very beginning of what these systems can
+            do, and I want to build the products that make them genuinely
+            useful. I&apos;d love to find other like-minded nerds to push this
+            frontier.
           </p>
-          <p>
-            I&apos;ve detailed my Web3 and other professional experiences below!
-          </p>
+          <p>I&apos;ve detailed my work below!</p>
         </div>
       </div>
       <div className="mt-16 md:mt-16 border-gray-700 border-b" />

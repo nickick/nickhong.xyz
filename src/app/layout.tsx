@@ -6,8 +6,8 @@ import { RootLayoutClient } from "./RootLayoutClient";
 import { ScrollHandler } from "./ScrollHandler";
 
 export const metadata: Metadata = {
-  title: "nickhong.xyz",
-  description: "Nick Hong, Web3 Dev",
+  title: "Nick Hong — Senior AI Engineer",
+  description: "Nick Hong, Senior AI Engineer",
 };
 
 export default function RootLayout({
